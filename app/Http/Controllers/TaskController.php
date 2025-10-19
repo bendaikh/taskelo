@@ -42,6 +42,15 @@ class TaskController extends Controller
 
         $task->update($validated);
 
+        // Return JSON for AJAX requests
+        if ($request->expectsJson() || $request->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Task updated successfully.',
+                'task' => $task->fresh()
+            ]);
+        }
+
         return back()->with('success', 'Task updated successfully.');
     }
 
@@ -68,7 +77,17 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
+        $projectId = $task->project_id;
         $task->delete();
+
+        // Return JSON for AJAX requests
+        if (request()->expectsJson() || request()->ajax()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Task deleted successfully.',
+                'project_id' => $projectId
+            ]);
+        }
 
         return back()->with('success', 'Task deleted successfully.');
     }
