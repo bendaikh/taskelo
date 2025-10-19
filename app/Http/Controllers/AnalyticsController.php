@@ -28,16 +28,16 @@ class AnalyticsController extends Controller
         $lastYearRevenue = Payment::whereYear('date', $currentYear - 1)->sum('amount');
 
         // Top 5 clients by revenue
-        $topClients = Client::select('clients.*')
+        $topClients = Client::select('clients.id', 'clients.name', DB::raw('SUM(payments.amount) as revenue'))
             ->join('payments', 'clients.id', '=', 'payments.client_id')
-            ->groupBy('clients.id')
+            ->groupBy('clients.id', 'clients.name')
             ->orderByRaw('SUM(payments.amount) DESC')
             ->limit(5)
             ->get()
             ->map(function ($client) {
                 return [
                     'name' => $client->name,
-                    'revenue' => $client->payments->sum('amount')
+                    'revenue' => $client->revenue
                 ];
             });
 
