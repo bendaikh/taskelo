@@ -114,11 +114,11 @@ class DashboardController extends Controller
         $months = collect(range(0, 11))
             ->map(fn ($i) => now()->subMonths(11 - $i)->format('Y-m'));
 
-        $revenueByMonth = $monthlyRevenue->keyBy('month');
-        $expensesByMonth = $monthlyExpenses->keyBy('month');
+        $revenueByMonth = $monthlyRevenue->pluck('total', 'month');
+        $expensesByMonth = $monthlyExpenses->pluck('total', 'month');
         $monthlyCashflow = $months->map(function ($m) use ($revenueByMonth, $expensesByMonth) {
-            $rev = (float) ($revenueByMonth[$m]->total ?? 0);
-            $exp = (float) ($expensesByMonth[$m]->total ?? 0);
+            $rev = (float) ($revenueByMonth[$m] ?? 0);
+            $exp = (float) ($expensesByMonth[$m] ?? 0);
             return [
                 'month' => $m,
                 'revenue' => $rev,
