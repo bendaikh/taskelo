@@ -5,6 +5,8 @@ import { createApp } from 'vue';
 import RevenueChart from './components/RevenueChart.vue';
 import PaymentStatusChart from './components/PaymentStatusChart.vue';
 import TaskList from './components/TaskList.vue';
+import ExpensesChart from './components/ExpensesChart.vue';
+import CashflowChart from './components/CashflowChart.vue';
 
 // Helper to parse JSON from attribute safely
 function parseJsonAttr(el, attrName, fallback = null) {
@@ -35,5 +37,21 @@ document.querySelectorAll('task-list').forEach((el) => {
     const initialTasks = parseJsonAttr(el, ':initial-tasks', []);
     const projectId = projectIdAttr ? parseInt(projectIdAttr, 10) : undefined;
     createApp(TaskList, { projectId, initialTasks }).mount(el);
+});
+
+document.querySelectorAll('expenses-chart').forEach((el) => {
+    const props = {
+        data: parseJsonAttr(el, ':data', []),
+        currency: el.getAttribute(':currency')?.replaceAll("'", '') || '',
+    };
+    createApp(ExpensesChart, props).mount(el);
+});
+
+document.querySelectorAll('cashflow-chart').forEach((el) => {
+    const props = {
+        data: parseJsonAttr(el, ':data', []),
+        currency: el.getAttribute(':currency')?.replaceAll("'", '') || '',
+    };
+    createApp(CashflowChart, props).mount(el);
 });
 

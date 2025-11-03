@@ -51,6 +51,16 @@
                 </li>
 
                 <li>
+                    <a href="<?php echo e(route('expenses.index')); ?>" 
+                       class="flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('expenses.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l2-2 4 4m0 0l-4-4m4 4V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2z" />
+                        </svg>
+                        Expenses
+                    </a>
+                </li>
+
+                <li>
                     <a href="<?php echo e(route('analytics')); ?>" 
                        class="flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('analytics') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

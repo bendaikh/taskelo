@@ -6,8 +6,10 @@ use App\Models\Client;
 use App\Models\Project;
 use App\Models\Payment;
 use App\Models\Task;
+use App\Models\Expense;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class DashboardController extends Controller
 {
@@ -71,6 +73,54 @@ class DashboardController extends Controller
             'pending' => (float) $pendingTotal,
         ];
 
+        // Expenses metrics (guard if table not migrated yet)
+        $totalExpenses = 0;
+        $monthlyExpenses = collect();
+        $dailyExpenses = collect();
+        if (Schema::hasTable('expenses')) {
+            $totalExpenses = (float) Expense::sum('amount');
+
+            $monthlyExpenses = Expense::select(
+                DB::raw('DATE_FORMAT(date, "%Y-%m") as month'),
+                DB::raw('SUM(amount) as total')
+            )
+                ->where('date', '>=', now()->subMonths(12))
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+
+            $dailyExpenses = Expense::select(
+                DB::raw('DATE(date) as day'),
+                DB::raw('SUM(amount) as total')
+            )
+                ->where('date', '>=', now()->subDays(14))
+                ->groupBy('day')
+                ->orderBy('day')
+                ->get();
+        }
+
+        // Monthly cashflow: revenue - expenses (last 12 months)
+        $months = collect(range(0, 11))
+            ->map(fn ($i) => now()->subMonths(11 - $i)->format('Y-m'));
+
+        $revenueByMonth = $monthlyRevenue->keyBy('month');
+        $expensesByMonth = $monthlyExpenses->keyBy('month');
+        $monthlyCashflow = $months->map(function ($m) use ($revenueByMonth, $expensesByMonth) {
+            $rev = (float) ($revenueByMonth[$m]->total ?? 0);
+            $exp = (float) ($expensesByMonth[$m]->total ?? 0);
+            return [
+                'month' => $m,
+                'revenue' => $rev,
+                'expenses' => $exp,
+                'cashflow' => $rev - $exp,
+            ];
+        });
+
+        // Net cashflow (last 30 days)
+        $revenue30 = Payment::where('date', '>=', now()->subDays(30))->sum('amount');
+        $expenses30 = Schema::hasTable('expenses') ? (float) Expense::where('date', '>=', now()->subDays(30))->sum('amount') : 0.0;
+        $netCashflow30 = (float) $revenue30 - (float) $expenses30;
+
         // Tasks to focus on: To Do and In Progress
         $todoTasks = Task::with(['project.client'])
             ->where('status', 'todo')
@@ -94,6 +144,11 @@ class DashboardController extends Controller
             'monthlyRevenue',
             'paymentStatus',
             'dailyRevenue',
+            'totalExpenses',
+            'monthlyExpenses',
+            'dailyExpenses',
+            'monthlyCashflow',
+            'netCashflow30',
             'todoTasks',
             'inProgressTasks'
         ));
