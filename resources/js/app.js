@@ -7,6 +7,7 @@ import PaymentStatusChart from './components/PaymentStatusChart.vue';
 import TaskList from './components/TaskList.vue';
 import ExpensesChart from './components/ExpensesChart.vue';
 import CashflowChart from './components/CashflowChart.vue';
+import ExpensesByCategoryChart from './components/ExpensesByCategoryChart.vue';
 
 // Helper to parse JSON from attribute safely
 function parseJsonAttr(el, attrName, fallback = null) {
@@ -53,5 +54,13 @@ document.querySelectorAll('cashflow-chart').forEach((el) => {
         currency: el.getAttribute(':currency')?.replaceAll("'", '') || '',
     };
     createApp(CashflowChart, props).mount(el);
+});
+
+document.querySelectorAll('expenses-by-category-chart').forEach((el) => {
+    const props = {
+        data: parseJsonAttr(el, ':data', []),
+        currency: el.getAttribute(':currency')?.replaceAll("'", '') || '',
+    };
+    createApp(ExpensesByCategoryChart, props).mount(el);
 });
 

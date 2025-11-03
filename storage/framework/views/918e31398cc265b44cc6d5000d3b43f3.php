@@ -153,6 +153,17 @@
             </cashflow-chart>
         </div>
     </div>
+
+    <!-- Expenses by Category -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Expenses by Category</h3>
+        <div>
+            <expenses-by-category-chart 
+                :data='<?php echo json_encode($expensesByCategory, 15, 512) ?>'
+                :currency="'<?php echo e(Auth::user()->currency); ?>'">
+            </expenses-by-category-chart>
+        </div>
+    </div>
 </div>
 
 <!-- Tasks To Focus -->

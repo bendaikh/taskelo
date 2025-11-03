@@ -9,6 +9,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\ExpenseCategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,6 +54,9 @@ Route::middleware('auth')->group(function () {
 
     // Expenses
     Route::resource('expenses', ExpenseController::class)->only(['index', 'create', 'store', 'destroy']);
+
+    // Expense Categories
+    Route::resource('expense-categories', ExpenseCategoryController::class)->only(['index', 'create', 'store', 'destroy']);
     Route::get('/payments/export/csv', [PaymentController::class, 'exportCsv'])->name('payments.export.csv');
     Route::get('/payments/export/pdf', [PaymentController::class, 'exportPdf'])->name('payments.export.pdf');
 

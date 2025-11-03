@@ -178,3 +178,4 @@ If anything doesn't work, share:
 4. Any errors from `tail -50 storage/logs/laravel.log`
 
 
+

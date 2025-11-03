@@ -18,14 +18,22 @@
       <select name="project_id" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
         <option value="">-- None --</option>
         <?php $__currentLoopData = $projects; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $project): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-          <option value="<?php echo e($project->id); ?>" <?php echo e(old('project_id') == $project->id ? 'selected' : ''); ?>><?php echo e($project->title); ?></option>
+          <option value="<?php echo e($project->id); ?>" <?php echo e((string) old('project_id', request('project_id')) === (string) $project->id ? 'selected' : ''); ?>><?php echo e($project->title); ?></option>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
       </select>
     </div>
 
     <div>
       <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Category</label>
-      <input type="text" name="category" value="<?php echo e(old('category')); ?>" placeholder="e.g. Software, Hosting, Salaries" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <select name="expense_category_id" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+          <option value="">-- Select Category --</option>
+          <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <option value="<?php echo e($cat->id); ?>" <?php echo e((string) old('expense_category_id') === (string) $cat->id ? 'selected' : ''); ?>><?php echo e($cat->name); ?></option>
+          <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </select>
+        <input type="text" name="category" value="<?php echo e(old('category')); ?>" placeholder="Or enter custom category" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" />
+      </div>
     </div>
 
     <div>

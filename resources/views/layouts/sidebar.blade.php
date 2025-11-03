@@ -59,6 +59,15 @@
                         Expenses
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('expense-categories.index') }}" 
+                       class="flex items-center px-4 py-3 rounded-lg transition-colors {{ request()->routeIs('expense-categories.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                        Expense Categories
+                    </a>
+                </li>
 
                 <li>
                     <a href="{{ route('analytics') }}" 

@@ -99,6 +99,17 @@ class DashboardController extends Controller
                 ->get();
         }
 
+        // Expenses by category (for dashboard breakdown)
+        $expensesByCategory = collect();
+        if (Schema::hasTable('expenses')) {
+            $expensesByCategory = DB::table('expenses')
+                ->select(DB::raw('COALESCE(category, "Uncategorized") as label'), DB::raw('SUM(amount) as total'))
+                ->groupBy('label')
+                ->orderByDesc('total')
+                ->limit(8)
+                ->get();
+        }
+
         // Monthly cashflow: revenue - expenses (last 12 months)
         $months = collect(range(0, 11))
             ->map(fn ($i) => now()->subMonths(11 - $i)->format('Y-m'));
@@ -149,6 +160,7 @@ class DashboardController extends Controller
             'dailyExpenses',
             'monthlyCashflow',
             'netCashflow30',
+            'expensesByCategory',
             'todoTasks',
             'inProgressTasks'
         ));

@@ -211,5 +211,44 @@
         @endforelse
     </div>
 </div>
+
+<!-- Expenses -->
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow mt-6">
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center">
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Expenses</h3>
+        <a href="{{ route('expenses.create', ['project_id' => $project->id]) }}" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm">
+            + Add Expense
+        </a>
+    </div>
+    <div class="p-6">
+        @php($projectTotalExpenses = $project->expenses->sum('amount'))
+        <div class="flex items-center justify-between mb-4">
+            <p class="text-sm text-gray-500 dark:text-gray-400">Total Expenses</p>
+            <p class="text-base font-semibold text-red-600 dark:text-red-400">{{ Auth::user()->currency }} {{ number_format($projectTotalExpenses, 2) }}</p>
+        </div>
+
+        @forelse($project->expenses->sortByDesc('date') as $expense)
+            <div class="flex items-start justify-between py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
+                <div>
+                    <p class="font-medium text-gray-800 dark:text-gray-200">{{ $expense->category ?? 'Expense' }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ $expense->date->format('M d, Y') }}</p>
+                    @if($expense->notes)
+                        <p class="text-sm text-gray-600 dark:text-gray-300 mt-1">{{ $expense->notes }}</p>
+                    @endif
+                </div>
+                <div class="text-right">
+                    <p class="font-semibold text-red-600 dark:text-red-400">{{ Auth::user()->currency }} {{ number_format($expense->amount, 2) }}</p>
+                </div>
+            </div>
+        @empty
+            <p class="text-gray-500 dark:text-gray-400 text-center py-4">No expenses yet</p>
+        @endforelse
+    </div>
+    <div class="p-4 border-t border-gray-200 dark:border-gray-700">
+        <a href="{{ route('expenses.index') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 text-sm font-medium">
+            View all expenses →
+        </a>
+    </div>
+</div>
 @endsection
 
