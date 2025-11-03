@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Project;
 use App\Models\Payment;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -70,6 +71,19 @@ class DashboardController extends Controller
             'pending' => (float) $pendingTotal,
         ];
 
+        // Tasks to focus on: To Do and In Progress
+        $todoTasks = Task::with(['project.client'])
+            ->where('status', 'todo')
+            ->latest()
+            ->limit(8)
+            ->get();
+
+        $inProgressTasks = Task::with(['project.client'])
+            ->where('status', 'in_progress')
+            ->latest()
+            ->limit(8)
+            ->get();
+
         return view('dashboard.index', compact(
             'totalProjects',
             'activeClients',
@@ -79,7 +93,9 @@ class DashboardController extends Controller
             'recentProjects',
             'monthlyRevenue',
             'paymentStatus',
-            'dailyRevenue'
+            'dailyRevenue',
+            'todoTasks',
+            'inProgressTasks'
         ));
     }
 }

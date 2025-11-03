@@ -103,6 +103,75 @@
     </div>
 </div>
 
+<!-- Tasks To Focus -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Tasks In Progress -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Tasks In Progress</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Latest tasks currently being worked on</p>
+        </div>
+        <div class="p-6">
+            <?php $__empty_1 = true; $__currentLoopData = $inProgressTasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800 dark:text-gray-200"><?php echo e($task->title); ?></p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                <?php echo e($task->project->title); ?>
+
+                                <?php if($task->project && $task->project->client): ?>
+                                    · <?php echo e($task->project->client->name); ?>
+
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                        <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">In Progress</span>
+                    </div>
+                    <?php if($task->deadline): ?>
+                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due <?php echo e($task->deadline->format('M d, Y')); ?></p>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No tasks in progress</p>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <!-- Tasks To Do -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Tasks To Do</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Latest tasks not started yet</p>
+        </div>
+        <div class="p-6">
+            <?php $__empty_1 = true; $__currentLoopData = $todoTasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                <div class="py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800 dark:text-gray-200"><?php echo e($task->title); ?></p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                <?php echo e($task->project->title); ?>
+
+                                <?php if($task->project && $task->project->client): ?>
+                                    · <?php echo e($task->project->client->name); ?>
+
+                                <?php endif; ?>
+                            </p>
+                        </div>
+                        <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">To Do</span>
+                    </div>
+                    <?php if($task->deadline): ?>
+                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due <?php echo e($task->deadline->format('M d, Y')); ?></p>
+                    <?php endif; ?>
+                </div>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No tasks to do</p>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
 <!-- Recent Items -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Recent Payments -->

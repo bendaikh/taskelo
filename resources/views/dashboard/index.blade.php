@@ -103,6 +103,71 @@
     </div>
 </div>
 
+<!-- Tasks To Focus -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+    <!-- Tasks In Progress -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Tasks In Progress</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Latest tasks currently being worked on</p>
+        </div>
+        <div class="p-6">
+            @forelse($inProgressTasks as $task)
+                <div class="py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800 dark:text-gray-200">{{ $task->title }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                {{ $task->project->title }}
+                                @if($task->project && $task->project->client)
+                                    · {{ $task->project->client->name }}
+                                @endif
+                            </p>
+                        </div>
+                        <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">In Progress</span>
+                    </div>
+                    @if($task->deadline)
+                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due {{ $task->deadline->format('M d, Y') }}</p>
+                    @endif
+                </div>
+            @empty
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No tasks in progress</p>
+            @endforelse
+        </div>
+    </div>
+
+    <!-- Tasks To Do -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
+        <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Tasks To Do</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Latest tasks not started yet</p>
+        </div>
+        <div class="p-6">
+            @forelse($todoTasks as $task)
+                <div class="py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="font-medium text-gray-800 dark:text-gray-200">{{ $task->title }}</p>
+                            <p class="text-sm text-gray-500 dark:text-gray-400">
+                                {{ $task->project->title }}
+                                @if($task->project && $task->project->client)
+                                    · {{ $task->project->client->name }}
+                                @endif
+                            </p>
+                        </div>
+                        <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">To Do</span>
+                    </div>
+                    @if($task->deadline)
+                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due {{ $task->deadline->format('M d, Y') }}</p>
+                    @endif
+                </div>
+            @empty
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No tasks to do</p>
+            @endforelse
+        </div>
+    </div>
+</div>
+
 <!-- Recent Items -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Recent Payments -->
