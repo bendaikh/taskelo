@@ -31,6 +31,16 @@
                 </li>
 
                 <li>
+                    <a href="<?php echo e(route('businesses.index')); ?>" 
+                       class="flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('businesses.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                        </svg>
+                        My Business
+                    </a>
+                </li>
+
+                <li>
                     <a href="<?php echo e(route('clients.index')); ?>" 
                        class="flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('clients.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -10,6 +10,7 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\BusinessController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,5 +69,15 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile');
     Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password');
     Route::put('/settings/preferences', [SettingsController::class, 'updatePreferences'])->name('settings.preferences');
+
+    // Businesses (My Business)
+    Route::resource('businesses', BusinessController::class);
+    
+    // Business flow builder API endpoints
+    Route::post('/businesses/{business}/nodes', [BusinessController::class, 'createNode'])->name('businesses.nodes.create');
+    Route::put('/businesses/{business}/nodes/{node}', [BusinessController::class, 'updateNode'])->name('businesses.nodes.update');
+    Route::delete('/businesses/{business}/nodes/{node}', [BusinessController::class, 'deleteNode'])->name('businesses.nodes.delete');
+    Route::post('/businesses/{business}/edges', [BusinessController::class, 'createEdge'])->name('businesses.edges.create');
+    Route::delete('/businesses/{business}/edges/{edge}', [BusinessController::class, 'deleteEdge'])->name('businesses.edges.delete');
 });
 

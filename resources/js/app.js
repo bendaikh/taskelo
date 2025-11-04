@@ -8,6 +8,7 @@ import TaskList from './components/TaskList.vue';
 import ExpensesChart from './components/ExpensesChart.vue';
 import CashflowChart from './components/CashflowChart.vue';
 import ExpensesByCategoryChart from './components/ExpensesByCategoryChart.vue';
+import FlowBuilder from './components/FlowBuilder.vue';
 
 // Helper to parse JSON from attribute safely
 function parseJsonAttr(el, attrName, fallback = null) {
@@ -62,5 +63,13 @@ document.querySelectorAll('expenses-by-category-chart').forEach((el) => {
         currency: el.getAttribute(':currency')?.replaceAll("'", '') || '',
     };
     createApp(ExpensesByCategoryChart, props).mount(el);
+});
+
+document.querySelectorAll('flow-builder').forEach((el) => {
+    const businessIdAttr = el.getAttribute(':business-id');
+    const initialNodes = parseJsonAttr(el, ':initial-nodes', []);
+    const initialEdges = parseJsonAttr(el, ':initial-edges', []);
+    const businessId = businessIdAttr ? parseInt(businessIdAttr, 10) : undefined;
+    createApp(FlowBuilder, { businessId, initialNodes, initialEdges }).mount(el);
 });
 
