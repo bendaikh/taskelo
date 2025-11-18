@@ -12,13 +12,12 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <!-- Client -->
                 <div>
-                    <label for="client_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Client *</label>
+                    <label for="client_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Client</label>
                     <select 
                         name="client_id" 
                         id="client_id" 
-                        required
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 @error('client_id') border-red-500 @enderror">
-                        <option value="">Select a client</option>
+                        <option value="">Select a client (optional)</option>
                         @foreach($clients as $client)
                             <option value="{{ $client->id }}" {{ old('client_id') == $client->id ? 'selected' : '' }}>
                                 {{ $client->name }}

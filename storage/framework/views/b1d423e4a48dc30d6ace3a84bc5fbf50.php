@@ -1,23 +1,21 @@
 
 
-<?php $__env->startSection('title', 'Edit Proposal'); ?>
-<?php $__env->startSection('page-title', 'Edit Proposal'); ?>
+<?php $__env->startSection('title', 'Create Proposal'); ?>
+<?php $__env->startSection('page-title', 'Create Proposal'); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="max-w-4xl">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <form method="POST" action="<?php echo e(route('proposals.update', $proposal)); ?>" id="proposalForm">
+        <form method="POST" action="<?php echo e(route('proposals.store')); ?>" id="proposalForm">
             <?php echo csrf_field(); ?>
-            <?php echo method_field('PUT'); ?>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <!-- Client -->
                 <div>
-                    <label for="client_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Client *</label>
+                    <label for="client_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Client</label>
                     <select 
                         name="client_id" 
                         id="client_id" 
-                        required
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 <?php $__errorArgs = ['client_id'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -26,9 +24,9 @@ $message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($messag
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>">
-                        <option value="">Select a client</option>
+                        <option value="">Select a client (optional)</option>
                         <?php $__currentLoopData = $clients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $client): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <option value="<?php echo e($client->id); ?>" <?php echo e(old('client_id', $proposal->client_id) == $client->id ? 'selected' : ''); ?>>
+                            <option value="<?php echo e($client->id); ?>" <?php echo e(old('client_id') == $client->id ? 'selected' : ''); ?>>
                                 <?php echo e($client->name); ?>
 
                             </option>
@@ -53,7 +51,7 @@ unset($__errorArgs, $__bag); ?>
                         type="text" 
                         name="title" 
                         id="title" 
-                        value="<?php echo e(old('title', $proposal->title)); ?>"
+                        value="<?php echo e(old('title')); ?>"
                         required
                         placeholder="e.g., Website Development Proposal"
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 <?php $__errorArgs = ['title'];
@@ -83,7 +81,7 @@ unset($__errorArgs, $__bag); ?>
                         type="date" 
                         name="date" 
                         id="date" 
-                        value="<?php echo e(old('date', $proposal->date->format('Y-m-d'))); ?>"
+                        value="<?php echo e(old('date', date('Y-m-d'))); ?>"
                         required
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
                 </div>
@@ -95,7 +93,7 @@ unset($__errorArgs, $__bag); ?>
                         type="date" 
                         name="valid_until" 
                         id="valid_until" 
-                        value="<?php echo e(old('valid_until', $proposal->valid_until ? $proposal->valid_until->format('Y-m-d') : '')); ?>"
+                        value="<?php echo e(old('valid_until')); ?>"
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
                 </div>
 
@@ -106,10 +104,10 @@ unset($__errorArgs, $__bag); ?>
                         name="status" 
                         id="status" 
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
-                        <option value="draft" <?php echo e(old('status', $proposal->status) === 'draft' ? 'selected' : ''); ?>>Draft</option>
-                        <option value="sent" <?php echo e(old('status', $proposal->status) === 'sent' ? 'selected' : ''); ?>>Sent</option>
-                        <option value="accepted" <?php echo e(old('status', $proposal->status) === 'accepted' ? 'selected' : ''); ?>>Accepted</option>
-                        <option value="rejected" <?php echo e(old('status', $proposal->status) === 'rejected' ? 'selected' : ''); ?>>Rejected</option>
+                        <option value="draft" <?php echo e(old('status', 'draft') === 'draft' ? 'selected' : ''); ?>>Draft</option>
+                        <option value="sent" <?php echo e(old('status') === 'sent' ? 'selected' : ''); ?>>Sent</option>
+                        <option value="accepted" <?php echo e(old('status') === 'accepted' ? 'selected' : ''); ?>>Accepted</option>
+                        <option value="rejected" <?php echo e(old('status') === 'rejected' ? 'selected' : ''); ?>>Rejected</option>
                     </select>
                 </div>
             </div>
@@ -154,8 +152,7 @@ unset($__errorArgs, $__bag); ?>
                 <div class="flex justify-between items-center">
                     <span class="text-lg font-semibold text-gray-800 dark:text-gray-200">Total Amount:</span>
                     <span class="text-2xl font-bold text-primary-600 dark:text-primary-400" id="total-amount">
-                        <?php echo e(Auth::user()->currency); ?> <?php echo e(number_format($proposal->total_amount, 2)); ?>
-
+                        <?php echo e(Auth::user()->currency); ?> 0.00
                     </span>
                 </div>
             </div>
@@ -167,7 +164,7 @@ unset($__errorArgs, $__bag); ?>
                     name="notes" 
                     id="notes" 
                     rows="4"
-                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500"><?php echo e(old('notes', $proposal->notes)); ?></textarea>
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500"><?php echo e(old('notes')); ?></textarea>
             </div>
 
             <!-- Buttons -->
@@ -176,7 +173,7 @@ unset($__errorArgs, $__bag); ?>
                     Cancel
                 </a>
                 <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
-                    Update Proposal
+                    Create Proposal
                 </button>
             </div>
         </form>
@@ -191,7 +188,7 @@ function addService(serviceData = null) {
     const serviceDiv = document.createElement('div');
     serviceDiv.className = 'p-4 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700';
     serviceDiv.id = `service-${serviceIndex}`;
-    
+
     const nameValue = serviceData ? (serviceData.name || '') : '';
     const description = serviceData ? (serviceData.description || '') : '';
     const safeDescription = description.replace(/'/g, "\\'");
@@ -200,7 +197,7 @@ function addService(serviceData = null) {
             ? serviceData.total
             : (serviceData.price !== undefined ? serviceData.price : 0))
         : 0;
-    
+
     serviceDiv.innerHTML = `
         <div class="grid grid-cols-1 md:grid-cols-12 gap-4">
             <div class="md:col-span-5">
@@ -284,13 +281,11 @@ function calculateTotal() {
     document.getElementById('total-amount').textContent = '<?php echo e(Auth::user()->currency); ?> ' + total.toFixed(2);
 }
 
-// Load existing services on page load
+// Add services on page load (old input or default)
 document.addEventListener('DOMContentLoaded', function() {
-    const services = <?php echo json_encode($proposal->services, 15, 512) ?>;
-    if (services && services.length > 0) {
-        services.forEach(service => {
-            addService(service);
-        });
+    const existingServices = <?php echo json_encode(old('services', []), 512) ?>;
+    if (existingServices && existingServices.length) {
+        existingServices.forEach(service => addService(service));
     } else {
         addService();
     }
@@ -299,4 +294,4 @@ document.addEventListener('DOMContentLoaded', function() {
 <?php $__env->stopSection(); ?>
 
 
-<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Espacegamers\Documents\bendaikh project\resources\views/proposals/edit.blade.php ENDPATH**/ ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Espacegamers\Documents\bendaikh project\resources\views/proposals/create.blade.php ENDPATH**/ ?>

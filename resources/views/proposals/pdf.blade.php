@@ -369,22 +369,24 @@
         </div>
         
         <!-- Client Information -->
-        <div class="client-section">
-            <h4>{{ $translations['client_information_heading'] ?? 'Client Information' }}</h4>
-            <p><strong>{{ $proposal->client->name }}</strong></p>
-            @if($proposal->client->company)
-                <p>{{ $proposal->client->company }}</p>
-            @endif
-            @if($proposal->client->email)
-                <p>{{ $translations['email_label'] ?? 'Email' }}: {{ $proposal->client->email }}</p>
-            @endif
-            @if($proposal->client->phone)
-                <p>{{ $translations['phone_label'] ?? 'Phone' }}: {{ $proposal->client->phone }}</p>
-            @endif
-            @if($proposal->client->address)
-                <p>{{ $proposal->client->address }}</p>
-            @endif
-        </div>
+        @if($proposal->client)
+            <div class="client-section">
+                <h4>{{ $translations['client_information_heading'] ?? 'Client Information' }}</h4>
+                <p><strong>{{ $proposal->client->name }}</strong></p>
+                @if($proposal->client->company)
+                    <p>{{ $proposal->client->company }}</p>
+                @endif
+                @if($proposal->client->email)
+                    <p>{{ $translations['email_label'] ?? 'Email' }}: {{ $proposal->client->email }}</p>
+                @endif
+                @if($proposal->client->phone)
+                    <p>{{ $translations['phone_label'] ?? 'Phone' }}: {{ $proposal->client->phone }}</p>
+                @endif
+                @if($proposal->client->address)
+                    <p>{{ $proposal->client->address }}</p>
+                @endif
+            </div>
+        @endif
         
         <!-- Services Table -->
         <div class="services-section">

@@ -78,9 +78,13 @@
                         </a>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <a href="{{ route('clients.show', $proposal->client) }}" class="text-gray-700 dark:text-gray-300 hover:text-primary-600">
-                            {{ $proposal->client->name }}
-                        </a>
+                        @if($proposal->client)
+                            <a href="{{ route('clients.show', $proposal->client) }}" class="text-gray-700 dark:text-gray-300 hover:text-primary-600">
+                                {{ $proposal->client->name }}
+                            </a>
+                        @else
+                            <span class="text-gray-400 dark:text-gray-500 italic">No client</span>
+                        @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {{ $proposal->date->format('M d, Y') }}

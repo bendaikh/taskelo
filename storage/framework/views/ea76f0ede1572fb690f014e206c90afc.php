@@ -370,22 +370,24 @@
         </div>
         
         <!-- Client Information -->
-        <div class="client-section">
-            <h4><?php echo e($translations['client_information_heading'] ?? 'Client Information'); ?></h4>
-            <p><strong><?php echo e($proposal->client->name); ?></strong></p>
-            <?php if($proposal->client->company): ?>
-                <p><?php echo e($proposal->client->company); ?></p>
-            <?php endif; ?>
-            <?php if($proposal->client->email): ?>
-                <p><?php echo e($translations['email_label'] ?? 'Email'); ?>: <?php echo e($proposal->client->email); ?></p>
-            <?php endif; ?>
-            <?php if($proposal->client->phone): ?>
-                <p><?php echo e($translations['phone_label'] ?? 'Phone'); ?>: <?php echo e($proposal->client->phone); ?></p>
-            <?php endif; ?>
-            <?php if($proposal->client->address): ?>
-                <p><?php echo e($proposal->client->address); ?></p>
-            <?php endif; ?>
-        </div>
+        <?php if($proposal->client): ?>
+            <div class="client-section">
+                <h4><?php echo e($translations['client_information_heading'] ?? 'Client Information'); ?></h4>
+                <p><strong><?php echo e($proposal->client->name); ?></strong></p>
+                <?php if($proposal->client->company): ?>
+                    <p><?php echo e($proposal->client->company); ?></p>
+                <?php endif; ?>
+                <?php if($proposal->client->email): ?>
+                    <p><?php echo e($translations['email_label'] ?? 'Email'); ?>: <?php echo e($proposal->client->email); ?></p>
+                <?php endif; ?>
+                <?php if($proposal->client->phone): ?>
+                    <p><?php echo e($translations['phone_label'] ?? 'Phone'); ?>: <?php echo e($proposal->client->phone); ?></p>
+                <?php endif; ?>
+                <?php if($proposal->client->address): ?>
+                    <p><?php echo e($proposal->client->address); ?></p>
+                <?php endif; ?>
+            </div>
+        <?php endif; ?>
         
         <!-- Services Table -->
         <div class="services-section">

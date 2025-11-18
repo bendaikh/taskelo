@@ -81,10 +81,14 @@
                         </a>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <a href="<?php echo e(route('clients.show', $proposal->client)); ?>" class="text-gray-700 dark:text-gray-300 hover:text-primary-600">
-                            <?php echo e($proposal->client->name); ?>
+                        <?php if($proposal->client): ?>
+                            <a href="<?php echo e(route('clients.show', $proposal->client)); ?>" class="text-gray-700 dark:text-gray-300 hover:text-primary-600">
+                                <?php echo e($proposal->client->name); ?>
 
-                        </a>
+                            </a>
+                        <?php else: ?>
+                            <span class="text-gray-400 dark:text-gray-500 italic">No client</span>
+                        <?php endif; ?>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         <?php echo e($proposal->date->format('M d, Y')); ?>

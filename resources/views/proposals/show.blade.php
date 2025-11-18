@@ -19,9 +19,11 @@
                 <p class="text-gray-500 dark:text-gray-400 mb-1">
                     <span class="font-mono text-sm">{{ $proposal->proposal_number }}</span>
                 </p>
-                <p class="text-gray-500 dark:text-gray-400">
-                    {{ $translations['client_label'] ?? 'Client' }}: <a href="{{ route('clients.show', $proposal->client) }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ $proposal->client->name }}</a>
-                </p>
+                @if($proposal->client)
+                    <p class="text-gray-500 dark:text-gray-400">
+                        {{ $translations['client_label'] ?? 'Client' }}: <a href="{{ route('clients.show', $proposal->client) }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ $proposal->client->name }}</a>
+                    </p>
+                @endif
             </div>
             <span class="px-3 py-1 text-sm rounded-full 
                 @if($proposal->status === 'accepted') bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300

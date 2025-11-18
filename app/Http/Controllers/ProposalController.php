@@ -57,7 +57,7 @@ class ProposalController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'client_id' => 'required|exists:clients,id',
+            'client_id' => 'nullable|exists:clients,id',
             'title' => 'required|string|max:255',
             'date' => 'required|date',
             'valid_until' => 'nullable|date|after_or_equal:date',
@@ -88,6 +88,11 @@ class ProposalController extends Controller
         $validated['total_amount'] = $totalAmount;
         $validated['proposal_number'] = Proposal::generateProposalNumber();
         $validated['status'] = $validated['status'] ?? 'draft';
+        
+        // Convert empty string to null for client_id
+        if (isset($validated['client_id']) && $validated['client_id'] === '') {
+            $validated['client_id'] = null;
+        }
 
         Proposal::create($validated);
 
@@ -100,7 +105,9 @@ class ProposalController extends Controller
      */
     public function show(Request $request, Proposal $proposal)
     {
-        $proposal->load('client');
+        if ($proposal->client_id) {
+            $proposal->load('client');
+        }
         
         $language = $request->query('lang') === 'fr' ? 'fr' : 'en';
         $translations = $this->getProposalTranslations($language);
@@ -123,7 +130,7 @@ class ProposalController extends Controller
     public function update(Request $request, Proposal $proposal)
     {
         $validated = $request->validate([
-            'client_id' => 'required|exists:clients,id',
+            'client_id' => 'nullable|exists:clients,id',
             'title' => 'required|string|max:255',
             'date' => 'required|date',
             'valid_until' => 'nullable|date|after_or_equal:date',
@@ -152,6 +159,11 @@ class ProposalController extends Controller
 
         $validated['services'] = $services;
         $validated['total_amount'] = $totalAmount;
+        
+        // Convert empty string to null for client_id
+        if (isset($validated['client_id']) && $validated['client_id'] === '') {
+            $validated['client_id'] = null;
+        }
 
         $proposal->update($validated);
 
@@ -175,7 +187,9 @@ class ProposalController extends Controller
      */
     public function pdf(Proposal $proposal)
     {
-        $proposal->load('client');
+        if ($proposal->client_id) {
+            $proposal->load('client');
+        }
         
         // Get business info if available
         $business = Business::first();
@@ -218,7 +232,9 @@ class ProposalController extends Controller
      */
     public function viewPdf(Proposal $proposal)
     {
-        $proposal->load('client');
+        if ($proposal->client_id) {
+            $proposal->load('client');
+        }
         
         // Get business info if available
         $business = Business::first();
