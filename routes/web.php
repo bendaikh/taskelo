@@ -11,6 +11,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\BusinessController;
+use App\Http\Controllers\ProposalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,14 +53,19 @@ Route::middleware('auth')->group(function () {
 
     // Payments
     Route::resource('payments', PaymentController::class);
+    Route::get('/payments/export/csv', [PaymentController::class, 'exportCsv'])->name('payments.export.csv');
+    Route::get('/payments/export/pdf', [PaymentController::class, 'exportPdf'])->name('payments.export.pdf');
+
+    // Proposals
+    Route::resource('proposals', ProposalController::class);
+    Route::get('/proposals/{proposal}/pdf', [ProposalController::class, 'pdf'])->name('proposals.pdf');
+    Route::get('/proposals/{proposal}/view-pdf', [ProposalController::class, 'viewPdf'])->name('proposals.view-pdf');
 
     // Expenses
     Route::resource('expenses', ExpenseController::class)->only(['index', 'create', 'store', 'destroy']);
 
     // Expense Categories
     Route::resource('expense-categories', ExpenseCategoryController::class)->only(['index', 'create', 'store', 'destroy']);
-    Route::get('/payments/export/csv', [PaymentController::class, 'exportCsv'])->name('payments.export.csv');
-    Route::get('/payments/export/pdf', [PaymentController::class, 'exportPdf'])->name('payments.export.pdf');
 
     // Analytics
     Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');

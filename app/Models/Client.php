@@ -36,6 +36,14 @@ class Client extends Model
     }
 
     /**
+     * Get all proposals for this client
+     */
+    public function proposals(): HasMany
+    {
+        return $this->hasMany(Proposal::class);
+    }
+
+    /**
      * Get the total outstanding balance for this client
      */
     public function getOutstandingBalanceAttribute(): float

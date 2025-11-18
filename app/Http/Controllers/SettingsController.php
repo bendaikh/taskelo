@@ -22,6 +22,8 @@ class SettingsController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'company_name' => 'nullable|string|max:255',
+            'company_website' => 'nullable|url|max:255',
             'logo' => 'nullable|image|max:2048',
         ]);
 
