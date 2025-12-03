@@ -180,6 +180,7 @@
                         <option value="AUD" {{ $user->currency === 'AUD' ? 'selected' : '' }}>AUD (A$)</option>
                         <option value="CAD" {{ $user->currency === 'CAD' ? 'selected' : '' }}>CAD (C$)</option>
                         <option value="MAD" {{ $user->currency === 'MAD' ? 'selected' : '' }}>MAD (Dhs)</option>
+                        <option value="PHP" {{ $user->currency === 'PHP' ? 'selected' : '' }}>PHP (₱)</option>
                     </select>
                 </div>
 
