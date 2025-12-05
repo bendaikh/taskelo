@@ -10,16 +10,19 @@
 </head>
 <body class="bg-gray-50 dark:bg-gray-900">
     <div id="app" class="flex h-screen overflow-hidden">
+        <!-- Mobile Sidebar Overlay -->
+        <div id="mobile-sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden hidden" onclick="toggleSidebar()"></div>
+
         <!-- Sidebar -->
         @include('layouts.sidebar')
 
         <!-- Main Content -->
-        <div class="flex-1 flex flex-col overflow-hidden">
+        <div class="flex-1 flex flex-col overflow-hidden w-full lg:w-auto">
             <!-- Top Navigation -->
             @include('layouts.navbar')
 
             <!-- Page Content -->
-            <main class="flex-1 overflow-y-auto p-6">
+            <main class="flex-1 overflow-y-auto p-4 sm:p-6">
                 <!-- Flash Messages -->
                 @if (session('success'))
                     <div class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">

@@ -111,8 +111,8 @@
             </div>
 
             <!-- Buttons -->
-            <div class="flex justify-end space-x-3">
-                <a href="{{ route('projects.index') }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">
+            <div class="flex flex-col sm:flex-row justify-end gap-3">
+                <a href="{{ route('projects.index') }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 text-center">
                     Cancel
                 </a>
                 <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">

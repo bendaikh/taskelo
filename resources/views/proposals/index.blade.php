@@ -47,13 +47,13 @@
     </form>
 
     <!-- Add Proposal Button -->
-    <a href="{{ route('proposals.create') }}" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
+    <a href="{{ route('proposals.create') }}" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 whitespace-nowrap text-center">
         + Create Proposal
     </a>
 </div>
 
-<!-- Proposals Table -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+<!-- Proposals Table (Desktop) -->
+<div class="hidden md:block bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
@@ -133,6 +133,76 @@
             @endforelse
         </tbody>
     </table>
+</div>
+
+<!-- Proposals Cards (Mobile) -->
+<div class="md:hidden space-y-4">
+    @forelse($proposals as $proposal)
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex-1 min-w-0">
+                    <a href="{{ route('proposals.show', $proposal) }}" class="text-lg font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 block mb-2">
+                        {{ $proposal->title }}
+                    </a>
+                    <p class="text-xs font-mono text-gray-500 dark:text-gray-400 mb-1">
+                        #{{ $proposal->proposal_number }}
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">
+                        {{ $proposal->date->format('M d, Y') }}
+                    </p>
+                    <div class="flex items-center justify-between">
+                        <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                            {{ Auth::user()->currency }} {{ number_format($proposal->total_amount, 2) }}
+                        </span>
+                        <span class="px-2 py-1 text-xs rounded-full 
+                            @if($proposal->status === 'accepted') bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300
+                            @elseif($proposal->status === 'sent') bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300
+                            @elseif($proposal->status === 'rejected') bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300
+                            @else bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300
+                            @endif">
+                            {{ ucfirst($proposal->status) }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            @if($proposal->client)
+                <div class="text-sm border-t border-gray-200 dark:border-gray-700 pt-3 mb-3">
+                    <span class="text-gray-500 dark:text-gray-400">Client: </span>
+                    <a href="{{ route('clients.show', $proposal->client) }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">
+                        {{ $proposal->client->name }}
+                    </a>
+                </div>
+            @endif
+            <div class="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
+                <div class="flex space-x-3">
+                    <a href="{{ route('proposals.view-pdf', $proposal) }}" target="_blank" class="text-blue-600 hover:text-blue-900 dark:text-blue-400" title="View PDF">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                    </a>
+                    <a href="{{ route('proposals.pdf', $proposal) }}" class="text-green-600 hover:text-green-900 dark:text-green-400" title="Download PDF">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                    </a>
+                </div>
+                <div class="flex space-x-3">
+                    <a href="{{ route('proposals.edit', $proposal) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 text-sm">Edit</a>
+                    <form action="{{ route('proposals.destroy', $proposal) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 text-sm">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @empty
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+            <p class="text-gray-500 dark:text-gray-400 mb-4">No proposals found.</p>
+            <a href="{{ route('proposals.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Create your first proposal</a>
+        </div>
+    @endforelse
 </div>
 
 <!-- Pagination -->

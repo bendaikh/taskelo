@@ -52,21 +52,21 @@
     </form>
 
     <!-- Actions -->
-    <div class="flex space-x-2">
-        <a href="{{ route('payments.export.csv') }}?{{ http_build_query(request()->all()) }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm">
+    <div class="flex flex-wrap gap-2">
+        <a href="{{ route('payments.export.csv') }}?{{ http_build_query(request()->all()) }}" class="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm whitespace-nowrap">
             Export CSV
         </a>
-        <a href="{{ route('payments.export.pdf') }}?{{ http_build_query(request()->all()) }}" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm">
+        <a href="{{ route('payments.export.pdf') }}?{{ http_build_query(request()->all()) }}" class="px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm whitespace-nowrap">
             Export PDF
         </a>
-        <a href="{{ route('payments.create') }}" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm">
+        <a href="{{ route('payments.create') }}" class="px-3 sm:px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm whitespace-nowrap">
             + Add Payment
         </a>
     </div>
 </div>
 
-<!-- Payments Table -->
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
+<!-- Payments Table (Desktop) -->
+<div class="hidden md:block bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
@@ -134,6 +134,69 @@
             </tfoot>
         @endif
     </table>
+</div>
+
+<!-- Payments Cards (Mobile) -->
+<div class="md:hidden space-y-4">
+    @forelse($payments as $payment)
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
+            <div class="flex items-start justify-between mb-3">
+                <div class="flex-1">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-lg font-semibold text-green-600">
+                            {{ Auth::user()->currency }} {{ number_format($payment->amount, 2) }}
+                        </span>
+                        <span class="px-2 py-1 text-xs rounded-full 
+                            @if($payment->type === 'advance') bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300
+                            @else bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300
+                            @endif">
+                            {{ ucfirst($payment->type) }}
+                        </span>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mb-1">
+                        {{ $payment->date->format('M d, Y') }}
+                    </p>
+                </div>
+                <div class="flex space-x-2 ml-2">
+                    <a href="{{ route('payments.edit', $payment) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 text-sm">Edit</a>
+                    <form action="{{ route('payments.destroy', $payment) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 text-sm">Delete</button>
+                    </form>
+                </div>
+            </div>
+            <div class="space-y-1 text-sm border-t border-gray-200 dark:border-gray-700 pt-3">
+                <div>
+                    <span class="text-gray-500 dark:text-gray-400">Client: </span>
+                    <a href="{{ route('clients.show', $payment->client) }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 font-medium">
+                        {{ $payment->client->name }}
+                    </a>
+                </div>
+                <div>
+                    <span class="text-gray-500 dark:text-gray-400">Project: </span>
+                    <a href="{{ route('projects.show', $payment->project) }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">
+                        {{ $payment->project->title }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    @empty
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
+            <p class="text-gray-500 dark:text-gray-400 mb-4">No payments found.</p>
+            <a href="{{ route('payments.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Add your first payment</a>
+        </div>
+    @endforelse
+    @if($payments->count() > 0)
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border-t-2 border-primary-600">
+            <div class="flex justify-between items-center">
+                <span class="font-semibold text-gray-800 dark:text-gray-200">Total:</span>
+                <span class="font-bold text-green-600 text-lg">
+                    {{ Auth::user()->currency }} {{ number_format($payments->sum('amount'), 2) }}
+                </span>
+            </div>
+        </div>
+    @endif
 </div>
 
 <!-- Pagination -->
