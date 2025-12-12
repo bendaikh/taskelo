@@ -265,6 +265,9 @@ unset($__errorArgs, $__bag); ?>
                         <option value="CAD" <?php echo e($user->currency === 'CAD' ? 'selected' : ''); ?>>CAD (C$)</option>
                         <option value="MAD" <?php echo e($user->currency === 'MAD' ? 'selected' : ''); ?>>MAD (Dhs)</option>
                         <option value="PHP" <?php echo e($user->currency === 'PHP' ? 'selected' : ''); ?>>PHP (₱)</option>
+                        <option value="NGN" <?php echo e($user->currency === 'NGN' ? 'selected' : ''); ?>>NGN (₦)</option>
+                        <option value="PKR" <?php echo e($user->currency === 'PKR' ? 'selected' : ''); ?>>PKR (₨)</option>
+                        <option value="BDT" <?php echo e($user->currency === 'BDT' ? 'selected' : ''); ?>>BDT (৳)</option>
                     </select>
                 </div>
 

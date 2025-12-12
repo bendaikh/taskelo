@@ -181,6 +181,9 @@
                         <option value="CAD" {{ $user->currency === 'CAD' ? 'selected' : '' }}>CAD (C$)</option>
                         <option value="MAD" {{ $user->currency === 'MAD' ? 'selected' : '' }}>MAD (Dhs)</option>
                         <option value="PHP" {{ $user->currency === 'PHP' ? 'selected' : '' }}>PHP (₱)</option>
+                        <option value="NGN" {{ $user->currency === 'NGN' ? 'selected' : '' }}>NGN (₦)</option>
+                        <option value="PKR" {{ $user->currency === 'PKR' ? 'selected' : '' }}>PKR (₨)</option>
+                        <option value="BDT" {{ $user->currency === 'BDT' ? 'selected' : '' }}>BDT (৳)</option>
                     </select>
                 </div>
 
