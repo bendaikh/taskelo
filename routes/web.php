@@ -12,6 +12,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseCategoryController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\ProposalController;
+use App\Http\Controllers\ProjectSectionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,6 +61,10 @@ Route::middleware('auth')->group(function () {
     Route::resource('proposals', ProposalController::class);
     Route::get('/proposals/{proposal}/pdf', [ProposalController::class, 'pdf'])->name('proposals.pdf');
     Route::get('/proposals/{proposal}/view-pdf', [ProposalController::class, 'viewPdf'])->name('proposals.view-pdf');
+
+    // Project Sections (Conceptions)
+    Route::resource('conceptions', ProjectSectionController::class);
+    Route::get('/conceptions/{conception}/pdf/{lang?}', [ProjectSectionController::class, 'generatePdf'])->name('conceptions.pdf');
 
     // Expenses
     Route::resource('expenses', ExpenseController::class)->only(['index', 'create', 'store', 'destroy']);
