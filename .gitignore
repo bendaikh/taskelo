@@ -17,3 +17,7 @@ yarn-error.log
 /.idea
 /.vscode
 
+# Laravel log files
+/storage/logs/*.log
+/storage/logs/.gitkeep
+
