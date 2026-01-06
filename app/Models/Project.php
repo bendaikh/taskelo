@@ -13,6 +13,7 @@ class Project extends Model
     use HasFactory;
 
     protected $fillable = [
+        'workspace_id',
         'client_id',
         'title',
         'budget',
@@ -29,6 +30,14 @@ class Project extends Model
         'start_date' => 'date',
         'end_date' => 'date',
     ];
+
+    /**
+     * Get the workspace this project belongs to
+     */
+    public function workspace(): BelongsTo
+    {
+        return $this->belongsTo(Workspace::class);
+    }
 
     /**
      * Get the client that owns the project

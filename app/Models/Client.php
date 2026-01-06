@@ -11,6 +11,7 @@ class Client extends Model
     use HasFactory;
 
     protected $fillable = [
+        'workspace_id',
         'name',
         'email',
         'phone',
@@ -18,6 +19,14 @@ class Client extends Model
         'address',
         'notes',
     ];
+
+    /**
+     * Get the workspace this client belongs to
+     */
+    public function workspace()
+    {
+        return $this->belongsTo(Workspace::class);
+    }
 
     /**
      * Get all projects for this client

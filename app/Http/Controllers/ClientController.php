@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -12,7 +13,8 @@ class ClientController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Client::withCount('projects');
+        $query = Client::where('workspace_id', Auth::user()->current_workspace_id)
+            ->withCount('projects');
 
         // Search functionality
         if ($request->has('search')) {
@@ -51,6 +53,8 @@ class ClientController extends Controller
             'notes' => 'nullable|string',
         ]);
 
+        $validated['workspace_id'] = Auth::user()->current_workspace_id;
+
         Client::create($validated);
 
         return redirect()->route('clients.index')
@@ -62,6 +66,11 @@ class ClientController extends Controller
      */
     public function show(Client $client)
     {
+        // Check if client belongs to current workspace
+        if ($client->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This client does not belong to your current workspace.');
+        }
+
         $client->load(['projects.tasks', 'payments']);
         
         return view('clients.show', compact('client'));
@@ -72,6 +81,11 @@ class ClientController extends Controller
      */
     public function edit(Client $client)
     {
+        // Check if client belongs to current workspace
+        if ($client->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This client does not belong to your current workspace.');
+        }
+
         return view('clients.edit', compact('client'));
     }
 
@@ -80,6 +94,11 @@ class ClientController extends Controller
      */
     public function update(Request $request, Client $client)
     {
+        // Check if client belongs to current workspace
+        if ($client->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This client does not belong to your current workspace.');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:clients,email,' . $client->id,
@@ -100,6 +119,11 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
+        // Check if client belongs to current workspace
+        if ($client->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This client does not belong to your current workspace.');
+        }
+
         $client->delete();
 
         return redirect()->route('clients.index')

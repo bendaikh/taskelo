@@ -10,9 +10,12 @@ use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpenseCategoryController;
+use App\Http\Controllers\RevenueController;
+use App\Http\Controllers\RevenueCategoryController;
 use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\ProjectSectionController;
+use App\Http\Controllers\WorkspaceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,6 +42,10 @@ Route::middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Workspaces
+    Route::resource('workspaces', WorkspaceController::class);
+    Route::post('/workspaces/{workspace}/switch', [WorkspaceController::class, 'switch'])->name('workspaces.switch');
 
     // Clients
     Route::resource('clients', ClientController::class);
@@ -71,6 +78,12 @@ Route::middleware('auth')->group(function () {
 
     // Expense Categories
     Route::resource('expense-categories', ExpenseCategoryController::class)->only(['index', 'create', 'store', 'destroy']);
+
+    // Revenues
+    Route::resource('revenues', RevenueController::class)->only(['index', 'create', 'store', 'destroy']);
+
+    // Revenue Categories
+    Route::resource('revenue-categories', RevenueCategoryController::class)->only(['index', 'create', 'store', 'destroy']);
 
     // Analytics
     Route::get('/analytics', [AnalyticsController::class, 'index'])->name('analytics');

@@ -1,18 +1,18 @@
-@extends('layouts.app')
 
-@section('title', 'Dashboard')
-@section('page-title', 'Dashboard')
 
-@section('content')
+<?php $__env->startSection('title', 'Dashboard'); ?>
+<?php $__env->startSection('page-title', 'Dashboard'); ?>
+
+<?php $__env->startSection('content'); ?>
 <!-- Overview Cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-    @if(!$isPersonal)
+    <?php if(!$isPersonal): ?>
     <!-- Total Projects -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 dark:text-gray-400 text-sm">Total Projects</p>
-                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ $totalProjects }}</p>
+                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2"><?php echo e($totalProjects); ?></p>
             </div>
             <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
                 <svg class="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -27,7 +27,7 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 dark:text-gray-400 text-sm">Active Clients</p>
-                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ $activeClients }}</p>
+                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2"><?php echo e($activeClients); ?></p>
             </div>
             <div class="bg-green-100 dark:bg-green-900 p-3 rounded-lg">
                 <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -36,14 +36,14 @@
             </div>
         </div>
     </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Total Revenue -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 dark:text-gray-400 text-sm">Total Revenue</p>
-                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ Auth::user()->currency }} {{ number_format($totalRevenue, 2) }}</p>
+                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2"><?php echo e(Auth::user()->currency); ?> <?php echo e(number_format($totalRevenue, 2)); ?></p>
             </div>
             <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-lg">
                 <svg class="w-8 h-8 text-yellow-600 dark:text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,13 +53,13 @@
         </div>
     </div>
 
-    @if(!$isPersonal)
+    <?php if(!$isPersonal): ?>
     <!-- Pending Payments -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 dark:text-gray-400 text-sm">Pending Payments</p>
-                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ Auth::user()->currency }} {{ number_format($pendingPayments, 2) }}</p>
+                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2"><?php echo e(Auth::user()->currency); ?> <?php echo e(number_format($pendingPayments, 2)); ?></p>
             </div>
             <div class="bg-red-100 dark:bg-red-900 p-3 rounded-lg">
                 <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -68,14 +68,14 @@
             </div>
         </div>
     </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Total Expenses -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 dark:text-gray-400 text-sm">Total Expenses</p>
-                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ Auth::user()->currency }} {{ number_format($totalExpenses, 2) }}</p>
+                <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2"><?php echo e(Auth::user()->currency); ?> <?php echo e(number_format($totalExpenses, 2)); ?></p>
             </div>
             <div class="bg-red-100 dark:bg-red-900 p-3 rounded-lg">
                 <svg class="w-8 h-8 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,10 +90,10 @@
         <div class="flex items-center justify-between">
             <div>
                 <p class="text-gray-500 dark:text-gray-400 text-sm">Net Cashflow (Last 30 Days)</p>
-                <p class="text-3xl font-bold mt-2 {{ $netCashflow30 >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">{{ Auth::user()->currency }} {{ number_format($netCashflow30, 2) }}</p>
+                <p class="text-3xl font-bold mt-2 <?php echo e($netCashflow30 >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'); ?>"><?php echo e(Auth::user()->currency); ?> <?php echo e(number_format($netCashflow30, 2)); ?></p>
             </div>
-            <div class="p-3 rounded-lg {{ $netCashflow30 >= 0 ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900' }}">
-                <svg class="w-8 h-8 {{ $netCashflow30 >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-3 rounded-lg <?php echo e($netCashflow30 >= 0 ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'); ?>">
+                <svg class="w-8 h-8 <?php echo e($netCashflow30 >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'); ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path>
                 </svg>
             </div>
@@ -108,8 +108,8 @@
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Monthly Revenue</h3>
         <div id="monthly-revenue-chart-container">
             <revenue-chart 
-                :data='@json($monthlyRevenue)'
-                :currency="'{{ Auth::user()->currency }}'">
+                :data='<?php echo json_encode($monthlyRevenue, 15, 512) ?>'
+                :currency="'<?php echo e(Auth::user()->currency); ?>'">
             </revenue-chart>
         </div>
     </div>
@@ -119,32 +119,32 @@
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Daily Revenue (Last 14 Days)</h3>
         <div>
             <revenue-chart 
-                :data='@json($dailyRevenue)'
-                :currency="'{{ Auth::user()->currency }}'">
+                :data='<?php echo json_encode($dailyRevenue, 15, 512) ?>'
+                :currency="'<?php echo e(Auth::user()->currency); ?>'">
             </revenue-chart>
         </div>
     </div>
 
-    @if(!$isPersonal)
+    <?php if(!$isPersonal): ?>
     <!-- Payment Status Chart -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Payment Status</h3>
         <div id="payment-status-chart-container">
             <payment-status-chart 
-                :data='@json($paymentStatus)'
-                :currency="'{{ Auth::user()->currency }}'">
+                :data='<?php echo json_encode($paymentStatus, 15, 512) ?>'
+                :currency="'<?php echo e(Auth::user()->currency); ?>'">
             </payment-status-chart>
         </div>
     </div>
-    @endif
+    <?php endif; ?>
 
     <!-- Monthly Expenses Chart -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Monthly Expenses</h3>
         <div>
             <expenses-chart 
-                :data='@json($monthlyExpenses)'
-                :currency="'{{ Auth::user()->currency }}'">
+                :data='<?php echo json_encode($monthlyExpenses, 15, 512) ?>'
+                :currency="'<?php echo e(Auth::user()->currency); ?>'">
             </expenses-chart>
         </div>
     </div>
@@ -154,8 +154,8 @@
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Monthly Cashflow</h3>
         <div>
             <cashflow-chart 
-                :data='@json($monthlyCashflow)'
-                :currency="'{{ Auth::user()->currency }}'">
+                :data='<?php echo json_encode($monthlyCashflow, 15, 512) ?>'
+                :currency="'<?php echo e(Auth::user()->currency); ?>'">
             </cashflow-chart>
         </div>
     </div>
@@ -165,14 +165,14 @@
         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Expenses by Category</h3>
         <div>
             <expenses-by-category-chart 
-                :data='@json($expensesByCategory)'
-                :currency="'{{ Auth::user()->currency }}'">
+                :data='<?php echo json_encode($expensesByCategory, 15, 512) ?>'
+                :currency="'<?php echo e(Auth::user()->currency); ?>'">
             </expenses-by-category-chart>
         </div>
     </div>
 </div>
 
-@if(!$isPersonal)
+<?php if(!$isPersonal): ?>
 <!-- Tasks To Focus -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <!-- Tasks In Progress -->
@@ -182,27 +182,29 @@
             <p class="text-sm text-gray-500 dark:text-gray-400">Latest tasks currently being worked on</p>
         </div>
         <div class="p-6">
-            @forelse($inProgressTasks as $task)
+            <?php $__empty_1 = true; $__currentLoopData = $inProgressTasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="font-medium text-gray-800 dark:text-gray-200">{{ $task->title }}</p>
+                            <p class="font-medium text-gray-800 dark:text-gray-200"><?php echo e($task->title); ?></p>
                             <p class="text-sm text-gray-500 dark:text-gray-400">
-                                {{ $task->project->title }}
-                                @if($task->project && $task->project->client)
-                                    · {{ $task->project->client->name }}
-                                @endif
+                                <?php echo e($task->project->title); ?>
+
+                                <?php if($task->project && $task->project->client): ?>
+                                    · <?php echo e($task->project->client->name); ?>
+
+                                <?php endif; ?>
                             </p>
                         </div>
                         <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">In Progress</span>
                     </div>
-                    @if($task->deadline)
-                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due {{ $task->deadline->format('M d, Y') }}</p>
-                    @endif
+                    <?php if($task->deadline): ?>
+                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due <?php echo e($task->deadline->format('M d, Y')); ?></p>
+                    <?php endif; ?>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <p class="text-gray-500 dark:text-gray-400 text-center py-4">No tasks in progress</p>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 
@@ -213,33 +215,35 @@
             <p class="text-sm text-gray-500 dark:text-gray-400">Latest tasks not started yet</p>
         </div>
         <div class="p-6">
-            @forelse($todoTasks as $task)
+            <?php $__empty_1 = true; $__currentLoopData = $todoTasks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
                     <div class="flex items-start justify-between">
                         <div>
-                            <p class="font-medium text-gray-800 dark:text-gray-200">{{ $task->title }}</p>
+                            <p class="font-medium text-gray-800 dark:text-gray-200"><?php echo e($task->title); ?></p>
                             <p class="text-sm text-gray-500 dark:text-gray-400">
-                                {{ $task->project->title }}
-                                @if($task->project && $task->project->client)
-                                    · {{ $task->project->client->name }}
-                                @endif
+                                <?php echo e($task->project->title); ?>
+
+                                <?php if($task->project && $task->project->client): ?>
+                                    · <?php echo e($task->project->client->name); ?>
+
+                                <?php endif; ?>
                             </p>
                         </div>
                         <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">To Do</span>
                     </div>
-                    @if($task->deadline)
-                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due {{ $task->deadline->format('M d, Y') }}</p>
-                    @endif
+                    <?php if($task->deadline): ?>
+                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due <?php echo e($task->deadline->format('M d, Y')); ?></p>
+                    <?php endif; ?>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <p class="text-gray-500 dark:text-gray-400 text-center py-4">No tasks to do</p>
-            @endforelse
+            <?php endif; ?>
         </div>
     </div>
 </div>
-@endif
+<?php endif; ?>
 
-@if(!$isPersonal)
+<?php if(!$isPersonal): ?>
 <!-- Recent Items -->
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Recent Payments -->
@@ -248,23 +252,23 @@
             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Recent Payments</h3>
         </div>
         <div class="p-6">
-            @forelse($recentPayments as $payment)
+            <?php $__empty_1 = true; $__currentLoopData = $recentPayments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $payment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="flex items-center justify-between py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
                     <div>
-                        <p class="font-medium text-gray-800 dark:text-gray-200">{{ $payment->client->name }}</p>
-                        <p class="text-sm text-gray-500 dark:text-gray-400">{{ $payment->project->title }}</p>
+                        <p class="font-medium text-gray-800 dark:text-gray-200"><?php echo e($payment->client->name); ?></p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400"><?php echo e($payment->project->title); ?></p>
                     </div>
                     <div class="text-right">
-                        <p class="font-semibold text-green-600">{{ Auth::user()->currency }} {{ number_format($payment->amount, 2) }}</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-400">{{ $payment->date->format('M d, Y') }}</p>
+                        <p class="font-semibold text-green-600"><?php echo e(Auth::user()->currency); ?> <?php echo e(number_format($payment->amount, 2)); ?></p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400"><?php echo e($payment->date->format('M d, Y')); ?></p>
                     </div>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <p class="text-gray-500 dark:text-gray-400 text-center py-4">No recent payments</p>
-            @endforelse
+            <?php endif; ?>
         </div>
         <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-            <a href="{{ route('payments.index') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 text-sm font-medium">
+            <a href="<?php echo e(route('payments.index')); ?>" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 text-sm font-medium">
                 View all payments →
             </a>
         </div>
@@ -276,38 +280,41 @@
             <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Recent Projects</h3>
         </div>
         <div class="p-6">
-            @forelse($recentProjects as $project)
+            <?php $__empty_1 = true; $__currentLoopData = $recentProjects; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $project): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                 <div class="py-3 border-b border-gray-200 dark:border-gray-700 last:border-0">
                     <div class="flex items-center justify-between mb-2">
-                        <p class="font-medium text-gray-800 dark:text-gray-200">{{ $project->title }}</p>
+                        <p class="font-medium text-gray-800 dark:text-gray-200"><?php echo e($project->title); ?></p>
                         <span class="px-2 py-1 text-xs rounded-full 
-                            @if($project->status === 'active') bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300
-                            @elseif($project->status === 'completed') bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300
-                            @elseif($project->status === 'on_hold') bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300
-                            @else bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300
-                            @endif">
-                            {{ ucfirst(str_replace('_', ' ', $project->status)) }}
+                            <?php if($project->status === 'active'): ?> bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300
+                            <?php elseif($project->status === 'completed'): ?> bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300
+                            <?php elseif($project->status === 'on_hold'): ?> bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300
+                            <?php else: ?> bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300
+                            <?php endif; ?>">
+                            <?php echo e(ucfirst(str_replace('_', ' ', $project->status))); ?>
+
                         </span>
                     </div>
-                    <p class="text-sm text-gray-500 dark:text-gray-400">{{ $project->client->name }}</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400"><?php echo e($project->client->name); ?></p>
                     <div class="mt-2">
                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                            <div class="bg-primary-600 h-2 rounded-full" style="width: {{ $project->progress }}%"></div>
+                            <div class="bg-primary-600 h-2 rounded-full" style="width: <?php echo e($project->progress); ?>%"></div>
                         </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $project->progress }}% complete</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><?php echo e($project->progress); ?>% complete</p>
                     </div>
                 </div>
-            @empty
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <p class="text-gray-500 dark:text-gray-400 text-center py-4">No recent projects</p>
-            @endforelse
+            <?php endif; ?>
         </div>
         <div class="p-4 border-t border-gray-200 dark:border-gray-700">
-            <a href="{{ route('projects.index') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 text-sm font-medium">
+            <a href="<?php echo e(route('projects.index')); ?>" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 text-sm font-medium">
                 View all projects →
             </a>
         </div>
     </div>
 </div>
-@endif
-@endsection
+<?php endif; ?>
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Espacegamers\Documents\bendaikh project\resources\views/dashboard/index.blade.php ENDPATH**/ ?>

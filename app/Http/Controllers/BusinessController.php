@@ -17,7 +17,8 @@ class BusinessController extends Controller
     {
         $type = $request->get('type', 'active'); // Default to 'active'
         
-        $businesses = Business::where('user_id', Auth::id())
+        $businesses = Business::where('workspace_id', Auth::user()->current_workspace_id)
+            ->where('user_id', Auth::id())
             ->where('type', $type)
             ->with(['flowNodes', 'flowEdges'])
             ->latest()
@@ -45,6 +46,7 @@ class BusinessController extends Controller
             'type' => 'required|in:active,idea',
         ]);
 
+        $validated['workspace_id'] = Auth::user()->current_workspace_id;
         $validated['user_id'] = Auth::id();
 
         $business = Business::create($validated);
@@ -58,8 +60,8 @@ class BusinessController extends Controller
      */
     public function show(Business $business)
     {
-        // Ensure user owns this business
-        if ($business->user_id !== Auth::id()) {
+        // Ensure business belongs to current workspace and user owns it
+        if ($business->workspace_id !== Auth::user()->current_workspace_id || $business->user_id !== Auth::id()) {
             abort(403);
         }
 
@@ -73,7 +75,8 @@ class BusinessController extends Controller
      */
     public function edit(Business $business)
     {
-        if ($business->user_id !== Auth::id()) {
+        // Ensure business belongs to current workspace and user owns it
+        if ($business->workspace_id !== Auth::user()->current_workspace_id || $business->user_id !== Auth::id()) {
             abort(403);
         }
 

@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class ExpenseCategory extends Model
+class RevenueCategory extends Model
 {
     use HasFactory;
 
@@ -22,10 +22,9 @@ class ExpenseCategory extends Model
         return $this->belongsTo(Workspace::class);
     }
 
-    public function expenses(): HasMany
+    public function revenues(): HasMany
     {
-        return $this->hasMany(Expense::class);
+        return $this->hasMany(Revenue::class);
     }
 }
-
 

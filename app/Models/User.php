@@ -26,6 +26,7 @@ class User extends Authenticatable
         'logo',
         'currency',
         'theme',
+        'current_workspace_id',
     ];
 
     /**
@@ -47,5 +48,31 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    /**
+     * Get the user's current workspace
+     */
+    public function currentWorkspace()
+    {
+        return $this->belongsTo(Workspace::class, 'current_workspace_id');
+    }
+
+    /**
+     * Get all workspaces owned by this user
+     */
+    public function ownedWorkspaces()
+    {
+        return $this->hasMany(Workspace::class, 'owner_id');
+    }
+
+    /**
+     * Get all workspaces this user is a member of
+     */
+    public function workspaces()
+    {
+        return $this->belongsToMany(Workspace::class, 'workspace_user')
+            ->withTimestamps()
+            ->withPivot('role');
+    }
 }
 

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -13,7 +14,8 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Project::with('client');
+        $query = Project::where('workspace_id', Auth::user()->current_workspace_id)
+            ->with('client');
 
         // Search functionality
         if ($request->has('search')) {
@@ -32,7 +34,8 @@ class ProjectController extends Controller
         }
 
         $projects = $query->latest()->paginate(15);
-        $clients = Client::orderBy('name')->get();
+        $clients = Client::where('workspace_id', Auth::user()->current_workspace_id)
+            ->orderBy('name')->get();
 
         return view('projects.index', compact('projects', 'clients'));
     }
@@ -42,7 +45,8 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        $clients = Client::orderBy('name')->get();
+        $clients = Client::where('workspace_id', Auth::user()->current_workspace_id)
+            ->orderBy('name')->get();
         return view('projects.create', compact('clients'));
     }
 
@@ -66,6 +70,8 @@ class ProjectController extends Controller
             $validated['budget'] = 0;
         }
 
+        $validated['workspace_id'] = Auth::user()->current_workspace_id;
+
         Project::create($validated);
 
         return redirect()->route('projects.index')
@@ -77,6 +83,11 @@ class ProjectController extends Controller
      */
     public function show(Project $project)
     {
+        // Check if project belongs to current workspace
+        if ($project->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This project does not belong to your current workspace.');
+        }
+
         $project->load(['client', 'tasks', 'payments']);
         
         return view('projects.show', compact('project'));
@@ -87,7 +98,13 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
-        $clients = Client::orderBy('name')->get();
+        // Check if project belongs to current workspace
+        if ($project->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This project does not belong to your current workspace.');
+        }
+
+        $clients = Client::where('workspace_id', Auth::user()->current_workspace_id)
+            ->orderBy('name')->get();
         return view('projects.edit', compact('project', 'clients'));
     }
 
@@ -96,6 +113,11 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        // Check if project belongs to current workspace
+        if ($project->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This project does not belong to your current workspace.');
+        }
+
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'title' => 'required|string|max:255',
@@ -121,6 +143,11 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        // Check if project belongs to current workspace
+        if ($project->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This project does not belong to your current workspace.');
+        }
+
         $project->delete();
 
         return redirect()->route('projects.index')

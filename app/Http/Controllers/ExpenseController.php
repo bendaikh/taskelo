@@ -6,24 +6,32 @@ use App\Models\Expense;
 use App\Models\Project;
 use App\Models\ExpenseCategory;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseController extends Controller
 {
     public function index(Request $request)
     {
-        $expenses = Expense::with('project')
+        $workspaceId = Auth::user()->current_workspace_id;
+        
+        $expenses = Expense::where('workspace_id', $workspaceId)
+            ->with('project')
             ->latest('date')
             ->paginate(15);
 
-        $total = Expense::sum('amount');
+        $total = Expense::where('workspace_id', $workspaceId)->sum('amount');
 
         return view('expenses.index', compact('expenses', 'total'));
     }
 
     public function create()
     {
-        $projects = Project::orderBy('title')->get(['id', 'title']);
-        $categories = ExpenseCategory::orderBy('name')->get(['id', 'name']);
+        $workspaceId = Auth::user()->current_workspace_id;
+        
+        $projects = Project::where('workspace_id', $workspaceId)
+            ->orderBy('title')->get(['id', 'title']);
+        $categories = ExpenseCategory::where('workspace_id', $workspaceId)
+            ->orderBy('name')->get(['id', 'name']);
         return view('expenses.create', compact('projects', 'categories'));
     }
 
@@ -46,6 +54,8 @@ class ExpenseController extends Controller
             }
         }
 
+        $validated['workspace_id'] = Auth::user()->current_workspace_id;
+
         Expense::create($validated);
 
         return redirect()->route('expenses.index')->with('success', 'Expense added successfully.');
@@ -53,6 +63,11 @@ class ExpenseController extends Controller
 
     public function destroy(Expense $expense)
     {
+        // Check if expense belongs to current workspace
+        if ($expense->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This expense does not belong to your current workspace.');
+        }
+
         $expense->delete();
         return back()->with('success', 'Expense deleted.');
     }

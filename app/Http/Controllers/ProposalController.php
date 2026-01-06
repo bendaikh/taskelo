@@ -6,6 +6,7 @@ use App\Models\Proposal;
 use App\Models\Client;
 use App\Models\Business;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class ProposalController extends Controller
@@ -15,7 +16,10 @@ class ProposalController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Proposal::with('client');
+        $workspaceId = Auth::user()->current_workspace_id;
+        
+        $query = Proposal::where('workspace_id', $workspaceId)
+            ->with('client');
 
         // Filter by client
         if ($request->has('client_id') && $request->client_id !== '') {
@@ -37,7 +41,8 @@ class ProposalController extends Controller
         }
 
         $proposals = $query->latest('date')->paginate(15);
-        $clients = Client::orderBy('name')->get();
+        $clients = Client::where('workspace_id', $workspaceId)
+            ->orderBy('name')->get();
 
         return view('proposals.index', compact('proposals', 'clients'));
     }
@@ -47,7 +52,8 @@ class ProposalController extends Controller
      */
     public function create()
     {
-        $clients = Client::orderBy('name')->get();
+        $clients = Client::where('workspace_id', Auth::user()->current_workspace_id)
+            ->orderBy('name')->get();
         return view('proposals.create', compact('clients'));
     }
 
@@ -88,6 +94,7 @@ class ProposalController extends Controller
         $validated['total_amount'] = $totalAmount;
         $validated['proposal_number'] = Proposal::generateProposalNumber();
         $validated['status'] = $validated['status'] ?? 'draft';
+        $validated['workspace_id'] = Auth::user()->current_workspace_id;
         
         // Convert empty string to null for client_id
         if (isset($validated['client_id']) && $validated['client_id'] === '') {
@@ -105,6 +112,11 @@ class ProposalController extends Controller
      */
     public function show(Request $request, Proposal $proposal)
     {
+        // Check if proposal belongs to current workspace
+        if ($proposal->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This proposal does not belong to your current workspace.');
+        }
+
         if ($proposal->client_id) {
             $proposal->load('client');
         }
@@ -120,7 +132,13 @@ class ProposalController extends Controller
      */
     public function edit(Proposal $proposal)
     {
-        $clients = Client::orderBy('name')->get();
+        // Check if proposal belongs to current workspace
+        if ($proposal->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This proposal does not belong to your current workspace.');
+        }
+
+        $clients = Client::where('workspace_id', Auth::user()->current_workspace_id)
+            ->orderBy('name')->get();
         return view('proposals.edit', compact('proposal', 'clients'));
     }
 
@@ -129,6 +147,11 @@ class ProposalController extends Controller
      */
     public function update(Request $request, Proposal $proposal)
     {
+        // Check if proposal belongs to current workspace
+        if ($proposal->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This proposal does not belong to your current workspace.');
+        }
+
         $validated = $request->validate([
             'client_id' => 'nullable|exists:clients,id',
             'title' => 'required|string|max:255',
@@ -176,6 +199,11 @@ class ProposalController extends Controller
      */
     public function destroy(Proposal $proposal)
     {
+        // Check if proposal belongs to current workspace
+        if ($proposal->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This proposal does not belong to your current workspace.');
+        }
+
         $proposal->delete();
 
         return redirect()->route('proposals.index')
@@ -187,12 +215,17 @@ class ProposalController extends Controller
      */
     public function pdf(Proposal $proposal)
     {
+        // Check if proposal belongs to current workspace
+        if ($proposal->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This proposal does not belong to your current workspace.');
+        }
+
         if ($proposal->client_id) {
             $proposal->load('client');
         }
         
         // Get business info if available
-        $business = Business::first();
+        $business = Business::where('workspace_id', Auth::user()->current_workspace_id)->first();
         $user = auth()->user();
         $language = request('lang') === 'fr' ? 'fr' : 'en';
         $translations = $this->getProposalTranslations($language);
@@ -232,12 +265,17 @@ class ProposalController extends Controller
      */
     public function viewPdf(Proposal $proposal)
     {
+        // Check if proposal belongs to current workspace
+        if ($proposal->workspace_id !== Auth::user()->current_workspace_id) {
+            abort(403, 'This proposal does not belong to your current workspace.');
+        }
+
         if ($proposal->client_id) {
             $proposal->load('client');
         }
         
         // Get business info if available
-        $business = Business::first();
+        $business = Business::where('workspace_id', Auth::user()->current_workspace_id)->first();
         $user = auth()->user();
         $language = request('lang') === 'fr' ? 'fr' : 'en';
         $translations = $this->getProposalTranslations($language);

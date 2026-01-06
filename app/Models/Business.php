@@ -12,11 +12,20 @@ class Business extends Model
     use HasFactory;
 
     protected $fillable = [
+        'workspace_id',
         'user_id',
         'name',
         'description',
         'type',
     ];
+
+    /**
+     * Get the workspace this business belongs to
+     */
+    public function workspace(): BelongsTo
+    {
+        return $this->belongsTo(Workspace::class);
+    }
 
     /**
      * Get the user that owns the business

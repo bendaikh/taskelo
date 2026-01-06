@@ -11,6 +11,7 @@ class Proposal extends Model
     use HasFactory;
 
     protected $fillable = [
+        'workspace_id',
         'client_id',
         'proposal_number',
         'title',
@@ -28,6 +29,14 @@ class Proposal extends Model
         'services' => 'array',
         'total_amount' => 'decimal:2',
     ];
+
+    /**
+     * Get the workspace this proposal belongs to
+     */
+    public function workspace(): BelongsTo
+    {
+        return $this->belongsTo(Workspace::class);
+    }
 
     /**
      * Get the client that owns the proposal

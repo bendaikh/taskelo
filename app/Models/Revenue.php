@@ -6,14 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Expense extends Model
+class Revenue extends Model
 {
     use HasFactory;
 
     protected $fillable = [
         'workspace_id',
-        'project_id',
-        'expense_category_id',
+        'revenue_category_id',
         'category',
         'amount',
         'date',
@@ -30,15 +29,9 @@ class Expense extends Model
         return $this->belongsTo(Workspace::class);
     }
 
-    public function project(): BelongsTo
-    {
-        return $this->belongsTo(Project::class);
-    }
-
     public function categoryRef(): BelongsTo
     {
-        return $this->belongsTo(ExpenseCategory::class, 'expense_category_id');
+        return $this->belongsTo(RevenueCategory::class, 'revenue_category_id');
     }
 }
-
 
