@@ -16,10 +16,15 @@ return new class extends Migration
         $users = DB::table('users')->get();
         
         foreach ($users as $user) {
-            // Create a default personal workspace for each user
+            // Default to business workspace (administrator workspace should be business)
+            // First user (administrator) gets business, others can be personal or business
+            // For existing installations, default to business
+            $workspaceType = 'business';
+            
+            // Create a default workspace for each user
             $workspaceId = DB::table('workspaces')->insertGetId([
                 'name' => $user->name . "'s Workspace",
-                'type' => 'personal',
+                'type' => $workspaceType,
                 'description' => 'Default workspace',
                 'owner_id' => $user->id,
                 'is_active' => true,

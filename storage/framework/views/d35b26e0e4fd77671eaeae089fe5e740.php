@@ -1,16 +1,16 @@
-@extends('layouts.app')
 
-@section('title', 'Edit Workspace')
-@section('page-title', 'Edit Workspace')
 
-@section('content')
+<?php $__env->startSection('title', 'Edit Workspace'); ?>
+<?php $__env->startSection('page-title', 'Edit Workspace'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="max-w-2xl mx-auto">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
         <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">Edit Workspace</h2>
 
-        <form method="POST" action="{{ route('workspaces.update', $workspace) }}">
-            @csrf
-            @method('PUT')
+        <form method="POST" action="<?php echo e(route('workspaces.update', $workspace)); ?>">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
 
             <!-- Workspace Name -->
             <div class="mb-6">
@@ -21,12 +21,19 @@
                     type="text" 
                     name="name" 
                     id="name" 
-                    value="{{ old('name', $workspace->name) }}"
+                    value="<?php echo e(old('name', $workspace->name)); ?>"
                     required
                     class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">
-                @error('name')
-                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+                <?php $__errorArgs = ['name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400"><?php echo e($message); ?></p>
+                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
             </div>
 
             <!-- Workspace Type -->
@@ -34,7 +41,7 @@
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                     Workspace Type *
                 </label>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" x-data="{ selectedType: '{{ old('type', $workspace->type) }}' }">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" x-data="{ selectedType: '<?php echo e(old('type', $workspace->type)); ?>' }">
                     <!-- Personal Option -->
                     <label 
                         @click="selectedType = 'personal'"
@@ -45,7 +52,8 @@
                             name="type" 
                             value="personal" 
                             x-model="selectedType"
-                            {{ old('type', $workspace->type) === 'personal' ? 'checked' : '' }}
+                            <?php echo e(old('type', $workspace->type) === 'personal' ? 'checked' : ''); ?>
+
                             class="sr-only">
                         <div class="flex items-center space-x-3">
                             <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -75,7 +83,8 @@
                             name="type" 
                             value="business" 
                             x-model="selectedType"
-                            {{ old('type', $workspace->type) === 'business' ? 'checked' : '' }}
+                            <?php echo e(old('type', $workspace->type) === 'business' ? 'checked' : ''); ?>
+
                             class="sr-only">
                         <div class="flex items-center space-x-3">
                             <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -95,9 +104,16 @@
                         </svg>
                     </label>
                 </div>
-                @error('type')
-                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+                <?php $__errorArgs = ['type'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400"><?php echo e($message); ?></p>
+                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 <p class="mt-2 text-xs text-gray-500 dark:text-gray-400">
                     <strong>Note:</strong> Changing workspace type will affect which features are available. Personal workspaces show Revenue & Revenue Categories, while Business workspaces show Projects, Clients, Payments, Proposals, and Conception.
                 </p>
@@ -112,10 +128,17 @@
                     name="description" 
                     id="description" 
                     rows="4"
-                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white">{{ old('description', $workspace->description) }}</textarea>
-                @error('description')
-                    <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                @enderror
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-white"><?php echo e(old('description', $workspace->description)); ?></textarea>
+                <?php $__errorArgs = ['description'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400"><?php echo e($message); ?></p>
+                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
             </div>
 
             <!-- Active Status -->
@@ -125,7 +148,8 @@
                         type="checkbox" 
                         name="is_active" 
                         value="1"
-                        {{ old('is_active', $workspace->is_active) ? 'checked' : '' }}
+                        <?php echo e(old('is_active', $workspace->is_active) ? 'checked' : ''); ?>
+
                         class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
                     <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Workspace is active</span>
                 </label>
@@ -139,7 +163,7 @@
                     Update Workspace
                 </button>
                 <a 
-                    href="{{ route('workspaces.index') }}" 
+                    href="<?php echo e(route('workspaces.index')); ?>" 
                     class="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors font-medium">
                     Cancel
                 </a>
@@ -147,5 +171,7 @@
         </form>
     </div>
 </div>
-@endsection
+<?php $__env->stopSection(); ?>
 
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Espacegamers\Documents\bendaikh project\resources\views/workspaces/edit.blade.php ENDPATH**/ ?>

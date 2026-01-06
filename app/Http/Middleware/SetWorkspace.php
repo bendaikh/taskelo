@@ -24,10 +24,14 @@ class SetWorkspace
                 if ($workspace) {
                     $user->update(['current_workspace_id' => $workspace->id]);
                 } else {
+                    // Default to business workspace (administrator workspace should be business)
+                    // First user (administrator) gets business, others can be personal or business
+                    $workspaceType = 'business';
+                    
                     // Create a default workspace if user has none
                     $workspace = \App\Models\Workspace::create([
                         'name' => $user->name . "'s Workspace",
-                        'type' => 'personal',
+                        'type' => $workspaceType,
                         'description' => 'Default workspace',
                         'owner_id' => $user->id,
                         'is_active' => true,

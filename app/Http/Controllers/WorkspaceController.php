@@ -92,6 +92,7 @@ class WorkspaceController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'type' => 'required|in:personal,business',
             'description' => 'nullable|string|max:1000',
             'is_active' => 'boolean',
         ]);
