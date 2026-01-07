@@ -6,6 +6,7 @@ use App\Models\Payment;
 use App\Models\Client;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaymentController extends Controller
@@ -15,7 +16,12 @@ class PaymentController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Payment::with(['project', 'client']);
+        $workspaceId = Auth::user()->current_workspace_id;
+
+        $query = Payment::with(['project', 'client'])
+            ->whereHas('project', function ($q) use ($workspaceId) {
+                $q->where('workspace_id', $workspaceId);
+            });
 
         // Filter by client
         if ($request->has('client_id') && $request->client_id !== '') {
@@ -42,8 +48,8 @@ class PaymentController extends Controller
         }
 
         $payments = $query->latest('date')->paginate(15);
-        $clients = Client::orderBy('name')->get();
-        $projects = Project::orderBy('title')->get();
+        $clients = Client::where('workspace_id', $workspaceId)->orderBy('name')->get();
+        $projects = Project::where('workspace_id', $workspaceId)->orderBy('title')->get();
 
         return view('payments.index', compact('payments', 'clients', 'projects'));
     }
@@ -53,8 +59,10 @@ class PaymentController extends Controller
      */
     public function create()
     {
-        $clients = Client::orderBy('name')->get();
-        $projects = Project::with('client')->orderBy('title')->get();
+        $workspaceId = Auth::user()->current_workspace_id;
+
+        $clients = Client::where('workspace_id', $workspaceId)->orderBy('name')->get();
+        $projects = Project::where('workspace_id', $workspaceId)->with('client')->orderBy('title')->get();
         
         return view('payments.create', compact('clients', 'projects'));
     }
@@ -64,6 +72,8 @@ class PaymentController extends Controller
      */
     public function store(Request $request)
     {
+        $workspaceId = Auth::user()->current_workspace_id;
+
         $validated = $request->validate([
             'project_id' => 'required|exists:projects,id',
             'client_id' => 'required|exists:clients,id',
@@ -72,6 +82,15 @@ class PaymentController extends Controller
             'date' => 'required|date',
             'notes' => 'nullable|string',
         ]);
+
+        $project = Project::where('workspace_id', $workspaceId)->findOrFail($validated['project_id']);
+        $client = Client::where('workspace_id', $workspaceId)->findOrFail($validated['client_id']);
+
+        if ((int) $project->client_id !== (int) $client->id) {
+            return back()
+                ->withErrors(['project_id' => 'Selected project does not belong to the selected client.'])
+                ->withInput();
+        }
 
         Payment::create($validated);
 
@@ -85,6 +104,8 @@ class PaymentController extends Controller
     public function show(Payment $payment)
     {
         $payment->load(['project', 'client']);
+        $this->authorizeWorkspace($payment);
+
         return view('payments.show', compact('payment'));
     }
 
@@ -93,8 +114,12 @@ class PaymentController extends Controller
      */
     public function edit(Payment $payment)
     {
-        $clients = Client::orderBy('name')->get();
-        $projects = Project::with('client')->orderBy('title')->get();
+        $payment->load(['project', 'client']);
+        $this->authorizeWorkspace($payment);
+
+        $workspaceId = Auth::user()->current_workspace_id;
+        $clients = Client::where('workspace_id', $workspaceId)->orderBy('name')->get();
+        $projects = Project::where('workspace_id', $workspaceId)->with('client')->orderBy('title')->get();
         
         return view('payments.edit', compact('payment', 'clients', 'projects'));
     }
@@ -104,6 +129,11 @@ class PaymentController extends Controller
      */
     public function update(Request $request, Payment $payment)
     {
+        $payment->load(['project', 'client']);
+        $this->authorizeWorkspace($payment);
+
+        $workspaceId = Auth::user()->current_workspace_id;
+
         $validated = $request->validate([
             'project_id' => 'required|exists:projects,id',
             'client_id' => 'required|exists:clients,id',
@@ -112,6 +142,15 @@ class PaymentController extends Controller
             'date' => 'required|date',
             'notes' => 'nullable|string',
         ]);
+
+        $project = Project::where('workspace_id', $workspaceId)->findOrFail($validated['project_id']);
+        $client = Client::where('workspace_id', $workspaceId)->findOrFail($validated['client_id']);
+
+        if ((int) $project->client_id !== (int) $client->id) {
+            return back()
+                ->withErrors(['project_id' => 'Selected project does not belong to the selected client.'])
+                ->withInput();
+        }
 
         $payment->update($validated);
 
@@ -124,6 +163,9 @@ class PaymentController extends Controller
      */
     public function destroy(Payment $payment)
     {
+        $payment->load('project');
+        $this->authorizeWorkspace($payment);
+
         $payment->delete();
 
         return redirect()->route('payments.index')
@@ -135,7 +177,12 @@ class PaymentController extends Controller
      */
     public function exportCsv(Request $request)
     {
-        $query = Payment::with(['project', 'client']);
+        $workspaceId = Auth::user()->current_workspace_id;
+
+        $query = Payment::with(['project', 'client'])
+            ->whereHas('project', function ($q) use ($workspaceId) {
+                $q->where('workspace_id', $workspaceId);
+            });
 
         // Apply same filters as index
         if ($request->has('client_id') && $request->client_id !== '') {
@@ -177,7 +224,12 @@ class PaymentController extends Controller
      */
     public function exportPdf(Request $request)
     {
-        $query = Payment::with(['project', 'client']);
+        $workspaceId = Auth::user()->current_workspace_id;
+
+        $query = Payment::with(['project', 'client'])
+            ->whereHas('project', function ($q) use ($workspaceId) {
+                $q->where('workspace_id', $workspaceId);
+            });
 
         // Apply same filters as index
         if ($request->has('client_id') && $request->client_id !== '') {
@@ -194,6 +246,15 @@ class PaymentController extends Controller
         $pdf = Pdf::loadView('payments.pdf', compact('payments', 'total'));
         
         return $pdf->download('payments_' . now()->format('Y-m-d') . '.pdf');
+    }
+
+    private function authorizeWorkspace(Payment $payment): void
+    {
+        $workspaceId = Auth::user()->current_workspace_id;
+
+        if (!$payment->project || (int) $payment->project->workspace_id !== (int) $workspaceId) {
+            abort(403, 'This payment does not belong to your current workspace.');
+        }
     }
 }
 
