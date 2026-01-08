@@ -28,9 +28,11 @@ class ExpenseCategoryController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:expense_categories,name',
             'description' => 'nullable|string',
+            'is_salary' => 'nullable|boolean',
         ]);
 
         $validated['workspace_id'] = Auth::user()->current_workspace_id;
+        $validated['is_salary'] = $request->boolean('is_salary');
 
         ExpenseCategory::create($validated);
 

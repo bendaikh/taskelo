@@ -14,6 +14,7 @@ class Expense extends Model
         'workspace_id',
         'project_id',
         'expense_category_id',
+        'user_id',
         'category',
         'amount',
         'date',
@@ -38,6 +39,11 @@ class Expense extends Model
     public function categoryRef(): BelongsTo
     {
         return $this->belongsTo(ExpenseCategory::class, 'expense_category_id');
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }
 

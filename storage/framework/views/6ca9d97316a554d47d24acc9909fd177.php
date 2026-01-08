@@ -125,25 +125,74 @@
                 </li>
                 <?php endif; ?>
 
-                <li>
-                    <a href="<?php echo e(route('expenses.index')); ?>" 
-                       onclick="if(window.innerWidth < 1024) toggleSidebar();"
-                       class="flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('expenses.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
+                <!-- Expenses -->
+                <li x-data="{ open: <?php echo e(request()->routeIs('expenses.*') || request()->routeIs('expense-categories.*') ? 'true' : 'false'); ?> }">
+                    <button @click="open = !open" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('expenses.*') || request()->routeIs('expense-categories.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l2-2 4 4m0 0l-4-4m4 4V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
-                        Expenses
-                    </a>
+                        <span class="flex-1 text-left">Expenses</span>
+                        <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <ul x-show="open" x-collapse class="ml-4 mt-2 space-y-1">
+                        <li>
+                            <a href="<?php echo e(route('expenses.index')); ?>" 
+                               onclick="if(window.innerWidth < 1024) toggleSidebar();"
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors <?php echo e(request()->routeIs('expenses.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l2-2 4 4m0 0l-4-4m4 4V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2z" />
+                                </svg>
+                                Expenses
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo e(route('expense-categories.index')); ?>" 
+                               onclick="if(window.innerWidth < 1024) toggleSidebar();"
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors <?php echo e(request()->routeIs('expense-categories.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                </svg>
+                                Categories
+                            </a>
+                        </li>
+                    </ul>
                 </li>
-                <li>
-                    <a href="<?php echo e(route('expense-categories.index')); ?>" 
-                       onclick="if(window.innerWidth < 1024) toggleSidebar();"
-                       class="flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('expense-categories.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
+
+                <!-- User Management -->
+                <li x-data="{ open: <?php echo e(request()->routeIs('roles.*') || request()->routeIs('users.*') ? 'true' : 'false'); ?> }">
+                    <button @click="open = !open" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('roles.*') || request()->routeIs('users.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
-                        Expense Categories
-                    </a>
+                        <span class="flex-1 text-left">User Management</span>
+                        <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-90': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                        </svg>
+                    </button>
+                    <ul x-show="open" x-collapse class="ml-4 mt-2 space-y-1">
+                        <li>
+                            <a href="<?php echo e(route('roles.index')); ?>" 
+                               onclick="if(window.innerWidth < 1024) toggleSidebar();"
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors <?php echo e(request()->routeIs('roles.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                                Roles
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo e(route('users.index')); ?>" 
+                               onclick="if(window.innerWidth < 1024) toggleSidebar();"
+                               class="flex items-center px-4 py-2 rounded-lg transition-colors <?php echo e(request()->routeIs('users.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                </svg>
+                                Users
+                            </a>
+                        </li>
+                    </ul>
                 </li>
 
                 <li>

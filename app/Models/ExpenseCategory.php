@@ -15,6 +15,11 @@ class ExpenseCategory extends Model
         'workspace_id',
         'name',
         'description',
+        'is_salary',
+    ];
+
+    protected $casts = [
+        'is_salary' => 'boolean',
     ];
 
     public function workspace(): BelongsTo

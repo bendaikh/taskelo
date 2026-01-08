@@ -16,6 +16,8 @@ use App\Http\Controllers\BusinessController;
 use App\Http\Controllers\ProposalController;
 use App\Http\Controllers\ProjectSectionController;
 use App\Http\Controllers\WorkspaceController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserManagementController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -103,5 +105,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/businesses/{business}/nodes/{node}', [BusinessController::class, 'deleteNode'])->name('businesses.nodes.delete');
     Route::post('/businesses/{business}/edges', [BusinessController::class, 'createEdge'])->name('businesses.edges.create');
     Route::delete('/businesses/{business}/edges/{edge}', [BusinessController::class, 'deleteEdge'])->name('businesses.edges.delete');
+
+    // User Management
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserManagementController::class);
 });
 

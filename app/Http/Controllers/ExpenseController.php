@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Expense;
 use App\Models\Project;
 use App\Models\ExpenseCategory;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,7 +16,7 @@ class ExpenseController extends Controller
         $workspaceId = Auth::user()->current_workspace_id;
         
         $expenses = Expense::where('workspace_id', $workspaceId)
-            ->with('project')
+            ->with(['project', 'user', 'categoryRef'])
             ->latest('date')
             ->paginate(15);
 
@@ -31,8 +32,10 @@ class ExpenseController extends Controller
         $projects = Project::where('workspace_id', $workspaceId)
             ->orderBy('title')->get(['id', 'title']);
         $categories = ExpenseCategory::where('workspace_id', $workspaceId)
-            ->orderBy('name')->get(['id', 'name']);
-        return view('expenses.create', compact('projects', 'categories'));
+            ->orderBy('name')->get(['id', 'name', 'is_salary']);
+        $users = User::orderBy('name')->get(['id', 'name']);
+        
+        return view('expenses.create', compact('projects', 'categories', 'users'));
     }
 
     public function store(Request $request)
@@ -40,6 +43,7 @@ class ExpenseController extends Controller
         $validated = $request->validate([
             'project_id' => 'nullable|exists:projects,id',
             'expense_category_id' => 'nullable|exists:expense_categories,id',
+            'user_id' => 'nullable|exists:users,id',
             'category' => 'nullable|string|max:255',
             'amount' => 'required|numeric|min:0',
             'date' => 'required|date',

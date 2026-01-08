@@ -20,6 +20,7 @@
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Project</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Category</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Employee</th>
           <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Amount</th>
           <th class="px-6 py-3"/>
         </tr>
@@ -29,7 +30,13 @@
           <tr>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $expense->date->format('M d, Y') }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">{{ $expense->project?->title ?? '-' }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">{{ $expense->category ?? '-' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+              {{ $expense->category ?? '-' }}
+              @if($expense->categoryRef?->is_salary)
+                <span class="ml-1 px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded text-xs">Salary</span>
+              @endif
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">{{ $expense->user?->name ?? '-' }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium text-red-600 dark:text-red-400">{{ Auth::user()->currency }} {{ number_format($expense->amount, 2) }}</td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
               <form action="{{ route('expenses.destroy', $expense) }}" method="POST" onsubmit="return confirm('Delete this expense?')">
@@ -41,7 +48,7 @@
           </tr>
         @empty
           <tr>
-            <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No expenses yet.</td>
+            <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No expenses yet.</td>
           </tr>
         @endforelse
       </tbody>
@@ -73,12 +80,23 @@
         <div class="space-y-1 text-sm border-t border-gray-200 dark:border-gray-700 pt-3">
           <div>
             <span class="text-gray-500 dark:text-gray-400">Category: </span>
-            <span class="text-gray-900 dark:text-gray-100">{{ $expense->category ?? '-' }}</span>
+            <span class="text-gray-900 dark:text-gray-100">
+              {{ $expense->category ?? '-' }}
+              @if($expense->categoryRef?->is_salary)
+                <span class="ml-1 px-1.5 py-0.5 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded text-xs">Salary</span>
+              @endif
+            </span>
           </div>
           @if($expense->project)
             <div>
               <span class="text-gray-500 dark:text-gray-400">Project: </span>
               <span class="text-gray-900 dark:text-gray-100">{{ $expense->project->title }}</span>
+            </div>
+          @endif
+          @if($expense->user)
+            <div>
+              <span class="text-gray-500 dark:text-gray-400">Employee: </span>
+              <span class="text-gray-900 dark:text-gray-100">{{ $expense->user->name }}</span>
             </div>
           @endif
         </div>

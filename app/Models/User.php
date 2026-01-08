@@ -74,5 +74,14 @@ class User extends Authenticatable
             ->withTimestamps()
             ->withPivot('role');
     }
+
+    /**
+     * Get all roles assigned to this user
+     */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_roles')
+            ->withTimestamps();
+    }
 }
 

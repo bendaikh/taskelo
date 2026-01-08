@@ -19,6 +19,7 @@
         <tr>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
           <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Description</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
           <th class="px-6 py-3"/>
         </tr>
       </thead>
@@ -26,7 +27,16 @@
         @forelse($categories as $category)
           <tr>
             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-100">{{ $category->name }}</td>
-            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">{{ $category->description }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">{{ $category->description ?? '-' }}</td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm">
+              @if($category->is_salary)
+                <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded text-xs font-medium">
+                  Salary
+                </span>
+              @else
+                <span class="text-gray-400">-</span>
+              @endif
+            </td>
             <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
               <form action="{{ route('expense-categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Delete this category?')">
                 @csrf
@@ -37,7 +47,7 @@
           </tr>
         @empty
           <tr>
-            <td colspan="3" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No categories yet.</td>
+            <td colspan="4" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">No categories yet.</td>
           </tr>
         @endforelse
       </tbody>
@@ -51,7 +61,14 @@
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4">
             <div class="flex items-start justify-between mb-2">
                 <div class="flex-1 min-w-0">
-                    <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">{{ $category->name }}</h3>
+                    <div class="flex items-center gap-2 mb-1">
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ $category->name }}</h3>
+                        @if($category->is_salary)
+                            <span class="px-2 py-1 bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded text-xs font-medium">
+                                Salary
+                            </span>
+                        @endif
+                    </div>
                     @if($category->description)
                         <p class="text-sm text-gray-700 dark:text-gray-300">{{ $category->description }}</p>
                     @endif
