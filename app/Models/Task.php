@@ -12,6 +12,7 @@ class Task extends Model
 
     protected $fillable = [
         'project_id',
+        'workspace_id',
         'title',
         'status',
         'price',
@@ -25,11 +26,19 @@ class Task extends Model
     ];
 
     /**
-     * Get the project that owns the task
+     * Get the project that owns the task (nullable for daily tasks)
      */
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+
+    /**
+     * Get the workspace that owns the task
+     */
+    public function workspace(): BelongsTo
+    {
+        return $this->belongsTo(Workspace::class);
     }
 
     /**

@@ -18,6 +18,7 @@ use App\Http\Controllers\ProjectSectionController;
 use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserManagementController;
+use App\Http\Controllers\DailyTasksController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -109,5 +110,12 @@ Route::middleware('auth')->group(function () {
     // User Management
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserManagementController::class);
+
+    // Daily Tasks (only for business workspace)
+    Route::get('/daily-tasks', [DailyTasksController::class, 'index'])->name('daily-tasks.index');
+    Route::post('/daily-tasks', [DailyTasksController::class, 'store'])->name('daily-tasks.store');
+    Route::put('/daily-tasks/{task}', [DailyTasksController::class, 'update'])->name('daily-tasks.update');
+    Route::patch('/daily-tasks/{task}/status', [DailyTasksController::class, 'updateStatus'])->name('daily-tasks.update-status');
+    Route::delete('/daily-tasks/{task}', [DailyTasksController::class, 'destroy'])->name('daily-tasks.destroy');
 });
 

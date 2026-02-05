@@ -5,6 +5,7 @@ import { createApp } from 'vue';
 import RevenueChart from './components/RevenueChart.vue';
 import PaymentStatusChart from './components/PaymentStatusChart.vue';
 import TaskList from './components/TaskList.vue';
+import DailyTasksList from './components/DailyTasksList.vue';
 import ExpensesChart from './components/ExpensesChart.vue';
 import CashflowChart from './components/CashflowChart.vue';
 import ExpensesByCategoryChart from './components/ExpensesByCategoryChart.vue';
@@ -71,5 +72,10 @@ document.querySelectorAll('flow-builder').forEach((el) => {
     const initialEdges = parseJsonAttr(el, ':initial-edges', []);
     const businessId = businessIdAttr ? parseInt(businessIdAttr, 10) : undefined;
     createApp(FlowBuilder, { businessId, initialNodes, initialEdges }).mount(el);
+});
+
+document.querySelectorAll('daily-tasks-list').forEach((el) => {
+    const initialTasks = parseJsonAttr(el, ':initial-tasks', []);
+    createApp(DailyTasksList, { initialTasks }).mount(el);
 });
 

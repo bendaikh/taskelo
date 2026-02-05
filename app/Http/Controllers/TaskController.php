@@ -22,6 +22,10 @@ class TaskController extends Controller
             'description' => 'nullable|string',
         ]);
 
+        // Get the project to set workspace_id
+        $project = Project::findOrFail($validated['project_id']);
+        $validated['workspace_id'] = $project->workspace_id;
+
         Task::create($validated);
 
         return back()->with('success', 'Task created successfully.');
