@@ -47,10 +47,6 @@ class DashboardController extends Controller
                 ->orderBy('day')
                 ->get();
 
-            // Revenue for last 30 days
-            $revenue30 = Revenue::where('workspace_id', $workspaceId)
-                ->where('date', '>=', now()->subDays(30))
-                ->sum('amount');
         } else {
             // Business workspace: Use existing Payment-based logic
             $totalProjects = Project::where('workspace_id', $workspaceId)->count();
@@ -124,10 +120,6 @@ class DashboardController extends Controller
                 'pending' => (float) $pendingTotal,
             ];
 
-            // Revenue for last 30 days
-            $revenue30 = Payment::whereHas('project', function($q) use ($workspaceId) {
-                $q->where('workspace_id', $workspaceId);
-            })->where('date', '>=', now()->subDays(30))->sum('amount');
         }
 
         // Initialize variables that might not be set for personal workspace
@@ -197,9 +189,8 @@ class DashboardController extends Controller
             ];
         });
 
-        // Net cashflow (last 30 days)
-        $expenses30 = Schema::hasTable('expenses') ? (float) Expense::where('workspace_id', $workspaceId)->where('date', '>=', now()->subDays(30))->sum('amount') : 0.0;
-        $netCashflow30 = (float) $revenue30 - (float) $expenses30;
+        // Net cashflow (all time): total revenue - total expenses
+        $netCashflow = (float) $totalRevenue - (float) $totalExpenses;
 
         // Tasks to focus on: To Do and In Progress (only for business workspace)
         $todoTasks = collect();
@@ -239,7 +230,7 @@ class DashboardController extends Controller
             'monthlyExpenses',
             'dailyExpenses',
             'monthlyCashflow',
-            'netCashflow30',
+            'netCashflow',
             'expensesByCategory',
             'todoTasks',
             'inProgressTasks'

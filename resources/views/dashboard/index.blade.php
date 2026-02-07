@@ -85,15 +85,15 @@
         </div>
     </div>
 
-    <!-- Net Cashflow (Last 30 Days) -->
+    <!-- Net Cashflow (All Time) -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">Net Cashflow (Last 30 Days)</p>
-                <p class="text-3xl font-bold mt-2 {{ $netCashflow30 >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">{{ Auth::user()->currency }} {{ number_format($netCashflow30, 2) }}</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">Net Cashflow (All Time)</p>
+                <p class="text-3xl font-bold mt-2 {{ $netCashflow >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">{{ Auth::user()->currency }} {{ number_format($netCashflow, 2) }}</p>
             </div>
-            <div class="p-3 rounded-lg {{ $netCashflow30 >= 0 ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900' }}">
-                <svg class="w-8 h-8 {{ $netCashflow30 >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="p-3 rounded-lg {{ $netCashflow >= 0 ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900' }}">
+                <svg class="w-8 h-8 {{ $netCashflow >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7"></path>
                 </svg>
             </div>
