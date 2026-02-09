@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Analytics')
-@section('page-title', 'Analytics')
+@section('title', __('app.analytics'))
+@section('page-title', __('app.analytics'))
 
 @section('content')
 <!-- Revenue Comparison -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Yearly Revenue Comparison</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.this_year') }} vs {{ __('app.last_year') }}</h3>
         <div class="space-y-4">
             <div>
                 <div class="flex justify-between mb-2">
-                    <span class="text-gray-600 dark:text-gray-400">Current Year ({{ now()->year }})</span>
+                    <span class="text-gray-600 dark:text-gray-400">{{ __('app.this_year') }} ({{ now()->year }})</span>
                     <span class="font-bold text-gray-900 dark:text-gray-100">{{ Auth::user()->currency }} {{ number_format($currentYearRevenue, 2) }}</span>
                 </div>
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
@@ -20,7 +20,7 @@
             </div>
             <div>
                 <div class="flex justify-between mb-2">
-                    <span class="text-gray-600 dark:text-gray-400">Last Year ({{ now()->year - 1 }})</span>
+                    <span class="text-gray-600 dark:text-gray-400">{{ __('app.last_year') }} ({{ now()->year - 1 }})</span>
                     <span class="font-bold text-gray-900 dark:text-gray-100">{{ Auth::user()->currency }} {{ number_format($lastYearRevenue, 2) }}</span>
                 </div>
                 <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3">
@@ -35,11 +35,11 @@
 
     <!-- Payment Completion Rate -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Payment Completion Rate</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.payment_status') }}</h3>
         <div class="flex items-center justify-center h-32">
             <div class="text-center">
                 <div class="text-5xl font-bold text-primary-600">{{ number_format($completionRate, 1) }}%</div>
-                <p class="text-gray-500 dark:text-gray-400 mt-2">Overall Completion</p>
+                <p class="text-gray-500 dark:text-gray-400 mt-2">{{ __('app.completed') }}</p>
             </div>
         </div>
     </div>
@@ -47,7 +47,7 @@
 
 <!-- Monthly Revenue Chart -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Monthly Revenue Trend (Last 12 Months)</h3>
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.monthly_revenue') }}</h3>
     <div id="monthly-revenue-chart">
         <revenue-chart 
             :data='@json($monthlyRevenue)'
@@ -60,7 +60,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <!-- Top 5 Clients -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Top 5 Clients by Revenue</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.top_clients') }}</h3>
         <div class="space-y-4">
             @foreach($topClients as $index => $client)
                 <div>
@@ -82,9 +82,9 @@
 
     <!-- Project Status Distribution -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Project Status Distribution</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.project_status') }}</h3>
         <div class="space-y-3">
-            @foreach(['planning' => 'Planning', 'active' => 'Active', 'on_hold' => 'On Hold', 'completed' => 'Completed', 'cancelled' => 'Cancelled'] as $key => $label)
+            @foreach(['planning' => __('app.pending'), 'active' => __('app.active'), 'on_hold' => __('app.on_hold'), 'completed' => __('app.completed'), 'cancelled' => __('app.cancelled')] as $key => $label)
                 @php
                     $count = $projectsByStatus[$key] ?? 0;
                 @endphp
@@ -116,10 +116,10 @@
 
 <!-- Revenue by Type -->
 <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Revenue by Payment Type</h3>
+    <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.revenue_overview') }}</h3>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
-            <div class="text-sm text-green-700 dark:text-green-300 mb-1">Payments</div>
+            <div class="text-sm text-green-700 dark:text-green-300 mb-1">{{ __('app.payments') }}</div>
             <div class="text-2xl font-bold text-green-800 dark:text-green-200">
                 {{ Auth::user()->currency }} {{ number_format($revenueByType['payment'] ?? 0, 2) }}
             </div>
@@ -133,4 +133,3 @@
     </div>
 </div>
 @endsection
-

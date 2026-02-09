@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Users')
-@section('page-title', 'Users')
+@section('title', __('app.users'))
+@section('page-title', __('app.users'))
 
 @section('content')
 <div class="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -10,22 +10,22 @@
         <input 
             type="text" 
             name="search" 
-            placeholder="Search users..." 
+            placeholder="{{ __('app.search') }}..." 
             value="{{ request('search') }}"
             class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
         <button type="submit" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 whitespace-nowrap">
-            Search
+            {{ __('app.search') }}
         </button>
         @if(request('search'))
             <a href="{{ route('users.index') }}" class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 whitespace-nowrap text-center">
-                Clear
+                {{ __('app.cancel') }}
             </a>
         @endif
     </form>
 
     <!-- Add User Button -->
     <a href="{{ route('users.create') }}" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 whitespace-nowrap text-center">
-        + Add User
+        + {{ __('app.add_user') }}
     </a>
 </div>
 
@@ -34,11 +34,11 @@
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Email</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Roles</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Created</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.name') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.email') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.roles') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.date') }}</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.actions') }}</th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -62,19 +62,19 @@
                                 @endforeach
                             </div>
                         @else
-                            <span class="text-gray-400">No roles</span>
+                            <span class="text-gray-400">{{ __('app.no_roles') }}</span>
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {{ $user->created_at->format('M d, Y') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="{{ route('users.edit', $user) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 mr-3">Edit</a>
+                        <a href="{{ route('users.edit', $user) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 mr-3">{{ __('app.edit') }}</a>
                         @if($user->id !== Auth::id())
-                            <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this user?');">
+                            <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('app.confirm_delete') }}');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">Delete</button>
+                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">{{ __('app.delete') }}</button>
                             </form>
                         @endif
                     </td>
@@ -82,7 +82,7 @@
             @empty
                 <tr>
                     <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
-                        No users found. <a href="{{ route('users.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Add your first user</a>
+                        {{ __('app.no_users') }}. <a href="{{ route('users.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ __('app.add_user') }}</a>
                     </td>
                 </tr>
             @endforelse
@@ -99,23 +99,23 @@
                     {{ $user->name }}
                 </a>
                 <div class="flex space-x-2">
-                    <a href="{{ route('users.edit', $user) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 text-sm">Edit</a>
+                    <a href="{{ route('users.edit', $user) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 text-sm">{{ __('app.edit') }}</a>
                     @if($user->id !== Auth::id())
-                        <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                        <form action="{{ route('users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('app.are_you_sure') }}');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 text-sm">Delete</button>
+                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 text-sm">{{ __('app.delete') }}</button>
                         </form>
                     @endif
                 </div>
             </div>
             <div class="space-y-2 text-sm">
                 <div class="flex items-center">
-                    <span class="text-gray-500 dark:text-gray-400 w-24">Email:</span>
+                    <span class="text-gray-500 dark:text-gray-400 w-24">{{ __('app.email') }}:</span>
                     <span class="text-gray-900 dark:text-gray-100 flex-1 truncate">{{ $user->email }}</span>
                 </div>
                 <div class="flex items-center">
-                    <span class="text-gray-500 dark:text-gray-400 w-24">Roles:</span>
+                    <span class="text-gray-500 dark:text-gray-400 w-24">{{ __('app.roles') }}:</span>
                     <span class="text-gray-900 dark:text-gray-100 flex-1">
                         @if($user->roles->count() > 0)
                             @foreach($user->roles as $role)
@@ -124,20 +124,20 @@
                                 </span>
                             @endforeach
                         @else
-                            <span class="text-gray-400">No roles</span>
+                            <span class="text-gray-400">{{ __('app.no_roles') }}</span>
                         @endif
                     </span>
                 </div>
                 <div class="flex items-center">
-                    <span class="text-gray-500 dark:text-gray-400 w-24">Created:</span>
+                    <span class="text-gray-500 dark:text-gray-400 w-24">{{ __('app.date') }}:</span>
                     <span class="text-gray-900 dark:text-gray-100 flex-1">{{ $user->created_at->format('M d, Y') }}</span>
                 </div>
             </div>
         </div>
     @empty
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
-            <p class="text-gray-500 dark:text-gray-400 mb-4">No users found.</p>
-            <a href="{{ route('users.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Add your first user</a>
+            <p class="text-gray-500 dark:text-gray-400 mb-4">{{ __('app.no_users') }}.</p>
+            <a href="{{ route('users.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ __('app.add_user') }}</a>
         </div>
     @endforelse
 </div>

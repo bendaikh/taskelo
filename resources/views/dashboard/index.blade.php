@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
-@section('page-title', 'Dashboard')
+@section('title', __('app.dashboard'))
+@section('page-title', __('app.dashboard'))
 
 @section('content')
 <!-- Overview Cards -->
@@ -11,7 +11,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">Total Projects</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">{{ __('app.total_projects') }}</p>
                 <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ $totalProjects }}</p>
             </div>
             <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-lg">
@@ -26,7 +26,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">Active Clients</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">{{ __('app.active_clients') }}</p>
                 <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ $activeClients }}</p>
             </div>
             <div class="bg-green-100 dark:bg-green-900 p-3 rounded-lg">
@@ -42,7 +42,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">Total Revenue</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">{{ __('app.total_revenue') }}</p>
                 <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ Auth::user()->currency }} {{ number_format($totalRevenue, 2) }}</p>
             </div>
             <div class="bg-yellow-100 dark:bg-yellow-900 p-3 rounded-lg">
@@ -58,7 +58,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">Pending Payments</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">{{ __('app.pending_payments') }}</p>
                 <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ Auth::user()->currency }} {{ number_format($pendingPayments, 2) }}</p>
             </div>
             <div class="bg-red-100 dark:bg-red-900 p-3 rounded-lg">
@@ -74,7 +74,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">Total Expenses</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">{{ __('app.total_expenses') }}</p>
                 <p class="text-3xl font-bold text-gray-800 dark:text-gray-200 mt-2">{{ Auth::user()->currency }} {{ number_format($totalExpenses, 2) }}</p>
             </div>
             <div class="bg-red-100 dark:bg-red-900 p-3 rounded-lg">
@@ -89,7 +89,7 @@
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-gray-500 dark:text-gray-400 text-sm">Net Cashflow (All Time)</p>
+                <p class="text-gray-500 dark:text-gray-400 text-sm">{{ __('app.net_cashflow') }}</p>
                 <p class="text-3xl font-bold mt-2 {{ $netCashflow >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400' }}">{{ Auth::user()->currency }} {{ number_format($netCashflow, 2) }}</p>
             </div>
             <div class="p-3 rounded-lg {{ $netCashflow >= 0 ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900' }}">
@@ -105,7 +105,7 @@
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <!-- Monthly Revenue Chart -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Monthly Revenue</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.monthly_revenue') }}</h3>
         <div id="monthly-revenue-chart-container">
             <revenue-chart 
                 :data='@json($monthlyRevenue)'
@@ -116,7 +116,7 @@
 
     <!-- Daily Revenue Chart -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Daily Revenue (Last 14 Days)</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.daily_revenue') }}</h3>
         <div>
             <revenue-chart 
                 :data='@json($dailyRevenue)'
@@ -128,7 +128,7 @@
     @if(!$isPersonal)
     <!-- Payment Status Chart -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Payment Status</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.payment_status') }}</h3>
         <div id="payment-status-chart-container">
             <payment-status-chart 
                 :data='@json($paymentStatus)'
@@ -140,7 +140,7 @@
 
     <!-- Monthly Expenses Chart -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Monthly Expenses</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.monthly_expenses') }}</h3>
         <div>
             <expenses-chart 
                 :data='@json($monthlyExpenses)'
@@ -151,7 +151,7 @@
 
     <!-- Monthly Cashflow Chart -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Monthly Cashflow</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.monthly_cashflow') }}</h3>
         <div>
             <cashflow-chart 
                 :data='@json($monthlyCashflow)'
@@ -162,7 +162,7 @@
 
     <!-- Expenses by Category -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Expenses by Category</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.expenses_by_category') }}</h3>
         <div>
             <expenses-by-category-chart 
                 :data='@json($expensesByCategory)'
@@ -178,8 +178,8 @@
     <!-- Tasks In Progress -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Tasks In Progress</h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Latest tasks currently being worked on</p>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ __('app.tasks_in_progress') }}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('app.tasks_in_progress_desc') }}</p>
         </div>
         <div class="p-6">
             @forelse($inProgressTasks as $task)
@@ -194,14 +194,14 @@
                                 @endif
                             </p>
                         </div>
-                        <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">In Progress</span>
+                        <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">{{ __('app.in_progress') }}</span>
                     </div>
                     @if($task->deadline)
-                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due {{ $task->deadline->format('M d, Y') }}</p>
+                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">{{ __('app.due') }} {{ $task->deadline->format('M d, Y') }}</p>
                     @endif
                 </div>
             @empty
-                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No tasks in progress</p>
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">{{ __('app.no_tasks_in_progress') }}</p>
             @endforelse
         </div>
     </div>
@@ -209,8 +209,8 @@
     <!-- Tasks To Do -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Tasks To Do</h3>
-            <p class="text-sm text-gray-500 dark:text-gray-400">Latest tasks not started yet</p>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ __('app.tasks_to_do') }}</h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('app.tasks_to_do_desc') }}</p>
         </div>
         <div class="p-6">
             @forelse($todoTasks as $task)
@@ -225,14 +225,14 @@
                                 @endif
                             </p>
                         </div>
-                        <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">To Do</span>
+                        <span class="px-2 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300">{{ __('app.to_do') }}</span>
                     </div>
                     @if($task->deadline)
-                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">Due {{ $task->deadline->format('M d, Y') }}</p>
+                        <p class="text-xs mt-1 text-gray-500 dark:text-gray-400">{{ __('app.due') }} {{ $task->deadline->format('M d, Y') }}</p>
                     @endif
                 </div>
             @empty
-                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No tasks to do</p>
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">{{ __('app.no_tasks_to_do') }}</p>
             @endforelse
         </div>
     </div>
@@ -245,7 +245,7 @@
     <!-- Recent Payments -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Recent Payments</h3>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ __('app.recent_payments') }}</h3>
         </div>
         <div class="p-6">
             @forelse($recentPayments as $payment)
@@ -260,12 +260,12 @@
                     </div>
                 </div>
             @empty
-                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No recent payments</p>
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">{{ __('app.no_recent_payments') }}</p>
             @endforelse
         </div>
         <div class="p-4 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ route('payments.index') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 text-sm font-medium">
-                View all payments →
+                {{ __('app.view_all_payments') }} →
             </a>
         </div>
     </div>
@@ -273,7 +273,7 @@
     <!-- Recent Projects -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
         <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Recent Projects</h3>
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200">{{ __('app.recent_projects') }}</h3>
         </div>
         <div class="p-6">
             @forelse($recentProjects as $project)
@@ -286,7 +286,7 @@
                             @elseif($project->status === 'on_hold') bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300
                             @else bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300
                             @endif">
-                            {{ ucfirst(str_replace('_', ' ', $project->status)) }}
+                            {{ __('app.' . $project->status) }}
                         </span>
                     </div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">{{ $project->client->name }}</p>
@@ -294,20 +294,19 @@
                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                             <div class="bg-primary-600 h-2 rounded-full" style="width: {{ $project->progress }}%"></div>
                         </div>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $project->progress }}% complete</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $project->progress }}% {{ __('app.complete') }}</p>
                     </div>
                 </div>
             @empty
-                <p class="text-gray-500 dark:text-gray-400 text-center py-4">No recent projects</p>
+                <p class="text-gray-500 dark:text-gray-400 text-center py-4">{{ __('app.no_recent_projects') }}</p>
             @endforelse
         </div>
         <div class="p-4 border-t border-gray-200 dark:border-gray-700">
             <a href="{{ route('projects.index') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 text-sm font-medium">
-                View all projects →
+                {{ __('app.view_all_projects') }} →
             </a>
         </div>
     </div>
 </div>
 @endif
 @endsection
-

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="{{ Auth::user()->theme ?? 'light' }}">
+<html lang="{{ Auth::check() ? (Auth::user()->language ?? 'en') : 'en' }}" class="{{ Auth::user()->theme ?? 'light' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

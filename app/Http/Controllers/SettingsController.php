@@ -67,11 +67,26 @@ class SettingsController extends Controller
         $validated = $request->validate([
             'currency' => 'required|string|max:10',
             'theme' => 'required|in:light,dark',
+            'language' => 'nullable|in:en,fr',
         ]);
 
         Auth::user()->update($validated);
 
-        return back()->with('success', 'Preferences updated successfully.');
+        return back()->with('success', __('app.preferences_updated'));
+    }
+
+    public function updateLanguage(Request $request)
+    {
+        $validated = $request->validate([
+            'language' => 'required|in:en,fr',
+        ]);
+
+        Auth::user()->update($validated);
+
+        // Set the locale immediately for this request
+        app()->setLocale($validated['language']);
+
+        return back()->with('success', __('app.language_updated'));
     }
 }
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Proposals')
-@section('page-title', 'Proposals')
+@section('title', __('app.proposals'))
+@section('page-title', __('app.proposals'))
 
 @section('content')
 <div class="mb-6 flex flex-col md:flex-row md:justify-between md:items-start space-y-4 md:space-y-0">
@@ -10,14 +10,14 @@
         <input 
             type="text" 
             name="search" 
-            placeholder="Search proposals..." 
+            placeholder="{{ __('app.search') }}..." 
             value="{{ request('search') }}"
             class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
         
         <select 
             name="client_id" 
             class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
-            <option value="">All Clients</option>
+            <option value="">{{ __('app.all') }} {{ __('app.clients') }}</option>
             @foreach($clients as $client)
                 <option value="{{ $client->id }}" {{ request('client_id') == $client->id ? 'selected' : '' }}>
                     {{ $client->name }}
@@ -28,27 +28,27 @@
         <select 
             name="status" 
             class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
-            <option value="">All Status</option>
-            <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
-            <option value="sent" {{ request('status') === 'sent' ? 'selected' : '' }}>Sent</option>
-            <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>Accepted</option>
-            <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>Rejected</option>
+            <option value="">{{ __('app.all') }} {{ __('app.status') }}</option>
+            <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>{{ __('app.draft') }}</option>
+            <option value="sent" {{ request('status') === 'sent' ? 'selected' : '' }}>{{ __('app.sent') }}</option>
+            <option value="accepted" {{ request('status') === 'accepted' ? 'selected' : '' }}>{{ __('app.accepted') }}</option>
+            <option value="rejected" {{ request('status') === 'rejected' ? 'selected' : '' }}>{{ __('app.rejected') }}</option>
         </select>
 
         <button type="submit" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-            Filter
+            {{ __('app.filter') }}
         </button>
         
         @if(request()->hasAny(['search', 'client_id', 'status']))
             <a href="{{ route('proposals.index') }}" class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500">
-                Clear
+                {{ __('app.cancel') }}
             </a>
         @endif
     </form>
 
     <!-- Add Proposal Button -->
     <a href="{{ route('proposals.create') }}" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 whitespace-nowrap text-center">
-        + Create Proposal
+        + {{ __('app.add_proposal') }}
     </a>
 </div>
 
@@ -57,13 +57,13 @@
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Proposal #</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Client</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Amount</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">#</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.title') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.client') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.date') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.total') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.status') }}</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.actions') }}</th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -83,7 +83,7 @@
                                 {{ $proposal->client->name }}
                             </a>
                         @else
-                            <span class="text-gray-400 dark:text-gray-500 italic">No client</span>
+                            <span class="text-gray-400 dark:text-gray-500 italic">{{ __('app.no_clients') }}</span>
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
@@ -99,27 +99,27 @@
                             @elseif($proposal->status === 'rejected') bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300
                             @else bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300
                             @endif">
-                            {{ ucfirst($proposal->status) }}
+                            {{ __('app.' . $proposal->status) }}
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                         <div class="flex justify-end items-center space-x-2">
-                            <a href="{{ route('proposals.view-pdf', $proposal) }}" target="_blank" class="text-blue-600 hover:text-blue-900 dark:text-blue-400" title="View PDF">
+                            <a href="{{ route('proposals.view-pdf', $proposal) }}" target="_blank" class="text-blue-600 hover:text-blue-900 dark:text-blue-400" title="{{ __('app.view_pdf') }}">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                 </svg>
                             </a>
-                            <a href="{{ route('proposals.pdf', $proposal) }}" class="text-green-600 hover:text-green-900 dark:text-green-400" title="Download PDF">
+                            <a href="{{ route('proposals.pdf', $proposal) }}" class="text-green-600 hover:text-green-900 dark:text-green-400" title="{{ __('app.download_pdf') }}">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                                 </svg>
                             </a>
-                            <a href="{{ route('proposals.edit', $proposal) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400">Edit</a>
-                            <form action="{{ route('proposals.destroy', $proposal) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                            <a href="{{ route('proposals.edit', $proposal) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400">{{ __('app.edit') }}</a>
+                            <form action="{{ route('proposals.destroy', $proposal) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('app.are_you_sure') }}');">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">Delete</button>
+                                <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">{{ __('app.delete') }}</button>
                             </form>
                         </div>
                     </td>
@@ -127,7 +127,7 @@
             @empty
                 <tr>
                     <td colspan="7" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
-                        No proposals found. <a href="{{ route('proposals.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Create your first proposal</a>
+                        {{ __('app.no_proposals') }}. <a href="{{ route('proposals.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ __('app.add_proposal') }}</a>
                     </td>
                 </tr>
             @endforelse
@@ -160,14 +160,14 @@
                             @elseif($proposal->status === 'rejected') bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300
                             @else bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300
                             @endif">
-                            {{ ucfirst($proposal->status) }}
+                            {{ __('app.' . $proposal->status) }}
                         </span>
                     </div>
                 </div>
             </div>
             @if($proposal->client)
                 <div class="text-sm border-t border-gray-200 dark:border-gray-700 pt-3 mb-3">
-                    <span class="text-gray-500 dark:text-gray-400">Client: </span>
+                    <span class="text-gray-500 dark:text-gray-400">{{ __('app.client') }}: </span>
                     <a href="{{ route('clients.show', $proposal->client) }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">
                         {{ $proposal->client->name }}
                     </a>
@@ -175,32 +175,32 @@
             @endif
             <div class="flex items-center justify-between pt-3 border-t border-gray-200 dark:border-gray-700">
                 <div class="flex space-x-3">
-                    <a href="{{ route('proposals.view-pdf', $proposal) }}" target="_blank" class="text-blue-600 hover:text-blue-900 dark:text-blue-400" title="View PDF">
+                    <a href="{{ route('proposals.view-pdf', $proposal) }}" target="_blank" class="text-blue-600 hover:text-blue-900 dark:text-blue-400" title="{{ __('app.view_pdf') }}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                         </svg>
                     </a>
-                    <a href="{{ route('proposals.pdf', $proposal) }}" class="text-green-600 hover:text-green-900 dark:text-green-400" title="Download PDF">
+                    <a href="{{ route('proposals.pdf', $proposal) }}" class="text-green-600 hover:text-green-900 dark:text-green-400" title="{{ __('app.download_pdf') }}">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                         </svg>
                     </a>
                 </div>
                 <div class="flex space-x-3">
-                    <a href="{{ route('proposals.edit', $proposal) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 text-sm">Edit</a>
-                    <form action="{{ route('proposals.destroy', $proposal) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                    <a href="{{ route('proposals.edit', $proposal) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 text-sm">{{ __('app.edit') }}</a>
+                    <form action="{{ route('proposals.destroy', $proposal) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('app.are_you_sure') }}');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 text-sm">Delete</button>
+                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 text-sm">{{ __('app.delete') }}</button>
                     </form>
                 </div>
             </div>
         </div>
     @empty
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
-            <p class="text-gray-500 dark:text-gray-400 mb-4">No proposals found.</p>
-            <a href="{{ route('proposals.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Create your first proposal</a>
+            <p class="text-gray-500 dark:text-gray-400 mb-4">{{ __('app.no_proposals') }}.</p>
+            <a href="{{ route('proposals.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ __('app.add_proposal') }}</a>
         </div>
     @endforelse
 </div>
@@ -210,4 +210,3 @@
     {{ $proposals->links() }}
 </div>
 @endsection
-

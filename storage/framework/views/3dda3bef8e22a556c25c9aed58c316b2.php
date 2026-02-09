@@ -1,7 +1,7 @@
 
 
-<?php $__env->startSection('title', 'Conceptions'); ?>
-<?php $__env->startSection('page-title', 'Conceptions'); ?>
+<?php $__env->startSection('title', __('app.conception')); ?>
+<?php $__env->startSection('page-title', __('app.conception')); ?>
 
 <?php $__env->startSection('content'); ?>
 <div class="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -11,32 +11,35 @@
         <input 
             type="text" 
             name="search" 
-            placeholder="Search conceptions..." 
+            placeholder="<?php echo e(__('app.search')); ?>..." 
             value="<?php echo e(request('search')); ?>"
             class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
         
         <!-- Status Filter -->
         <select name="status" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-            <option value="">All Status</option>
-            <option value="draft" <?php echo e(request('status') == 'draft' ? 'selected' : ''); ?>>Draft</option>
-            <option value="sent" <?php echo e(request('status') == 'sent' ? 'selected' : ''); ?>>Sent</option>
-            <option value="accepted" <?php echo e(request('status') == 'accepted' ? 'selected' : ''); ?>>Accepted</option>
-            <option value="rejected" <?php echo e(request('status') == 'rejected' ? 'selected' : ''); ?>>Rejected</option>
+            <option value=""><?php echo e(__('app.all')); ?> <?php echo e(__('app.status')); ?></option>
+            <option value="draft" <?php echo e(request('status') == 'draft' ? 'selected' : ''); ?>><?php echo e(__('app.draft')); ?></option>
+            <option value="sent" <?php echo e(request('status') == 'sent' ? 'selected' : ''); ?>><?php echo e(__('app.sent')); ?></option>
+            <option value="accepted" <?php echo e(request('status') == 'accepted' ? 'selected' : ''); ?>><?php echo e(__('app.accepted')); ?></option>
+            <option value="rejected" <?php echo e(request('status') == 'rejected' ? 'selected' : ''); ?>><?php echo e(__('app.rejected')); ?></option>
         </select>
         
         <button type="submit" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 whitespace-nowrap">
-            Filter
+            <?php echo e(__('app.filter')); ?>
+
         </button>
         <?php if(request('search') || request('status')): ?>
             <a href="<?php echo e(route('conceptions.index')); ?>" class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 whitespace-nowrap text-center">
-                Clear
+                <?php echo e(__('app.cancel')); ?>
+
             </a>
         <?php endif; ?>
     </form>
 
     <!-- Add Conception Button -->
     <a href="<?php echo e(route('conceptions.create')); ?>" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 whitespace-nowrap text-center">
-        + New Conception
+        + <?php echo e(__('app.add_conception')); ?>
+
     </a>
 </div>
 
@@ -45,13 +48,13 @@
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Client</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Sections</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Price</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"><?php echo e(__('app.title')); ?></th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"><?php echo e(__('app.client')); ?></th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"><?php echo e(__('app.date')); ?></th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"><?php echo e(__('app.sections')); ?></th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"><?php echo e(__('app.total')); ?></th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"><?php echo e(__('app.status')); ?></th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"><?php echo e(__('app.actions')); ?></th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -64,7 +67,7 @@
                         </a>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                        <?php echo e($conception->client?->name ?? 'No client'); ?>
+                        <?php echo e($conception->client?->name ?? __('app.no_clients')); ?>
 
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
@@ -72,7 +75,8 @@
 
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                        <?php echo e(count($conception->sections)); ?> section(s)
+                        <?php echo e(count($conception->sections)); ?> <?php echo e(__('app.sections')); ?>
+
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-gray-100">
                         <?php echo e(Auth::user()->currency); ?> <?php echo e(number_format($conception->total_price, 2)); ?>
@@ -88,29 +92,29 @@
                             ];
                         ?>
                         <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full <?php echo e($statusColors[$conception->status]); ?>">
-                            <?php echo e(ucfirst($conception->status)); ?>
+                            <?php echo e(__('app.' . $conception->status)); ?>
 
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                        <a href="<?php echo e(route('conceptions.show', $conception)); ?>" class="text-green-600 hover:text-green-900 dark:text-green-400">View</a>
+                        <a href="<?php echo e(route('conceptions.show', $conception)); ?>" class="text-green-600 hover:text-green-900 dark:text-green-400"><?php echo e(__('app.view')); ?></a>
                         <select onchange="if(this.value) window.location.href=this.value" class="text-purple-600 dark:text-purple-400 bg-transparent border-none cursor-pointer text-sm font-medium focus:outline-none focus:ring-0">
                             <option value="">PDF ▾</option>
-                            <option value="<?php echo e(route('conceptions.pdf', [$conception, 'en'])); ?>">🇬🇧 English</option>
-                            <option value="<?php echo e(route('conceptions.pdf', [$conception, 'fr'])); ?>">🇫🇷 Français</option>
+                            <option value="<?php echo e(route('conceptions.pdf', [$conception, 'en'])); ?>">🇬🇧 <?php echo e(__('app.english')); ?></option>
+                            <option value="<?php echo e(route('conceptions.pdf', [$conception, 'fr'])); ?>">🇫🇷 <?php echo e(__('app.french')); ?></option>
                         </select>
-                        <a href="<?php echo e(route('conceptions.edit', $conception)); ?>" class="text-blue-600 hover:text-blue-900 dark:text-blue-400">Edit</a>
-                        <form action="<?php echo e(route('conceptions.destroy', $conception)); ?>" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this conception?');">
+                        <a href="<?php echo e(route('conceptions.edit', $conception)); ?>" class="text-blue-600 hover:text-blue-900 dark:text-blue-400"><?php echo e(__('app.edit')); ?></a>
+                        <form action="<?php echo e(route('conceptions.destroy', $conception)); ?>" method="POST" class="inline" onsubmit="return confirm('<?php echo e(__('app.confirm_delete')); ?>');">
                             <?php echo csrf_field(); ?>
                             <?php echo method_field('DELETE'); ?>
-                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">Delete</button>
+                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400"><?php echo e(__('app.delete')); ?></button>
                         </form>
                     </td>
                 </tr>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                 <tr>
                     <td colspan="7" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
-                        No conceptions found. <a href="<?php echo e(route('conceptions.create')); ?>" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Create your first conception</a>
+                        <?php echo e(__('app.no_conceptions')); ?>. <a href="<?php echo e(route('conceptions.create')); ?>" class="text-primary-600 dark:text-primary-400 hover:text-primary-700"><?php echo e(__('app.add_conception')); ?></a>
                     </td>
                 </tr>
             <?php endif; ?>
@@ -137,26 +141,26 @@
                         ];
                     ?>
                     <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full <?php echo e($statusColors[$conception->status]); ?>">
-                        <?php echo e(ucfirst($conception->status)); ?>
+                        <?php echo e(__('app.' . $conception->status)); ?>
 
                     </span>
                 </div>
             </div>
             <div class="space-y-2 text-sm mb-3">
                 <div class="flex items-center justify-between">
-                    <span class="text-gray-500 dark:text-gray-400">Client:</span>
-                    <span class="text-gray-900 dark:text-gray-100"><?php echo e($conception->client?->name ?? 'No client'); ?></span>
+                    <span class="text-gray-500 dark:text-gray-400"><?php echo e(__('app.client')); ?>:</span>
+                    <span class="text-gray-900 dark:text-gray-100"><?php echo e($conception->client?->name ?? __('app.no_clients')); ?></span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span class="text-gray-500 dark:text-gray-400">Date:</span>
+                    <span class="text-gray-500 dark:text-gray-400"><?php echo e(__('app.date')); ?>:</span>
                     <span class="text-gray-900 dark:text-gray-100"><?php echo e($conception->date->format('M d, Y')); ?></span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span class="text-gray-500 dark:text-gray-400">Sections:</span>
-                    <span class="text-gray-900 dark:text-gray-100"><?php echo e(count($conception->sections)); ?> section(s)</span>
+                    <span class="text-gray-500 dark:text-gray-400"><?php echo e(__('app.sections')); ?>:</span>
+                    <span class="text-gray-900 dark:text-gray-100"><?php echo e(count($conception->sections)); ?></span>
                 </div>
                 <div class="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-                    <span class="text-gray-500 dark:text-gray-400">Total:</span>
+                    <span class="text-gray-500 dark:text-gray-400"><?php echo e(__('app.total')); ?>:</span>
                     <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         <?php echo e(Auth::user()->currency); ?> <?php echo e(number_format($conception->total_price, 2)); ?>
 
@@ -164,24 +168,24 @@
                 </div>
             </div>
             <div class="flex flex-wrap gap-2 text-sm items-center">
-                <a href="<?php echo e(route('conceptions.show', $conception)); ?>" class="text-green-600 hover:text-green-900 dark:text-green-400">View</a>
+                <a href="<?php echo e(route('conceptions.show', $conception)); ?>" class="text-green-600 hover:text-green-900 dark:text-green-400"><?php echo e(__('app.view')); ?></a>
                 <select onchange="if(this.value) window.location.href=this.value" class="text-purple-600 dark:text-purple-400 bg-transparent border-none cursor-pointer text-sm font-medium focus:outline-none focus:ring-0">
                     <option value="">PDF ▾</option>
-                    <option value="<?php echo e(route('conceptions.pdf', [$conception, 'en'])); ?>">🇬🇧 English</option>
-                    <option value="<?php echo e(route('conceptions.pdf', [$conception, 'fr'])); ?>">🇫🇷 Français</option>
+                    <option value="<?php echo e(route('conceptions.pdf', [$conception, 'en'])); ?>">🇬🇧 <?php echo e(__('app.english')); ?></option>
+                    <option value="<?php echo e(route('conceptions.pdf', [$conception, 'fr'])); ?>">🇫🇷 <?php echo e(__('app.french')); ?></option>
                 </select>
-                <a href="<?php echo e(route('conceptions.edit', $conception)); ?>" class="text-blue-600 hover:text-blue-900 dark:text-blue-400">Edit</a>
-                <form action="<?php echo e(route('conceptions.destroy', $conception)); ?>" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                <a href="<?php echo e(route('conceptions.edit', $conception)); ?>" class="text-blue-600 hover:text-blue-900 dark:text-blue-400"><?php echo e(__('app.edit')); ?></a>
+                <form action="<?php echo e(route('conceptions.destroy', $conception)); ?>" method="POST" class="inline" onsubmit="return confirm('<?php echo e(__('app.are_you_sure')); ?>');">
                     <?php echo csrf_field(); ?>
                     <?php echo method_field('DELETE'); ?>
-                    <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">Delete</button>
+                    <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400"><?php echo e(__('app.delete')); ?></button>
                 </form>
             </div>
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
-            <p class="text-gray-500 dark:text-gray-400 mb-4">No conceptions found.</p>
-            <a href="<?php echo e(route('conceptions.create')); ?>" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Create your first conception</a>
+            <p class="text-gray-500 dark:text-gray-400 mb-4"><?php echo e(__('app.no_conceptions')); ?>.</p>
+            <a href="<?php echo e(route('conceptions.create')); ?>" class="text-primary-600 dark:text-primary-400 hover:text-primary-700"><?php echo e(__('app.add_conception')); ?></a>
         </div>
     <?php endif; ?>
 </div>

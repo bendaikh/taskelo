@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Conceptions')
-@section('page-title', 'Conceptions')
+@section('title', __('app.conception'))
+@section('page-title', __('app.conception'))
 
 @section('content')
 <div class="mb-6 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
@@ -11,32 +11,32 @@
         <input 
             type="text" 
             name="search" 
-            placeholder="Search conceptions..." 
+            placeholder="{{ __('app.search') }}..." 
             value="{{ request('search') }}"
             class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
         
         <!-- Status Filter -->
         <select name="status" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-            <option value="">All Status</option>
-            <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
-            <option value="sent" {{ request('status') == 'sent' ? 'selected' : '' }}>Sent</option>
-            <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>Accepted</option>
-            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+            <option value="">{{ __('app.all') }} {{ __('app.status') }}</option>
+            <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>{{ __('app.draft') }}</option>
+            <option value="sent" {{ request('status') == 'sent' ? 'selected' : '' }}>{{ __('app.sent') }}</option>
+            <option value="accepted" {{ request('status') == 'accepted' ? 'selected' : '' }}>{{ __('app.accepted') }}</option>
+            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>{{ __('app.rejected') }}</option>
         </select>
         
         <button type="submit" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 whitespace-nowrap">
-            Filter
+            {{ __('app.filter') }}
         </button>
         @if(request('search') || request('status'))
             <a href="{{ route('conceptions.index') }}" class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 whitespace-nowrap text-center">
-                Clear
+                {{ __('app.cancel') }}
             </a>
         @endif
     </form>
 
     <!-- Add Conception Button -->
     <a href="{{ route('conceptions.create') }}" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 whitespace-nowrap text-center">
-        + New Conception
+        + {{ __('app.add_conception') }}
     </a>
 </div>
 
@@ -45,13 +45,13 @@
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Title</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Client</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Sections</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Price</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.title') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.client') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.date') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.sections') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.total') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.status') }}</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.actions') }}</th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -63,13 +63,13 @@
                         </a>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                        {{ $conception->client?->name ?? 'No client' }}
+                        {{ $conception->client?->name ?? __('app.no_clients') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {{ $conception->date->format('M d, Y') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                        {{ count($conception->sections) }} section(s)
+                        {{ count($conception->sections) }} {{ __('app.sections') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-gray-100">
                         {{ Auth::user()->currency }} {{ number_format($conception->total_price, 2) }}
@@ -84,28 +84,28 @@
                             ];
                         @endphp
                         <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$conception->status] }}">
-                            {{ ucfirst($conception->status) }}
+                            {{ __('app.' . $conception->status) }}
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
-                        <a href="{{ route('conceptions.show', $conception) }}" class="text-green-600 hover:text-green-900 dark:text-green-400">View</a>
+                        <a href="{{ route('conceptions.show', $conception) }}" class="text-green-600 hover:text-green-900 dark:text-green-400">{{ __('app.view') }}</a>
                         <select onchange="if(this.value) window.location.href=this.value" class="text-purple-600 dark:text-purple-400 bg-transparent border-none cursor-pointer text-sm font-medium focus:outline-none focus:ring-0">
                             <option value="">PDF ▾</option>
-                            <option value="{{ route('conceptions.pdf', [$conception, 'en']) }}">🇬🇧 English</option>
-                            <option value="{{ route('conceptions.pdf', [$conception, 'fr']) }}">🇫🇷 Français</option>
+                            <option value="{{ route('conceptions.pdf', [$conception, 'en']) }}">🇬🇧 {{ __('app.english') }}</option>
+                            <option value="{{ route('conceptions.pdf', [$conception, 'fr']) }}">🇫🇷 {{ __('app.french') }}</option>
                         </select>
-                        <a href="{{ route('conceptions.edit', $conception) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400">Edit</a>
-                        <form action="{{ route('conceptions.destroy', $conception) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure you want to delete this conception?');">
+                        <a href="{{ route('conceptions.edit', $conception) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400">{{ __('app.edit') }}</a>
+                        <form action="{{ route('conceptions.destroy', $conception) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('app.confirm_delete') }}');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">Delete</button>
+                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">{{ __('app.delete') }}</button>
                         </form>
                     </td>
                 </tr>
             @empty
                 <tr>
                     <td colspan="7" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
-                        No conceptions found. <a href="{{ route('conceptions.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Create your first conception</a>
+                        {{ __('app.no_conceptions') }}. <a href="{{ route('conceptions.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ __('app.add_conception') }}</a>
                     </td>
                 </tr>
             @endforelse
@@ -131,49 +131,49 @@
                         ];
                     @endphp
                     <span class="px-2 py-1 inline-flex text-xs leading-5 font-semibold rounded-full {{ $statusColors[$conception->status] }}">
-                        {{ ucfirst($conception->status) }}
+                        {{ __('app.' . $conception->status) }}
                     </span>
                 </div>
             </div>
             <div class="space-y-2 text-sm mb-3">
                 <div class="flex items-center justify-between">
-                    <span class="text-gray-500 dark:text-gray-400">Client:</span>
-                    <span class="text-gray-900 dark:text-gray-100">{{ $conception->client?->name ?? 'No client' }}</span>
+                    <span class="text-gray-500 dark:text-gray-400">{{ __('app.client') }}:</span>
+                    <span class="text-gray-900 dark:text-gray-100">{{ $conception->client?->name ?? __('app.no_clients') }}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span class="text-gray-500 dark:text-gray-400">Date:</span>
+                    <span class="text-gray-500 dark:text-gray-400">{{ __('app.date') }}:</span>
                     <span class="text-gray-900 dark:text-gray-100">{{ $conception->date->format('M d, Y') }}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span class="text-gray-500 dark:text-gray-400">Sections:</span>
-                    <span class="text-gray-900 dark:text-gray-100">{{ count($conception->sections) }} section(s)</span>
+                    <span class="text-gray-500 dark:text-gray-400">{{ __('app.sections') }}:</span>
+                    <span class="text-gray-900 dark:text-gray-100">{{ count($conception->sections) }}</span>
                 </div>
                 <div class="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-                    <span class="text-gray-500 dark:text-gray-400">Total:</span>
+                    <span class="text-gray-500 dark:text-gray-400">{{ __('app.total') }}:</span>
                     <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
                         {{ Auth::user()->currency }} {{ number_format($conception->total_price, 2) }}
                     </span>
                 </div>
             </div>
             <div class="flex flex-wrap gap-2 text-sm items-center">
-                <a href="{{ route('conceptions.show', $conception) }}" class="text-green-600 hover:text-green-900 dark:text-green-400">View</a>
+                <a href="{{ route('conceptions.show', $conception) }}" class="text-green-600 hover:text-green-900 dark:text-green-400">{{ __('app.view') }}</a>
                 <select onchange="if(this.value) window.location.href=this.value" class="text-purple-600 dark:text-purple-400 bg-transparent border-none cursor-pointer text-sm font-medium focus:outline-none focus:ring-0">
                     <option value="">PDF ▾</option>
-                    <option value="{{ route('conceptions.pdf', [$conception, 'en']) }}">🇬🇧 English</option>
-                    <option value="{{ route('conceptions.pdf', [$conception, 'fr']) }}">🇫🇷 Français</option>
+                    <option value="{{ route('conceptions.pdf', [$conception, 'en']) }}">🇬🇧 {{ __('app.english') }}</option>
+                    <option value="{{ route('conceptions.pdf', [$conception, 'fr']) }}">🇫🇷 {{ __('app.french') }}</option>
                 </select>
-                <a href="{{ route('conceptions.edit', $conception) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400">Edit</a>
-                <form action="{{ route('conceptions.destroy', $conception) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                <a href="{{ route('conceptions.edit', $conception) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400">{{ __('app.edit') }}</a>
+                <form action="{{ route('conceptions.destroy', $conception) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('app.are_you_sure') }}');">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">Delete</button>
+                    <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">{{ __('app.delete') }}</button>
                 </form>
             </div>
         </div>
     @empty
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
-            <p class="text-gray-500 dark:text-gray-400 mb-4">No conceptions found.</p>
-            <a href="{{ route('conceptions.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Create your first conception</a>
+            <p class="text-gray-500 dark:text-gray-400 mb-4">{{ __('app.no_conceptions') }}.</p>
+            <a href="{{ route('conceptions.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ __('app.add_conception') }}</a>
         </div>
     @endforelse
 </div>

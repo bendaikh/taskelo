@@ -26,6 +26,7 @@ class User extends Authenticatable
         'logo',
         'currency',
         'theme',
+        'language',
         'current_workspace_id',
     ];
 

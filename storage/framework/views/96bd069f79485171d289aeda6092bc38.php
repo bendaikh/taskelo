@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="<?php echo e(Auth::user()->theme ?? 'light'); ?>">
+<html lang="<?php echo e(Auth::check() ? (Auth::user()->language ?? 'en') : 'en'); ?>" class="<?php echo e(Auth::user()->theme ?? 'light'); ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">

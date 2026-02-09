@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Daily Tasks')
-@section('page-title', 'Daily Tasks')
+@section('title', __('app.daily_tasks'))
+@section('page-title', __('app.daily_tasks'))
 
 @section('content')
 <div class="mb-6">
     <div>
-        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Daily Tasks</h2>
-        <p class="text-sm text-gray-500 dark:text-gray-400">Manage and track your daily tasks</p>
+        <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">{{ __('app.daily_tasks') }}</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">{{ __('app.tasks_to_do_desc') }}</p>
     </div>
 </div>
 

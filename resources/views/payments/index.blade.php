@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Payments')
-@section('page-title', 'Payments')
+@section('title', __('app.payments'))
+@section('page-title', __('app.payments'))
 
 @section('content')
 <div class="mb-6 flex flex-col md:flex-row md:justify-between md:items-start space-y-4 md:space-y-0">
@@ -10,7 +10,7 @@
         <select 
             name="client_id" 
             class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
-            <option value="">All Clients</option>
+            <option value="">{{ __('app.all') }} {{ __('app.clients') }}</option>
             @foreach($clients as $client)
                 <option value="{{ $client->id }}" {{ request('client_id') == $client->id ? 'selected' : '' }}>
                     {{ $client->name }}
@@ -21,32 +21,32 @@
         <select 
             name="type" 
             class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
-            <option value="">All Types</option>
+            <option value="">{{ __('app.all') }} Types</option>
             <option value="advance" {{ request('type') === 'advance' ? 'selected' : '' }}>Advance</option>
-            <option value="payment" {{ request('type') === 'payment' ? 'selected' : '' }}>Payment</option>
+            <option value="payment" {{ request('type') === 'payment' ? 'selected' : '' }}>{{ __('app.payments') }}</option>
         </select>
 
         <input 
             type="date" 
             name="date_from" 
-            placeholder="From"
+            placeholder="{{ __('app.start_date') }}"
             value="{{ request('date_from') }}"
             class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
 
         <input 
             type="date" 
             name="date_to" 
-            placeholder="To"
+            placeholder="{{ __('app.end_date') }}"
             value="{{ request('date_to') }}"
             class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
 
         <button type="submit" class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700">
-            Filter
+            {{ __('app.filter') }}
         </button>
         
         @if(request()->hasAny(['client_id', 'project_id', 'type', 'date_from', 'date_to']))
             <a href="{{ route('payments.index') }}" class="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500">
-                Clear
+                {{ __('app.cancel') }}
             </a>
         @endif
     </form>
@@ -54,13 +54,13 @@
     <!-- Actions -->
     <div class="flex flex-wrap gap-2">
         <a href="{{ route('payments.export.csv') }}?{{ http_build_query(request()->all()) }}" class="px-3 sm:px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm whitespace-nowrap">
-            Export CSV
+            {{ __('app.export_csv') }}
         </a>
         <a href="{{ route('payments.export.pdf') }}?{{ http_build_query(request()->all()) }}" class="px-3 sm:px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm whitespace-nowrap">
-            Export PDF
+            {{ __('app.export_pdf') }}
         </a>
         <a href="{{ route('payments.create') }}" class="px-3 sm:px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm whitespace-nowrap">
-            + Add Payment
+            + {{ __('app.add_payment') }}
         </a>
     </div>
 </div>
@@ -70,12 +70,12 @@
     <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
         <thead class="bg-gray-50 dark:bg-gray-700">
             <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Date</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Client</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Project</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.date') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.client') }}</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.project') }}</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Amount</th>
-                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.amount') }}</th>
+                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.actions') }}</th>
             </tr>
         </thead>
         <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
@@ -106,18 +106,18 @@
                         {{ Auth::user()->currency }} {{ number_format($payment->amount, 2) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="{{ route('payments.edit', $payment) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 mr-3">Edit</a>
-                        <form action="{{ route('payments.destroy', $payment) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                        <a href="{{ route('payments.edit', $payment) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 mr-3">{{ __('app.edit') }}</a>
+                        <form action="{{ route('payments.destroy', $payment) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('app.are_you_sure') }}');">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">Delete</button>
+                            <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400">{{ __('app.delete') }}</button>
                         </form>
                     </td>
                 </tr>
             @empty
                 <tr>
                     <td colspan="6" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
-                        No payments found. <a href="{{ route('payments.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Add your first payment</a>
+                        {{ __('app.no_payments') }}. <a href="{{ route('payments.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ __('app.add_payment') }}</a>
                     </td>
                 </tr>
             @endforelse
@@ -125,7 +125,7 @@
         @if($payments->count() > 0)
             <tfoot class="bg-gray-50 dark:bg-gray-700">
                 <tr>
-                    <td colspan="4" class="px-6 py-4 text-right font-semibold text-gray-800 dark:text-gray-200">Total:</td>
+                    <td colspan="4" class="px-6 py-4 text-right font-semibold text-gray-800 dark:text-gray-200">{{ __('app.total') }}:</td>
                     <td class="px-6 py-4 font-bold text-green-600">
                         {{ Auth::user()->currency }} {{ number_format($payments->sum('amount'), 2) }}
                     </td>
@@ -158,23 +158,23 @@
                     </p>
                 </div>
                 <div class="flex space-x-2 ml-2">
-                    <a href="{{ route('payments.edit', $payment) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 text-sm">Edit</a>
-                    <form action="{{ route('payments.destroy', $payment) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?');">
+                    <a href="{{ route('payments.edit', $payment) }}" class="text-blue-600 hover:text-blue-900 dark:text-blue-400 text-sm">{{ __('app.edit') }}</a>
+                    <form action="{{ route('payments.destroy', $payment) }}" method="POST" class="inline" onsubmit="return confirm('{{ __('app.are_you_sure') }}');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 text-sm">Delete</button>
+                        <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 text-sm">{{ __('app.delete') }}</button>
                     </form>
                 </div>
             </div>
             <div class="space-y-1 text-sm border-t border-gray-200 dark:border-gray-700 pt-3">
                 <div>
-                    <span class="text-gray-500 dark:text-gray-400">Client: </span>
+                    <span class="text-gray-500 dark:text-gray-400">{{ __('app.client') }}: </span>
                     <a href="{{ route('clients.show', $payment->client) }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700 font-medium">
                         {{ $payment->client->name }}
                     </a>
                 </div>
                 <div>
-                    <span class="text-gray-500 dark:text-gray-400">Project: </span>
+                    <span class="text-gray-500 dark:text-gray-400">{{ __('app.project') }}: </span>
                     <a href="{{ route('projects.show', $payment->project) }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">
                         {{ $payment->project->title }}
                     </a>
@@ -183,14 +183,14 @@
         </div>
     @empty
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-8 text-center">
-            <p class="text-gray-500 dark:text-gray-400 mb-4">No payments found.</p>
-            <a href="{{ route('payments.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">Add your first payment</a>
+            <p class="text-gray-500 dark:text-gray-400 mb-4">{{ __('app.no_payments') }}.</p>
+            <a href="{{ route('payments.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ __('app.add_payment') }}</a>
         </div>
     @endforelse
     @if($payments->count() > 0)
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-4 border-t-2 border-primary-600">
             <div class="flex justify-between items-center">
-                <span class="font-semibold text-gray-800 dark:text-gray-200">Total:</span>
+                <span class="font-semibold text-gray-800 dark:text-gray-200">{{ __('app.total') }}:</span>
                 <span class="font-bold text-green-600 text-lg">
                     {{ Auth::user()->currency }} {{ number_format($payments->sum('amount'), 2) }}
                 </span>
@@ -204,4 +204,3 @@
     {{ $payments->links() }}
 </div>
 @endsection
-

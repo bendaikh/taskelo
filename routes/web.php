@@ -96,6 +96,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings/profile', [SettingsController::class, 'updateProfile'])->name('settings.profile');
     Route::put('/settings/password', [SettingsController::class, 'updatePassword'])->name('settings.password');
     Route::put('/settings/preferences', [SettingsController::class, 'updatePreferences'])->name('settings.preferences');
+    Route::post('/settings/language', [SettingsController::class, 'updateLanguage'])->name('settings.language');
 
     // Businesses (My Business)
     Route::resource('businesses', BusinessController::class);

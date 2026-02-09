@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', 'Settings')
-@section('page-title', 'Settings')
+@section('title', __('app.settings'))
+@section('page-title', __('app.settings'))
 
 @section('content')
 <div class="max-w-4xl">
     <!-- Profile Settings -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Profile Settings</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.profile_settings') }}</h3>
         <form method="POST" action="{{ route('settings.profile') }}" enctype="multipart/form-data">
             @csrf
             @method('PUT')
@@ -15,7 +15,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Name -->
                 <div>
-                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Name *</label>
+                    <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.name') }} *</label>
                     <input 
                         type="text" 
                         name="name" 
@@ -30,7 +30,7 @@
 
                 <!-- Email -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email *</label>
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.email') }} *</label>
                     <input 
                         type="email" 
                         name="email" 
@@ -45,7 +45,7 @@
 
                 <!-- Company Name -->
                 <div>
-                    <label for="company_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company Name</label>
+                    <label for="company_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.company_name') }}</label>
                     <input
                         type="text"
                         name="company_name"
@@ -59,7 +59,7 @@
 
                 <!-- Company Website -->
                 <div>
-                    <label for="company_website" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Company Website</label>
+                    <label for="company_website" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.company_website') }}</label>
                     <input
                         type="url"
                         name="company_website"
@@ -75,7 +75,7 @@
 
             <!-- Logo -->
             <div class="mt-6">
-                <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Logo</label>
+                <label for="logo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.logo') }}</label>
                 @if($user->logo)
                     <div class="mb-2">
                         <img src="{{ asset('storage/' . $user->logo) }}" alt="Logo" class="h-20 w-20 object-cover rounded">
@@ -87,13 +87,13 @@
                     id="logo" 
                     accept="image/*"
                     class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Max size: 2MB</p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ __('app.max_size') }}</p>
             </div>
 
             <!-- Submit Button -->
             <div class="mt-6">
                 <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
-                    Update Profile
+                    {{ __('app.update_profile') }}
                 </button>
             </div>
         </form>
@@ -101,7 +101,7 @@
 
     <!-- Password Settings -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Change Password</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.change_password') }}</h3>
         <form method="POST" action="{{ route('settings.password') }}">
             @csrf
             @method('PUT')
@@ -109,7 +109,7 @@
             <div class="space-y-4">
                 <!-- Current Password -->
                 <div>
-                    <label for="current_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Current Password *</label>
+                    <label for="current_password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.current_password') }} *</label>
                     <input 
                         type="password" 
                         name="current_password" 
@@ -123,7 +123,7 @@
 
                 <!-- New Password -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">New Password *</label>
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.new_password') }} *</label>
                     <input 
                         type="password" 
                         name="password" 
@@ -137,7 +137,7 @@
 
                 <!-- Confirm Password -->
                 <div>
-                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Confirm New Password *</label>
+                    <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.confirm_new_password') }} *</label>
                     <input 
                         type="password" 
                         name="password_confirmation" 
@@ -150,7 +150,7 @@
             <!-- Submit Button -->
             <div class="mt-6">
                 <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
-                    Update Password
+                    {{ __('app.update_password') }}
                 </button>
             </div>
         </form>
@@ -158,7 +158,7 @@
 
     <!-- Preferences Settings -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Preferences</h3>
+        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">{{ __('app.preferences') }}</h3>
         <form method="POST" action="{{ route('settings.preferences') }}">
             @csrf
             @method('PUT')
@@ -166,7 +166,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Currency -->
                 <div>
-                    <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency *</label>
+                    <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.currency') }} *</label>
                     <select 
                         name="currency" 
                         id="currency" 
@@ -184,19 +184,34 @@
                         <option value="NGN" {{ $user->currency === 'NGN' ? 'selected' : '' }}>NGN (₦)</option>
                         <option value="PKR" {{ $user->currency === 'PKR' ? 'selected' : '' }}>PKR (₨)</option>
                         <option value="BDT" {{ $user->currency === 'BDT' ? 'selected' : '' }}>BDT (৳)</option>
+                        <option value="XOF" {{ $user->currency === 'XOF' ? 'selected' : '' }}>CFA (FCFA)</option>
+                        <option value="XAF" {{ $user->currency === 'XAF' ? 'selected' : '' }}>CFA Central (FCFA)</option>
                     </select>
                 </div>
 
                 <!-- Theme -->
                 <div>
-                    <label for="theme" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Theme *</label>
+                    <label for="theme" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.theme') }} *</label>
                     <select 
                         name="theme" 
                         id="theme" 
                         required
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
-                        <option value="light" {{ $user->theme === 'light' ? 'selected' : '' }}>Light</option>
-                        <option value="dark" {{ $user->theme === 'dark' ? 'selected' : '' }}>Dark</option>
+                        <option value="light" {{ $user->theme === 'light' ? 'selected' : '' }}>{{ __('app.light') }}</option>
+                        <option value="dark" {{ $user->theme === 'dark' ? 'selected' : '' }}>{{ __('app.dark') }}</option>
+                    </select>
+                </div>
+
+                <!-- Language -->
+                <div>
+                    <label for="language" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">{{ __('app.language') }} *</label>
+                    <select 
+                        name="language" 
+                        id="language" 
+                        required
+                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
+                        <option value="en" {{ ($user->language ?? 'en') === 'en' ? 'selected' : '' }}>{{ __('app.english') }}</option>
+                        <option value="fr" {{ ($user->language ?? 'en') === 'fr' ? 'selected' : '' }}>{{ __('app.french') }}</option>
                     </select>
                 </div>
             </div>
@@ -204,7 +219,7 @@
             <!-- Submit Button -->
             <div class="mt-6">
                 <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
-                    Update Preferences
+                    {{ __('app.update_preferences') }}
                 </button>
             </div>
         </form>
