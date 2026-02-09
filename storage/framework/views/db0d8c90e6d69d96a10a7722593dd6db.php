@@ -1,14 +1,14 @@
-@extends('layouts.app')
 
-@section('title', 'Edit Conception')
-@section('page-title', 'Edit Conception')
 
-@section('content')
+<?php $__env->startSection('title', 'Edit Conception'); ?>
+<?php $__env->startSection('page-title', 'Edit Conception'); ?>
+
+<?php $__env->startSection('content'); ?>
 <div class="max-w-4xl">
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-        <form method="POST" action="{{ route('conceptions.update', $conception) }}" id="conception-form">
-            @csrf
-            @method('PUT')
+        <form method="POST" action="<?php echo e(route('conceptions.update', $conception)); ?>" id="conception-form">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <!-- Title -->
@@ -18,13 +18,27 @@
                         type="text" 
                         name="title" 
                         id="title" 
-                        value="{{ old('title', $conception->title) }}"
+                        value="<?php echo e(old('title', $conception->title)); ?>"
                         required
                         placeholder="e.g., E-commerce Website Development"
-                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 @error('title') border-red-500 @enderror">
-                    @error('title')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 <?php $__errorArgs = ['title'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                    <?php $__errorArgs = ['title'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Client -->
@@ -35,11 +49,12 @@
                         id="client_id"
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
                         <option value="">No client (General conception)</option>
-                        @foreach($clients as $client)
-                            <option value="{{ $client->id }}" {{ old('client_id', $conception->client_id) == $client->id ? 'selected' : '' }}>
-                                {{ $client->name }}
+                        <?php $__currentLoopData = $clients; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $client): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <option value="<?php echo e($client->id); ?>" <?php echo e(old('client_id', $conception->client_id) == $client->id ? 'selected' : ''); ?>>
+                                <?php echo e($client->name); ?>
+
                             </option>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </select>
                 </div>
 
@@ -50,12 +65,26 @@
                         type="date" 
                         name="date" 
                         id="date" 
-                        value="{{ old('date', $conception->date->format('Y-m-d')) }}"
+                        value="<?php echo e(old('date', $conception->date->format('Y-m-d'))); ?>"
                         required
-                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 @error('date') border-red-500 @enderror">
-                    @error('date')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
+                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 <?php $__errorArgs = ['date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                    <?php $__errorArgs = ['date'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                 </div>
 
                 <!-- Valid Until -->
@@ -65,7 +94,7 @@
                         type="date" 
                         name="valid_until" 
                         id="valid_until" 
-                        value="{{ old('valid_until', $conception->valid_until?->format('Y-m-d')) }}"
+                        value="<?php echo e(old('valid_until', $conception->valid_until?->format('Y-m-d'))); ?>"
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
                 </div>
 
@@ -77,10 +106,10 @@
                         id="status"
                         required
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
-                        <option value="draft" {{ old('status', $conception->status) == 'draft' ? 'selected' : '' }}>Draft</option>
-                        <option value="sent" {{ old('status', $conception->status) == 'sent' ? 'selected' : '' }}>Sent</option>
-                        <option value="accepted" {{ old('status', $conception->status) == 'accepted' ? 'selected' : '' }}>Accepted</option>
-                        <option value="rejected" {{ old('status', $conception->status) == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                        <option value="draft" <?php echo e(old('status', $conception->status) == 'draft' ? 'selected' : ''); ?>>Draft</option>
+                        <option value="sent" <?php echo e(old('status', $conception->status) == 'sent' ? 'selected' : ''); ?>>Sent</option>
+                        <option value="accepted" <?php echo e(old('status', $conception->status) == 'accepted' ? 'selected' : ''); ?>>Accepted</option>
+                        <option value="rejected" <?php echo e(old('status', $conception->status) == 'rejected' ? 'selected' : ''); ?>>Rejected</option>
                     </select>
                 </div>
 
@@ -92,7 +121,7 @@
                         id="description" 
                         rows="3"
                         placeholder="Brief description of the project..."
-                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">{{ old('description', $conception->description) }}</textarea>
+                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500"><?php echo e(old('description', $conception->description)); ?></textarea>
                 </div>
             </div>
 
@@ -113,7 +142,7 @@
                     <div class="flex items-center justify-between">
                         <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">Total Price:</span>
                         <span id="total-price" class="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                            {{ Auth::user()->currency }} 0.00
+                            <?php echo e(Auth::user()->currency); ?> 0.00
                         </span>
                     </div>
                 </div>
@@ -127,12 +156,12 @@
                     id="notes" 
                     rows="3"
                     placeholder="Any additional notes or terms..."
-                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">{{ old('notes', $conception->notes) }}</textarea>
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500"><?php echo e(old('notes', $conception->notes)); ?></textarea>
             </div>
 
             <!-- Buttons -->
             <div class="flex flex-col sm:flex-row justify-end gap-3">
-                <a href="{{ route('conceptions.index') }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 text-center">
+                <a href="<?php echo e(route('conceptions.index')); ?>" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 text-center">
                     Cancel
                 </a>
                 <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700">
@@ -145,7 +174,7 @@
 
 <script>
 let sectionCount = 0;
-let existingSections = @json(old('sections', $conception->sections ?? [])) || [];
+let existingSections = <?php echo json_encode(old('sections', $conception->sections ?? []), 512) ?> || [];
 
 // Convert object to array if needed (sections may be stored as {"1": {...}, "2": {...}})
 if (existingSections && typeof existingSections === 'object' && !Array.isArray(existingSections)) {
@@ -187,7 +216,7 @@ function addSection(name = '', description = '', price = '') {
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price (optional)</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-2 text-gray-500 dark:text-gray-400">{{ Auth::user()->currency }}</span>
+                        <span class="absolute left-3 top-2 text-gray-500 dark:text-gray-400"><?php echo e(Auth::user()->currency); ?></span>
                         <input 
                             type="number" 
                             name="sections[${sectionCount}][price]" 
@@ -225,7 +254,7 @@ function updateTotal() {
         total += value;
     });
     
-    document.getElementById('total-price').textContent = '{{ Auth::user()->currency }} ' + total.toFixed(2);
+    document.getElementById('total-price').textContent = '<?php echo e(Auth::user()->currency); ?> ' + total.toFixed(2);
 }
 
 // Load existing sections on page load
@@ -248,4 +277,6 @@ document.getElementById('conception-form').addEventListener('submit', function(e
     }
 });
 </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\Users\Espacegamers\Documents\bendaikh project\resources\views/conceptions/edit.blade.php ENDPATH**/ ?>
