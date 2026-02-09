@@ -300,6 +300,37 @@ unset($__errorArgs, $__bag); ?>
                         <option value="fr" <?php echo e(($user->language ?? 'en') === 'fr' ? 'selected' : ''); ?>><?php echo e(__('app.french')); ?></option>
                     </select>
                 </div>
+
+                <!-- App Name -->
+                <div>
+                    <label for="app_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"><?php echo e(__('app.app_name')); ?></label>
+                    <input 
+                        type="text" 
+                        name="app_name" 
+                        id="app_name" 
+                        value="<?php echo e(old('app_name', $user->app_name)); ?>"
+                        placeholder="<?php echo e(__('app.business_manager')); ?>"
+                        maxlength="50"
+                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 <?php $__errorArgs = ['app_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> border-red-500 <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>">
+                    <p class="text-xs text-gray-500 dark:text-gray-400 mt-1"><?php echo e(__('app.app_name_help')); ?></p>
+                    <?php $__errorArgs = ['app_name'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+                        <p class="mt-1 text-sm text-red-600"><?php echo e($message); ?></p>
+                    <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+                </div>
             </div>
 
             <!-- Submit Button -->

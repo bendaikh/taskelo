@@ -53,6 +53,8 @@ return [
     'language' => 'Langue',
     'english' => 'Anglais',
     'french' => 'Français',
+    'app_name' => 'Nom de l\'Application',
+    'app_name_help' => 'Personnalisez le nom affiché dans la barre latérale (max 50 caractères)',
 
     // Dashboard
     'total_projects' => 'Total des Projets',

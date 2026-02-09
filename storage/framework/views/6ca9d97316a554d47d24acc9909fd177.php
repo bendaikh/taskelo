@@ -3,7 +3,7 @@
         <!-- Logo -->
         <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
             <h1 class="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-400">
-                <?php echo e(__('app.business_manager')); ?>
+                <?php echo e(Auth::user()->app_name ?? __('app.business_manager')); ?>
 
             </h1>
             <!-- Close button for mobile -->

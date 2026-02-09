@@ -68,6 +68,7 @@ class SettingsController extends Controller
             'currency' => 'required|string|max:10',
             'theme' => 'required|in:light,dark',
             'language' => 'nullable|in:en,fr',
+            'app_name' => 'nullable|string|max:50',
         ]);
 
         Auth::user()->update($validated);

@@ -53,6 +53,8 @@ return [
     'language' => 'Language',
     'english' => 'English',
     'french' => 'French',
+    'app_name' => 'Application Name',
+    'app_name_help' => 'Customize the name displayed in the sidebar (max 50 characters)',
 
     // Dashboard
     'total_projects' => 'Total Projects',

@@ -3,7 +3,7 @@
         <!-- Logo -->
         <div class="p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
             <h1 class="text-xl sm:text-2xl font-bold text-primary-600 dark:text-primary-400">
-                {{ __('app.business_manager') }}
+                {{ Auth::user()->app_name ?? __('app.business_manager') }}
             </h1>
             <!-- Close button for mobile -->
             <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700">
