@@ -32,6 +32,20 @@
                 <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Created</span>
                 <p class="mt-1 text-gray-900 dark:text-gray-100">{{ $role->created_at->format('M d, Y \a\t H:i') }}</p>
             </div>
+            <div>
+                <span class="text-sm font-medium text-gray-500 dark:text-gray-400">Permissions</span>
+                @if($role->permissions && count($role->permissions) > 0)
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        @foreach($role->permissions as $permission)
+                            <span class="px-3 py-1 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 rounded-full text-xs font-medium">
+                                {{ str_replace('.', ' → ', ucwords(str_replace('.', ' ', $permission))) }}
+                            </span>
+                        @endforeach
+                    </div>
+                @else
+                    <p class="mt-1 text-gray-500 dark:text-gray-400 italic">No permissions assigned.</p>
+                @endif
+            </div>
         </div>
     </div>
 

@@ -57,6 +57,35 @@
                     @enderror
                 </div>
 
+                <!-- Currency -->
+                <div>
+                    <label for="currency" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Currency *</label>
+                    <select 
+                        name="currency" 
+                        id="currency" 
+                        required
+                        onchange="updateCurrencyDisplay()"
+                        class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 @error('currency') border-red-500 @enderror">
+                        <option value="USD" {{ old('currency', 'USD') === 'USD' ? 'selected' : '' }}>USD ($)</option>
+                        <option value="EUR" {{ old('currency') === 'EUR' ? 'selected' : '' }}>EUR (€)</option>
+                        <option value="GBP" {{ old('currency') === 'GBP' ? 'selected' : '' }}>GBP (£)</option>
+                        <option value="JPY" {{ old('currency') === 'JPY' ? 'selected' : '' }}>JPY (¥)</option>
+                        <option value="INR" {{ old('currency') === 'INR' ? 'selected' : '' }}>INR (₹)</option>
+                        <option value="AUD" {{ old('currency') === 'AUD' ? 'selected' : '' }}>AUD (A$)</option>
+                        <option value="CAD" {{ old('currency') === 'CAD' ? 'selected' : '' }}>CAD (C$)</option>
+                        <option value="MAD" {{ old('currency') === 'MAD' ? 'selected' : '' }}>MAD (Dhs)</option>
+                        <option value="PHP" {{ old('currency') === 'PHP' ? 'selected' : '' }}>PHP (₱)</option>
+                        <option value="NGN" {{ old('currency') === 'NGN' ? 'selected' : '' }}>NGN (₦)</option>
+                        <option value="PKR" {{ old('currency') === 'PKR' ? 'selected' : '' }}>PKR (₨)</option>
+                        <option value="BDT" {{ old('currency') === 'BDT' ? 'selected' : '' }}>BDT (৳)</option>
+                        <option value="XOF" {{ old('currency') === 'XOF' ? 'selected' : '' }}>CFA (FCFA)</option>
+                        <option value="XAF" {{ old('currency') === 'XAF' ? 'selected' : '' }}>CFA Central (FCFA)</option>
+                    </select>
+                    @error('currency')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 <!-- Valid Until -->
                 <div>
                     <label for="valid_until" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Valid Until</label>
@@ -97,7 +126,7 @@
                     <div class="flex items-center justify-between">
                         <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">Total Price:</span>
                         <span id="total-price" class="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                            {{ Auth::user()->currency }} 0.00
+                            <span id="currency-symbol">USD</span> 0.00
                         </span>
                     </div>
                 </div>
@@ -130,9 +159,27 @@
 <script>
 let sectionCount = 0;
 
+function getCurrentCurrency() {
+    return document.getElementById('currency').value;
+}
+
+function updateCurrencyDisplay() {
+    const currency = getCurrentCurrency();
+    document.getElementById('currency-symbol').textContent = currency;
+    
+    // Update all currency symbols in sections
+    const currencyLabels = document.querySelectorAll('.currency-label');
+    currencyLabels.forEach(label => {
+        label.textContent = currency;
+    });
+    
+    updateTotal();
+}
+
 function addSection() {
     sectionCount++;
     const container = document.getElementById('sections-container');
+    const currency = getCurrentCurrency();
     const sectionHtml = `
         <div class="section-item p-4 border-2 border-gray-300 dark:border-gray-600 rounded-lg relative" id="section-${sectionCount}">
             <button type="button" onclick="removeSection(${sectionCount})" class="absolute top-2 right-2 text-red-600 hover:text-red-800 dark:text-red-400">
@@ -164,7 +211,7 @@ function addSection() {
                 <div>
                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price (optional)</label>
                     <div class="relative">
-                        <span class="absolute left-3 top-2 text-gray-500 dark:text-gray-400">{{ Auth::user()->currency }}</span>
+                        <span class="absolute left-3 top-2 text-gray-500 dark:text-gray-400 currency-label">${currency}</span>
                         <input 
                             type="number" 
                             name="sections[${sectionCount}][price]" 
@@ -173,7 +220,7 @@ function addSection() {
                             placeholder="0.00"
                             onchange="updateTotal()"
                             oninput="updateTotal()"
-                            class="section-price w-full pl-12 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
+                            class="section-price w-full pl-16 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
                     </div>
                 </div>
             </div>
@@ -200,12 +247,14 @@ function updateTotal() {
         total += value;
     });
     
-    document.getElementById('total-price').textContent = '{{ Auth::user()->currency }} ' + total.toFixed(2);
+    const currency = getCurrentCurrency();
+    document.getElementById('total-price').innerHTML = `<span id="currency-symbol">${currency}</span> ${total.toFixed(2)}`;
 }
 
 // Add initial section on page load
 window.addEventListener('DOMContentLoaded', function() {
     addSection();
+    updateCurrencyDisplay();
 });
 
 // Validate form before submission

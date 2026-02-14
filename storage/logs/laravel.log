@@ -582,3 +582,34 @@
 #75 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\resources\\server.php(16): require_once('C:\\\\Users\\\\Espace...')
 #76 {main}
 "} 
+[2026-02-14 13:29:45] local.ERROR: The "--show" option does not exist. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\RuntimeException(code: 0): The \"--show\" option does not exist. at C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Input\\ArgvInput.php:223)
+[stacktrace]
+#0 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Input\\ArgvInput.php(152): Symfony\\Component\\Console\\Input\\ArgvInput->addLongOption('show', NULL)
+#1 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Input\\ArgvInput.php(85): Symfony\\Component\\Console\\Input\\ArgvInput->parseLongOption('--show')
+#2 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Input\\ArgvInput.php(74): Symfony\\Component\\Console\\Input\\ArgvInput->parseToken('--show', true)
+#3 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Input\\Input.php(56): Symfony\\Component\\Console\\Input\\ArgvInput->parse()
+#4 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Command\\Command.php(285): Symfony\\Component\\Console\\Input\\Input->bind(Object(Symfony\\Component\\Console\\Input\\InputDefinition))
+#5 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(180): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#6 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Application.php(1096): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#7 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Application.php(324): Symfony\\Component\\Console\\Application->doRunCommand(Object(Illuminate\\Database\\Console\\TableCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#8 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#9 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#10 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\artisan(24): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 {main}
+"} 
+[2026-02-14 13:34:40] local.ERROR: Command "optimize:claer" is not defined.
+
+Did you mean one of these?
+    optimize
+    optimize:clear {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"optimize:claer\" is not defined.
+
+Did you mean one of these?
+    optimize
+    optimize:clear at C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Application.php:737)
+[stacktrace]
+#0 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Application.php(266): Symfony\\Component\\Console\\Application->find('optimize:claer')
+#1 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\symfony\\console\\Application.php(175): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#2 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(201): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 C:\\Users\\Espacegamers\\Documents\\bendaikh project\\artisan(24): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 {main}
+"} 

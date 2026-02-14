@@ -17,6 +17,13 @@
         <!-- Navigation -->
         <nav class="flex-1 overflow-y-auto p-4">
             <ul class="space-y-2">
+                <?php
+                    $isPersonal = Auth::check() && Auth::user()->currentWorkspace && Auth::user()->currentWorkspace->type === 'personal';
+                    $user = Auth::user();
+                ?>
+
+                <!-- Dashboard - Always visible -->
+                <?php if($user->hasPermission('dashboard.view') || $user->roles->isEmpty()): ?>
                 <li>
                     <a href="<?php echo e(route('dashboard')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -28,12 +35,10 @@
 
                     </a>
                 </li>
+                <?php endif; ?>
 
-                <?php
-                    $isPersonal = Auth::check() && Auth::user()->currentWorkspace && Auth::user()->currentWorkspace->type === 'personal';
-                ?>
-
-                <?php if(!$isPersonal): ?>
+                <!-- Projects -->
+                <?php if(!$isPersonal && ($user->hasPermission('projects.view') || $user->roles->isEmpty())): ?>
                 <li>
                     <a href="<?php echo e(route('projects.index')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -47,6 +52,8 @@
                 </li>
                 <?php endif; ?>
 
+                <!-- My Business -->
+                <?php if($user->hasPermission('businesses.view') || $user->roles->isEmpty()): ?>
                 <li>
                     <a href="<?php echo e(route('businesses.index')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -58,8 +65,10 @@
 
                     </a>
                 </li>
+                <?php endif; ?>
 
-                <?php if(!$isPersonal): ?>
+                <!-- Daily Tasks -->
+                <?php if(!$isPersonal && ($user->hasPermission('tasks.view') || $user->roles->isEmpty())): ?>
                 <li>
                     <a href="<?php echo e(route('daily-tasks.index')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -73,7 +82,8 @@
                 </li>
                 <?php endif; ?>
 
-                <?php if(!$isPersonal): ?>
+                <!-- Clients -->
+                <?php if(!$isPersonal && ($user->hasPermission('clients.view') || $user->roles->isEmpty())): ?>
                 <li>
                     <a href="<?php echo e(route('clients.index')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -85,7 +95,10 @@
 
                     </a>
                 </li>
+                <?php endif; ?>
 
+                <!-- Payments -->
+                <?php if(!$isPersonal && ($user->hasPermission('payments.view') || $user->roles->isEmpty())): ?>
                 <li>
                     <a href="<?php echo e(route('payments.index')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -97,7 +110,10 @@
 
                     </a>
                 </li>
+                <?php endif; ?>
 
+                <!-- Proposals -->
+                <?php if(!$isPersonal && ($user->hasPermission('proposals.view') || $user->roles->isEmpty())): ?>
                 <li>
                     <a href="<?php echo e(route('proposals.index')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -109,7 +125,10 @@
 
                     </a>
                 </li>
+                <?php endif; ?>
 
+                <!-- Conceptions -->
+                <?php if(!$isPersonal && ($user->hasPermission('conceptions.view') || $user->roles->isEmpty())): ?>
                 <li>
                     <a href="<?php echo e(route('conceptions.index')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -123,7 +142,8 @@
                 </li>
                 <?php endif; ?>
 
-                <?php if($isPersonal): ?>
+                <!-- Revenue (Personal workspace only) -->
+                <?php if($isPersonal && ($user->hasPermission('revenue.view') || $user->roles->isEmpty())): ?>
                 <li>
                     <a href="<?php echo e(route('revenues.index')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -135,7 +155,10 @@
 
                     </a>
                 </li>
+                <?php endif; ?>
 
+                <!-- Revenue Categories (Personal workspace only) -->
+                <?php if($isPersonal && ($user->hasPermission('categories.view') || $user->roles->isEmpty())): ?>
                 <li>
                     <a href="<?php echo e(route('revenue-categories.index')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -150,6 +173,7 @@
                 <?php endif; ?>
 
                 <!-- Expenses -->
+                <?php if($user->hasPermission('expenses.view') || $user->hasPermission('categories.view') || $user->roles->isEmpty()): ?>
                 <li x-data="{ open: <?php echo e(request()->routeIs('expenses.*') || request()->routeIs('expense-categories.*') ? 'true' : 'false'); ?> }">
                     <button @click="open = !open" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('expenses.*') || request()->routeIs('expense-categories.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,6 +185,7 @@
                         </svg>
                     </button>
                     <ul x-show="open" x-collapse class="ml-4 mt-2 space-y-1">
+                        <?php if($user->hasPermission('expenses.view') || $user->roles->isEmpty()): ?>
                         <li>
                             <a href="<?php echo e(route('expenses.index')); ?>" 
                                onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -172,6 +197,8 @@
 
                             </a>
                         </li>
+                        <?php endif; ?>
+                        <?php if($user->hasPermission('categories.view') || $user->roles->isEmpty()): ?>
                         <li>
                             <a href="<?php echo e(route('expense-categories.index')); ?>" 
                                onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -183,10 +210,13 @@
 
                             </a>
                         </li>
+                        <?php endif; ?>
                     </ul>
                 </li>
+                <?php endif; ?>
 
                 <!-- User Management -->
+                <?php if($user->hasPermission('users.view') || $user->hasPermission('roles.view') || $user->roles->isEmpty()): ?>
                 <li x-data="{ open: <?php echo e(request()->routeIs('roles.*') || request()->routeIs('users.*') ? 'true' : 'false'); ?> }">
                     <button @click="open = !open" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors <?php echo e(request()->routeIs('roles.*') || request()->routeIs('users.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'); ?>">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -198,6 +228,7 @@
                         </svg>
                     </button>
                     <ul x-show="open" x-collapse class="ml-4 mt-2 space-y-1">
+                        <?php if($user->hasPermission('roles.view') || $user->roles->isEmpty()): ?>
                         <li>
                             <a href="<?php echo e(route('roles.index')); ?>" 
                                onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -209,6 +240,8 @@
 
                             </a>
                         </li>
+                        <?php endif; ?>
+                        <?php if($user->hasPermission('users.view') || $user->roles->isEmpty()): ?>
                         <li>
                             <a href="<?php echo e(route('users.index')); ?>" 
                                onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -220,9 +253,13 @@
 
                             </a>
                         </li>
+                        <?php endif; ?>
                     </ul>
                 </li>
+                <?php endif; ?>
 
+                <!-- Analytics -->
+                <?php if($user->hasPermission('analytics.view') || $user->roles->isEmpty()): ?>
                 <li>
                     <a href="<?php echo e(route('analytics')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -234,7 +271,10 @@
 
                     </a>
                 </li>
+                <?php endif; ?>
 
+                <!-- Settings - Always visible -->
+                <?php if($user->hasPermission('settings.view') || $user->roles->isEmpty()): ?>
                 <li>
                     <a href="<?php echo e(route('settings')); ?>" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -247,6 +287,7 @@
 
                     </a>
                 </li>
+                <?php endif; ?>
             </ul>
         </nav>
 
@@ -304,5 +345,4 @@
         }
     });
 </script>
-
 <?php /**PATH C:\Users\Espacegamers\Documents\bendaikh project\resources\views/layouts/sidebar.blade.php ENDPATH**/ ?>

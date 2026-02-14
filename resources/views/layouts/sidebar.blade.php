@@ -16,6 +16,13 @@
         <!-- Navigation -->
         <nav class="flex-1 overflow-y-auto p-4">
             <ul class="space-y-2">
+                @php
+                    $isPersonal = Auth::check() && Auth::user()->currentWorkspace && Auth::user()->currentWorkspace->type === 'personal';
+                    $user = Auth::user();
+                @endphp
+
+                <!-- Dashboard - Always visible -->
+                @if($user->hasPermission('dashboard.view') || $user->roles->isEmpty())
                 <li>
                     <a href="{{ route('dashboard') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -26,12 +33,10 @@
                         {{ __('app.dashboard') }}
                     </a>
                 </li>
+                @endif
 
-                @php
-                    $isPersonal = Auth::check() && Auth::user()->currentWorkspace && Auth::user()->currentWorkspace->type === 'personal';
-                @endphp
-
-                @if(!$isPersonal)
+                <!-- Projects -->
+                @if(!$isPersonal && ($user->hasPermission('projects.view') || $user->roles->isEmpty()))
                 <li>
                     <a href="{{ route('projects.index') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -44,6 +49,8 @@
                 </li>
                 @endif
 
+                <!-- My Business -->
+                @if($user->hasPermission('businesses.view') || $user->roles->isEmpty())
                 <li>
                     <a href="{{ route('businesses.index') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -54,8 +61,10 @@
                         {{ __('app.my_business') }}
                     </a>
                 </li>
+                @endif
 
-                @if(!$isPersonal)
+                <!-- Daily Tasks -->
+                @if(!$isPersonal && ($user->hasPermission('tasks.view') || $user->roles->isEmpty()))
                 <li>
                     <a href="{{ route('daily-tasks.index') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -68,7 +77,8 @@
                 </li>
                 @endif
 
-                @if(!$isPersonal)
+                <!-- Clients -->
+                @if(!$isPersonal && ($user->hasPermission('clients.view') || $user->roles->isEmpty()))
                 <li>
                     <a href="{{ route('clients.index') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -79,7 +89,10 @@
                         {{ __('app.clients') }}
                     </a>
                 </li>
+                @endif
 
+                <!-- Payments -->
+                @if(!$isPersonal && ($user->hasPermission('payments.view') || $user->roles->isEmpty()))
                 <li>
                     <a href="{{ route('payments.index') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -90,7 +103,10 @@
                         {{ __('app.payments') }}
                     </a>
                 </li>
+                @endif
 
+                <!-- Proposals -->
+                @if(!$isPersonal && ($user->hasPermission('proposals.view') || $user->roles->isEmpty()))
                 <li>
                     <a href="{{ route('proposals.index') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -101,7 +117,10 @@
                         {{ __('app.proposals') }}
                     </a>
                 </li>
+                @endif
 
+                <!-- Conceptions -->
+                @if(!$isPersonal && ($user->hasPermission('conceptions.view') || $user->roles->isEmpty()))
                 <li>
                     <a href="{{ route('conceptions.index') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -114,7 +133,8 @@
                 </li>
                 @endif
 
-                @if($isPersonal)
+                <!-- Revenue (Personal workspace only) -->
+                @if($isPersonal && ($user->hasPermission('revenue.view') || $user->roles->isEmpty()))
                 <li>
                     <a href="{{ route('revenues.index') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -125,7 +145,10 @@
                         {{ __('app.revenue') }}
                     </a>
                 </li>
+                @endif
 
+                <!-- Revenue Categories (Personal workspace only) -->
+                @if($isPersonal && ($user->hasPermission('categories.view') || $user->roles->isEmpty()))
                 <li>
                     <a href="{{ route('revenue-categories.index') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -139,6 +162,7 @@
                 @endif
 
                 <!-- Expenses -->
+                @if($user->hasPermission('expenses.view') || $user->hasPermission('categories.view') || $user->roles->isEmpty())
                 <li x-data="{ open: {{ request()->routeIs('expenses.*') || request()->routeIs('expense-categories.*') ? 'true' : 'false' }} }">
                     <button @click="open = !open" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors {{ request()->routeIs('expenses.*') || request()->routeIs('expense-categories.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,6 +174,7 @@
                         </svg>
                     </button>
                     <ul x-show="open" x-collapse class="ml-4 mt-2 space-y-1">
+                        @if($user->hasPermission('expenses.view') || $user->roles->isEmpty())
                         <li>
                             <a href="{{ route('expenses.index') }}" 
                                onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -160,6 +185,8 @@
                                 {{ __('app.expenses') }}
                             </a>
                         </li>
+                        @endif
+                        @if($user->hasPermission('categories.view') || $user->roles->isEmpty())
                         <li>
                             <a href="{{ route('expense-categories.index') }}" 
                                onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -170,10 +197,13 @@
                                 {{ __('app.categories') }}
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </li>
+                @endif
 
                 <!-- User Management -->
+                @if($user->hasPermission('users.view') || $user->hasPermission('roles.view') || $user->roles->isEmpty())
                 <li x-data="{ open: {{ request()->routeIs('roles.*') || request()->routeIs('users.*') ? 'true' : 'false' }} }">
                     <button @click="open = !open" class="w-full flex items-center px-4 py-3 rounded-lg transition-colors {{ request()->routeIs('roles.*') || request()->routeIs('users.*') ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -185,6 +215,7 @@
                         </svg>
                     </button>
                     <ul x-show="open" x-collapse class="ml-4 mt-2 space-y-1">
+                        @if($user->hasPermission('roles.view') || $user->roles->isEmpty())
                         <li>
                             <a href="{{ route('roles.index') }}" 
                                onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -195,6 +226,8 @@
                                 {{ __('app.roles') }}
                             </a>
                         </li>
+                        @endif
+                        @if($user->hasPermission('users.view') || $user->roles->isEmpty())
                         <li>
                             <a href="{{ route('users.index') }}" 
                                onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -205,9 +238,13 @@
                                 {{ __('app.users') }}
                             </a>
                         </li>
+                        @endif
                     </ul>
                 </li>
+                @endif
 
+                <!-- Analytics -->
+                @if($user->hasPermission('analytics.view') || $user->roles->isEmpty())
                 <li>
                     <a href="{{ route('analytics') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -218,7 +255,10 @@
                         {{ __('app.analytics') }}
                     </a>
                 </li>
+                @endif
 
+                <!-- Settings - Always visible -->
+                @if($user->hasPermission('settings.view') || $user->roles->isEmpty())
                 <li>
                     <a href="{{ route('settings') }}" 
                        onclick="if(window.innerWidth < 1024) toggleSidebar();"
@@ -230,6 +270,7 @@
                         {{ __('app.settings') }}
                     </a>
                 </li>
+                @endif
             </ul>
         </nav>
 
@@ -284,4 +325,3 @@
         }
     });
 </script>
-

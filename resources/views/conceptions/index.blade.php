@@ -72,7 +72,7 @@
                         {{ count($conception->sections) }} {{ __('app.sections') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-gray-100">
-                        {{ Auth::user()->currency }} {{ number_format($conception->total_price, 2) }}
+                        {{ $conception->currency }} {{ number_format($conception->total_price, 2) }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         @php
@@ -151,7 +151,7 @@
                 <div class="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
                     <span class="text-gray-500 dark:text-gray-400">{{ __('app.total') }}:</span>
                     <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                        {{ Auth::user()->currency }} {{ number_format($conception->total_price, 2) }}
+                        {{ $conception->currency }} {{ number_format($conception->total_price, 2) }}
                     </span>
                 </div>
             </div>

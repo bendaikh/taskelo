@@ -17,6 +17,7 @@ class ProjectSection extends Model
         'description',
         'sections',
         'total_price',
+        'currency',
         'date',
         'valid_until',
         'notes',
