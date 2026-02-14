@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Conception - {{ $conception->title }}</title>
+    <title>Conception - <?php echo e($conception->title); ?></title>
     <style>
         * {
             margin: 0;
@@ -231,120 +231,128 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <div class="header-title">{{ $trans['title'] }}</div>
-        <div class="header-subtitle">{{ $conception->title }}</div>
+        <div class="header-title"><?php echo e($trans['title']); ?></div>
+        <div class="header-subtitle"><?php echo e($conception->title); ?></div>
     </div>
     
     <div class="container">
         <!-- Company Information -->
-        @if($conception->user->company_name)
+        <?php if($conception->user->company_name): ?>
         <div class="company-info">
-            <div class="company-name">{{ $conception->user->company_name }}</div>
+            <div class="company-name"><?php echo e($conception->user->company_name); ?></div>
             <div class="company-details">
-                @if($conception->user->company_address)
-                    {{ $conception->user->company_address }}<br>
-                @endif
-                @if($conception->user->company_phone)
-                    {{ $trans['phone'] }}: {{ $conception->user->company_phone }}<br>
-                @endif
-                @if($conception->user->email)
-                    {{ $trans['email'] }}: {{ $conception->user->email }}
-                @endif
+                <?php if($conception->user->company_address): ?>
+                    <?php echo e($conception->user->company_address); ?><br>
+                <?php endif; ?>
+                <?php if($conception->user->company_phone): ?>
+                    <?php echo e($trans['phone']); ?>: <?php echo e($conception->user->company_phone); ?><br>
+                <?php endif; ?>
+                <?php if($conception->user->email): ?>
+                    <?php echo e($trans['email']); ?>: <?php echo e($conception->user->email); ?>
+
+                <?php endif; ?>
             </div>
         </div>
-        @endif
+        <?php endif; ?>
         
         <!-- Conception Information -->
         <table class="info-table">
-            @if($conception->client)
+            <?php if($conception->client): ?>
             <tr>
-                <td class="label">{{ $trans['client'] }}</td>
-                <td class="value">{{ $conception->client->name }}</td>
+                <td class="label"><?php echo e($trans['client']); ?></td>
+                <td class="value"><?php echo e($conception->client->name); ?></td>
             </tr>
-            @endif
+            <?php endif; ?>
             <tr>
-                <td class="label">{{ $trans['date'] }}</td>
-                <td class="value">{{ $conception->date->format($lang == 'fr' ? 'd F Y' : 'F d, Y') }}</td>
+                <td class="label"><?php echo e($trans['date']); ?></td>
+                <td class="value"><?php echo e($conception->date->format($lang == 'fr' ? 'd F Y' : 'F d, Y')); ?></td>
             </tr>
-            @if($conception->valid_until)
+            <?php if($conception->valid_until): ?>
             <tr>
-                <td class="label">{{ $trans['valid_until'] }}</td>
-                <td class="value">{{ $conception->valid_until->format($lang == 'fr' ? 'd F Y' : 'F d, Y') }}</td>
+                <td class="label"><?php echo e($trans['valid_until']); ?></td>
+                <td class="value"><?php echo e($conception->valid_until->format($lang == 'fr' ? 'd F Y' : 'F d, Y')); ?></td>
             </tr>
-            @endif
+            <?php endif; ?>
             <tr>
-                <td class="label">{{ $trans['status'] }}</td>
-                <td class="value">{{ $trans['status_' . $conception->status] }}</td>
+                <td class="label"><?php echo e($trans['status']); ?></td>
+                <td class="value"><?php echo e($trans['status_' . $conception->status]); ?></td>
             </tr>
         </table>
         
-        @if($conception->description)
-        <div class="section-title">{{ $trans['project_overview'] }}</div>
-        <p class="overview-text">{{ $conception->description }}</p>
-        @endif
+        <?php if($conception->description): ?>
+        <div class="section-title"><?php echo e($trans['project_overview']); ?></div>
+        <p class="overview-text"><?php echo e($conception->description); ?></p>
+        <?php endif; ?>
         
         <!-- Sections -->
-        <div class="section-title">{{ $trans['project_sections'] }}</div>
+        <div class="section-title"><?php echo e($trans['project_sections']); ?></div>
         
-        @foreach($conception->sections as $index => $section)
+        <?php $__currentLoopData = $conception->sections; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $section): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
         <div class="section-item">
             <table class="section-header-table">
                 <tr>
                     <td style="width: 40px; vertical-align: middle;">
-                        <span class="section-number">{{ $index + 1 }}</span>
+                        <span class="section-number"><?php echo e($index + 1); ?></span>
                     </td>
                     <td class="section-name" style="vertical-align: middle;">
-                        {{ $section['name'] }}
+                        <?php echo e($section['name']); ?>
+
                     </td>
                     <td class="section-price" style="width: 150px; vertical-align: middle; white-space: nowrap;">
-                        @if(!empty($section['price']) && $section['price'] > 0)
-                            {{ $conception->currency }} {{ number_format($section['price'], 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',') }}
-                        @else
+                        <?php if(!empty($section['price']) && $section['price'] > 0): ?>
+                            <?php echo e($conception->currency); ?> <?php echo e(number_format($section['price'], 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',')); ?>
+
+                        <?php else: ?>
                             <span style="color: #999; font-style: italic; font-size: 10px;">-</span>
-                        @endif
+                        <?php endif; ?>
                     </td>
                 </tr>
             </table>
-            @if(!empty($section['description']))
+            <?php if(!empty($section['description'])): ?>
             <div class="section-description">
-                {{ $section['description'] }}
+                <?php echo e($section['description']); ?>
+
             </div>
-            @endif
+            <?php endif; ?>
         </div>
-        @endforeach
+        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         
         <!-- Total Price -->
         <div class="total-box">
             <table class="total-table">
                 <tr>
-                    <td class="total-label">{{ $trans['total_project_price'] }}</td>
-                    <td class="total-amount">{{ $conception->currency }} {{ number_format($conception->total_price, 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',') }}</td>
+                    <td class="total-label"><?php echo e($trans['total_project_price']); ?></td>
+                    <td class="total-amount"><?php echo e($conception->currency); ?> <?php echo e(number_format($conception->total_price, 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',')); ?></td>
                 </tr>
             </table>
         </div>
         
         <!-- Notes -->
-        @if($conception->notes)
+        <?php if($conception->notes): ?>
         <div class="notes-box">
-            <div class="notes-title">{{ $trans['additional_notes'] }}</div>
-            <div class="notes-content">{{ $conception->notes }}</div>
+            <div class="notes-title"><?php echo e($trans['additional_notes']); ?></div>
+            <div class="notes-content"><?php echo e($conception->notes); ?></div>
         </div>
-        @endif
+        <?php endif; ?>
         
         <!-- Important Warning -->
         <div class="warning-box">
-            <div class="warning-title">{{ $trans['important_scope'] }}</div>
+            <div class="warning-title"><?php echo e($trans['important_scope']); ?></div>
             <div class="warning-content">
-                {{ $trans['scope_warning'] }}
-                <span class="highlight"><strong>{{ $trans['scope_highlight'] }}</strong></span>
-                {{ $trans['scope_agreement'] }}
+                <?php echo e($trans['scope_warning']); ?>
+
+                <span class="highlight"><strong><?php echo e($trans['scope_highlight']); ?></strong></span>
+                <?php echo e($trans['scope_agreement']); ?>
+
             </div>
         </div>
         
         <!-- Footer -->
         <div class="footer">
-            {{ $trans['generated_on'] }} {{ now()->format($lang == 'fr' ? 'd F Y' : 'F d, Y') }} {{ $trans['at'] }} {{ now()->format('H:i') }}
+            <?php echo e($trans['generated_on']); ?> <?php echo e(now()->format($lang == 'fr' ? 'd F Y' : 'F d, Y')); ?> <?php echo e($trans['at']); ?> <?php echo e(now()->format('H:i')); ?>
+
         </div>
     </div>
 </body>
 </html>
+<?php /**PATH C:\Users\Espacegamers\Documents\bendaikh project\resources\views/conceptions/pdf.blade.php ENDPATH**/ ?>
