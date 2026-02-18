@@ -13,9 +13,12 @@ class ProjectSectionController extends Controller
      */
     public function index(Request $request)
     {
-        $query = ProjectSection::where('user_id', Auth::id())
-            ->with('client')
+        $query = ProjectSection::with(['client', 'user'])
             ->orderBy('created_at', 'desc');
+
+        if (!Auth::user()->isSuperAdmin()) {
+            $query->where('user_id', Auth::id());
+        }
 
         // Filter by status if provided
         if ($request->has('status') && $request->status) {
@@ -84,8 +87,7 @@ class ProjectSectionController extends Controller
      */
     public function show(ProjectSection $conception)
     {
-        // Ensure the conception belongs to the authenticated user
-        if ($conception->user_id !== Auth::id()) {
+        if (!Auth::user()->isSuperAdmin() && $conception->user_id !== Auth::id()) {
             abort(403);
         }
 
@@ -99,8 +101,7 @@ class ProjectSectionController extends Controller
      */
     public function edit(ProjectSection $conception)
     {
-        // Ensure the conception belongs to the authenticated user
-        if ($conception->user_id !== Auth::id()) {
+        if (!Auth::user()->isSuperAdmin() && $conception->user_id !== Auth::id()) {
             abort(403);
         }
 
@@ -114,8 +115,7 @@ class ProjectSectionController extends Controller
      */
     public function update(Request $request, ProjectSection $conception)
     {
-        // Ensure the conception belongs to the authenticated user
-        if ($conception->user_id !== Auth::id()) {
+        if (!Auth::user()->isSuperAdmin() && $conception->user_id !== Auth::id()) {
             abort(403);
         }
 
@@ -151,8 +151,7 @@ class ProjectSectionController extends Controller
      */
     public function destroy(ProjectSection $conception)
     {
-        // Ensure the conception belongs to the authenticated user
-        if ($conception->user_id !== Auth::id()) {
+        if (!Auth::user()->isSuperAdmin() && $conception->user_id !== Auth::id()) {
             abort(403);
         }
 
@@ -167,8 +166,7 @@ class ProjectSectionController extends Controller
      */
     public function generatePdf(ProjectSection $conception, $lang = 'en')
     {
-        // Ensure the conception belongs to the authenticated user
-        if ($conception->user_id !== Auth::id()) {
+        if (!Auth::user()->isSuperAdmin() && $conception->user_id !== Auth::id()) {
             abort(403);
         }
 

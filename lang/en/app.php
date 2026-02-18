@@ -128,6 +128,7 @@ return [
     'remove' => 'Remove',
     'title' => 'Title',
     'client' => 'Client',
+    'creator' => 'Creator',
     'project' => 'Project',
     'budget' => 'Budget',
     'deadline' => 'Deadline',

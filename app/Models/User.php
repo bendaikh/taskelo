@@ -124,5 +124,13 @@ class User extends Authenticatable
         }
         return true;
     }
+
+    /**
+     * Check if user is superadmin
+     */
+    public function isSuperAdmin()
+    {
+        return $this->id === 1;
+    }
 }
 

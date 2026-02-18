@@ -47,6 +47,9 @@
             <tr>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.title') }}</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.client') }}</th>
+                @if(Auth::user()->isSuperAdmin())
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.creator') }}</th>
+                @endif
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.date') }}</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.sections') }}</th>
                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">{{ __('app.total') }}</th>
@@ -65,6 +68,11 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {{ $conception->client?->name ?? __('app.no_clients') }}
                     </td>
+                    @if(Auth::user()->isSuperAdmin())
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
+                            {{ $conception->user?->name ?? 'N/A' }}
+                        </td>
+                    @endif
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
                         {{ $conception->date->format('M d, Y') }}
                     </td>
@@ -104,7 +112,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                    <td colspan="{{ Auth::user()->isSuperAdmin() ? '8' : '7' }}" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
                         {{ __('app.no_conceptions') }}. <a href="{{ route('conceptions.create') }}" class="text-primary-600 dark:text-primary-400 hover:text-primary-700">{{ __('app.add_conception') }}</a>
                     </td>
                 </tr>
@@ -140,6 +148,12 @@
                     <span class="text-gray-500 dark:text-gray-400">{{ __('app.client') }}:</span>
                     <span class="text-gray-900 dark:text-gray-100">{{ $conception->client?->name ?? __('app.no_clients') }}</span>
                 </div>
+                @if(Auth::user()->isSuperAdmin())
+                    <div class="flex items-center justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">{{ __('app.creator') }}:</span>
+                        <span class="text-gray-900 dark:text-gray-100">{{ $conception->user?->name ?? 'N/A' }}</span>
+                    </div>
+                @endif
                 <div class="flex items-center justify-between">
                     <span class="text-gray-500 dark:text-gray-400">{{ __('app.date') }}:</span>
                     <span class="text-gray-900 dark:text-gray-100">{{ $conception->date->format('M d, Y') }}</span>
