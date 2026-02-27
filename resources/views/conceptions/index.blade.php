@@ -194,7 +194,7 @@
 
 <!-- Pagination -->
 <div class="mt-6">
-    {{ $conceptions->links() }}
+    {{ $conceptions->appends(request()->query())->links() }}
 </div>
 
 @endsection
