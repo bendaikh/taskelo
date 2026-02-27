@@ -34,7 +34,7 @@ class ProjectSectionController extends Controller
             });
         }
 
-        $conceptions = $query->paginate(15);
+        $conceptions = $query->paginate(8);
 
         return view('conceptions.index', compact('conceptions'));
     }
