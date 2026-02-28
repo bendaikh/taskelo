@@ -62,6 +62,11 @@ document.querySelectorAll('expenses-by-category-chart').forEach((el) => {
     const props = {
         data: parseJsonAttr(el, ':data', []),
         currency: el.getAttribute(':currency')?.replaceAll("'", '') || '',
+        availableYears: parseJsonAttr(el, ':available-years', []),
+        initialYear: parseJsonAttr(el, ':initial-year', null),
+        initialMonth: parseJsonAttr(el, ':initial-month', null),
+        labels: parseJsonAttr(el, ':labels', {}),
+        endpoint: el.getAttribute('endpoint') || '',
     };
     createApp(ExpensesByCategoryChart, props).mount(el);
 });

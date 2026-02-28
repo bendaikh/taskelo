@@ -20,6 +20,8 @@ class DashboardController extends Controller
         $workspaceId = Auth::user()->current_workspace_id;
         $workspace = Auth::user()->currentWorkspace;
         $isPersonal = $workspace && $workspace->type === 'personal';
+        $selectedCategoryYear = null;
+        $selectedCategoryMonth = null;
 
         if ($isPersonal) {
             // Personal workspace: Use Revenue model instead of Payment
@@ -162,14 +164,18 @@ class DashboardController extends Controller
 
         // Expenses by category (for dashboard breakdown)
         $expensesByCategory = collect();
+        $availableExpenseYears = collect();
+        $expenseCategoryChartLabels = [
+            'filter' => __('app.filter'),
+            'year' => __('app.year'),
+            'month' => __('app.month'),
+            'all' => __('app.all'),
+            'loading' => __('app.loading'),
+            'noData' => __('app.no_data'),
+        ];
         if (Schema::hasTable('expenses')) {
-            $expensesByCategory = DB::table('expenses')
-                ->select(DB::raw('COALESCE(category, "Uncategorized") as label'), DB::raw('SUM(amount) as total'))
-                ->where('workspace_id', $workspaceId)
-                ->groupBy('label')
-                ->orderByDesc('total')
-                ->limit(8)
-                ->get();
+            $availableExpenseYears = $this->getAvailableExpenseYears($workspaceId);
+            $expensesByCategory = $this->getExpensesByCategory($workspaceId, null, null);
         }
 
         // Monthly cashflow: revenue - expenses (last 12 months)
@@ -232,9 +238,75 @@ class DashboardController extends Controller
             'monthlyCashflow',
             'netCashflow',
             'expensesByCategory',
+            'availableExpenseYears',
+            'selectedCategoryYear',
+            'selectedCategoryMonth',
+            'expenseCategoryChartLabels',
             'todoTasks',
             'inProgressTasks'
         ));
+    }
+
+    public function expensesByCategoryData(Request $request)
+    {
+        $workspaceId = Auth::user()->current_workspace_id;
+
+        if (!Schema::hasTable('expenses')) {
+            return response()->json([
+                'data' => [],
+                'availableYears' => [],
+                'selectedYear' => null,
+                'selectedMonth' => null,
+            ]);
+        }
+
+        $validated = $request->validate([
+            'year' => ['nullable', 'integer', 'between:2000,2100'],
+            'month' => ['nullable', 'integer', 'between:1,12'],
+        ]);
+
+        $selectedYear = $validated['year'] ?? null;
+        $selectedMonth = $validated['month'] ?? null;
+
+        // Month filter is only applied when a year is selected.
+        if (!$selectedYear) {
+            $selectedMonth = null;
+        }
+
+        return response()->json([
+            'data' => $this->getExpensesByCategory($workspaceId, $selectedYear, $selectedMonth),
+            'availableYears' => $this->getAvailableExpenseYears($workspaceId),
+            'selectedYear' => $selectedYear,
+            'selectedMonth' => $selectedMonth,
+        ]);
+    }
+
+    private function getAvailableExpenseYears(int $workspaceId)
+    {
+        return Expense::where('workspace_id', $workspaceId)
+            ->select(DB::raw('YEAR(date) as year'))
+            ->whereNotNull('date')
+            ->distinct()
+            ->orderByDesc('year')
+            ->pluck('year')
+            ->values();
+    }
+
+    private function getExpensesByCategory(int $workspaceId, ?int $year, ?int $month)
+    {
+        return DB::table('expenses')
+            ->select(DB::raw('COALESCE(category, "Uncategorized") as label'), DB::raw('SUM(amount) as total'))
+            ->where('workspace_id', $workspaceId)
+            ->when($year, function ($query) use ($year) {
+                $query->whereYear('date', $year);
+            })
+            ->when($month, function ($query) use ($month) {
+                $query->whereMonth('date', $month);
+            })
+            ->groupBy('label')
+            ->orderByDesc('total')
+            ->limit(8)
+            ->get();
     }
 }
 

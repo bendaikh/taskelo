@@ -151,6 +151,8 @@ return [
     'of' => 'of',
     'entries' => 'entries',
     'all' => 'All',
+    'year' => 'Year',
+    'month' => 'Month',
 
     // Forms
     'add_new' => 'Add New',

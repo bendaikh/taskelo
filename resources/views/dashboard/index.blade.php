@@ -166,7 +166,12 @@
         <div>
             <expenses-by-category-chart 
                 :data='@json($expensesByCategory)'
-                :currency="'{{ Auth::user()->currency }}'">
+                :currency="'{{ Auth::user()->currency }}'"
+                :available-years='@json($availableExpenseYears)'
+                :initial-year='@json($selectedCategoryYear)'
+                :initial-month='@json($selectedCategoryMonth)'
+                :labels='@json($expenseCategoryChartLabels)'
+                endpoint="{{ route('dashboard.expenses-by-category-data') }}">
             </expenses-by-category-chart>
         </div>
     </div>
