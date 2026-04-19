@@ -208,19 +208,30 @@ function addSection() {
                         class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500"></textarea>
                 </div>
                 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price (optional)</label>
-                    <div class="relative">
-                        <span class="absolute left-3 top-2 text-gray-500 dark:text-gray-400 currency-label">${currency}</span>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Price (optional)</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-2 text-gray-500 dark:text-gray-400 currency-label">${currency}</span>
+                            <input 
+                                type="number" 
+                                name="sections[${sectionCount}][price]" 
+                                min="0"
+                                step="0.01"
+                                placeholder="0.00"
+                                onchange="updateTotal()"
+                                oninput="updateTotal()"
+                                class="section-price w-full pl-16 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Time Range (optional)</label>
                         <input 
-                            type="number" 
-                            name="sections[${sectionCount}][price]" 
-                            min="0"
-                            step="0.01"
-                            placeholder="0.00"
-                            onchange="updateTotal()"
-                            oninput="updateTotal()"
-                            class="section-price w-full pl-16 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
+                            type="text" 
+                            name="sections[${sectionCount}][time_range]" 
+                            placeholder="e.g., 2-3 weeks, 5 days, 10 hours"
+                            class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
                     </div>
                 </div>
             </div>

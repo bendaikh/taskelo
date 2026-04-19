@@ -35,9 +35,14 @@
     </form>
 
     <!-- Add Conception Button -->
-    <a href="{{ route('conceptions.create') }}" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 whitespace-nowrap text-center">
-        + {{ __('app.add_conception') }}
-    </a>
+    <div class="flex gap-2">
+        <a href="{{ route('conceptions.import.form') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 whitespace-nowrap text-center">
+            {{ __('app.import') }} Excel
+        </a>
+        <a href="{{ route('conceptions.create') }}" class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 whitespace-nowrap text-center">
+            + {{ __('app.add_conception') }}
+        </a>
+    </div>
 </div>
 
 <!-- Conceptions Table (Desktop) -->

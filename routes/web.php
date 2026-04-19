@@ -77,6 +77,9 @@ Route::middleware('auth')->group(function () {
     // Project Sections (Conceptions)
     Route::resource('conceptions', ProjectSectionController::class);
     Route::get('/conceptions/{conception}/pdf/{lang?}', [ProjectSectionController::class, 'generatePdf'])->name('conceptions.pdf');
+    Route::get('/conceptions-import', [ProjectSectionController::class, 'showImportForm'])->name('conceptions.import.form');
+    Route::post('/conceptions-import', [ProjectSectionController::class, 'import'])->name('conceptions.import');
+    Route::get('/conceptions-template', [ProjectSectionController::class, 'downloadTemplate'])->name('conceptions.template');
 
     // Expenses
     Route::resource('expenses', ExpenseController::class)->only(['index', 'create', 'store', 'destroy']);
