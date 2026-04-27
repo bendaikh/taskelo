@@ -84,6 +84,21 @@
                     class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">{{ old('notes', $client->notes) }}</textarea>
             </div>
 
+            <!-- Portal Password -->
+            <div class="mt-6">
+                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Client Portal Password</label>
+                <input 
+                    type="password" 
+                    name="password" 
+                    id="password"
+                    placeholder="Leave blank to keep current password"
+                    class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 @error('password') border-red-500 @enderror">
+                @error('password')
+                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                @enderror
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Client can login at: <a href="{{ route('client.login') }}" target="_blank" class="text-blue-600 hover:underline">{{ url('/client/login') }}</a></p>
+            </div>
+
             <!-- Buttons -->
             <div class="mt-6 flex justify-end space-x-3">
                 <a href="{{ route('clients.index') }}" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">

@@ -14,8 +14,9 @@ class SetWorkspace
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check()) {
-            $user = Auth::user();
+        // Only run workspace logic for regular users (web guard), not for clients
+        if (Auth::guard('web')->check()) {
+            $user = Auth::guard('web')->user();
             
             // If user doesn't have a current workspace, set one
             if (!$user->current_workspace_id) {

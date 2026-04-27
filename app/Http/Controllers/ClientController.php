@@ -54,11 +54,15 @@ class ClientController extends Controller
         ]);
 
         $validated['workspace_id'] = Auth::user()->current_workspace_id;
+        
+        // Set default password for client portal access
+        $defaultPassword = 'Client@' . date('Y');
+        $validated['password'] = bcrypt($defaultPassword);
 
         Client::create($validated);
 
         return redirect()->route('clients.index')
-            ->with('success', 'Client created successfully.');
+            ->with('success', "Client created successfully. Default portal password: {$defaultPassword} (Client can login at /client/login)");
     }
 
     /**
@@ -106,7 +110,15 @@ class ClientController extends Controller
             'company' => 'nullable|string|max:255',
             'address' => 'nullable|string',
             'notes' => 'nullable|string',
+            'password' => 'nullable|string|min:6',
         ]);
+
+        // Only update password if provided
+        if (!empty($validated['password'])) {
+            $validated['password'] = bcrypt($validated['password']);
+        } else {
+            unset($validated['password']);
+        }
 
         $client->update($validated);
 

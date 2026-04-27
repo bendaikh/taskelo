@@ -19,6 +19,8 @@ use App\Http\Controllers\WorkspaceController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserManagementController;
 use App\Http\Controllers\DailyTasksController;
+use App\Http\Controllers\ClientAuthController;
+use App\Http\Controllers\ClientPortalController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,6 +28,25 @@ use Illuminate\Support\Facades\Route;
 | Web Routes
 |--------------------------------------------------------------------------
 */
+
+// Client Portal Routes
+Route::prefix('client')->name('client.')->group(function () {
+    // Client guest routes (not authenticated)
+    Route::middleware('guest:client')->group(function () {
+        Route::get('/login', [ClientAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('/login', [ClientAuthController::class, 'login']);
+    });
+
+    // Client authenticated routes
+    Route::middleware('auth:client')->group(function () {
+        Route::post('/logout', [ClientAuthController::class, 'logout'])->name('logout');
+        Route::get('/dashboard', [ClientPortalController::class, 'dashboard'])->name('dashboard');
+        Route::get('/projects', [ClientPortalController::class, 'projects'])->name('projects');
+        Route::get('/projects/{id}', [ClientPortalController::class, 'project'])->name('project');
+        Route::get('/payments', [ClientPortalController::class, 'payments'])->name('payments');
+        Route::get('/tasks', [ClientPortalController::class, 'tasks'])->name('tasks');
+    });
+});
 
 // Guest routes (Authentication)
 Route::middleware('guest')->group(function () {
