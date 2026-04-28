@@ -253,8 +253,8 @@ class ProjectSectionController extends Controller
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Set headers
-        $headers = [
+        // Set basic headers
+        $basicHeaders = [
             'A1' => 'Title',
             'B1' => 'Client Name (optional)',
             'C1' => 'Description',
@@ -262,24 +262,40 @@ class ProjectSectionController extends Controller
             'E1' => 'Valid Until (YYYY-MM-DD, optional)',
             'F1' => 'Currency',
             'G1' => 'Notes',
-            'H1' => 'Section 1 Name',
-            'I1' => 'Section 1 Description',
-            'J1' => 'Section 1 Price',
-            'K1' => 'Section 1 Time Range',
-            'L1' => 'Section 2 Name',
-            'M1' => 'Section 2 Description',
-            'N1' => 'Section 2 Price',
-            'O1' => 'Section 2 Time Range',
-            'P1' => 'Section 3 Name',
-            'Q1' => 'Section 3 Description',
-            'R1' => 'Section 3 Price',
-            'S1' => 'Section 3 Time Range',
         ];
 
-        foreach ($headers as $cell => $value) {
+        foreach ($basicHeaders as $cell => $value) {
             $sheet->setCellValue($cell, $value);
             $sheet->getStyle($cell)->getFont()->setBold(true);
         }
+
+        // Add section headers (supporting unlimited sections - template shows 5 examples)
+        $numSections = 5;
+        $columnIndex = 7; // Starting at column H (index 7)
+        
+        for ($i = 1; $i <= $numSections; $i++) {
+            $colName = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndex + 1);
+            $colDesc = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndex + 2);
+            $colPrice = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndex + 3);
+            $colTime = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndex + 4);
+            
+            $sheet->setCellValue($colName . '1', "Section {$i} Name");
+            $sheet->setCellValue($colDesc . '1', "Section {$i} Description");
+            $sheet->setCellValue($colPrice . '1', "Section {$i} Price");
+            $sheet->setCellValue($colTime . '1', "Section {$i} Time Range");
+            
+            $sheet->getStyle($colName . '1')->getFont()->setBold(true);
+            $sheet->getStyle($colDesc . '1')->getFont()->setBold(true);
+            $sheet->getStyle($colPrice . '1')->getFont()->setBold(true);
+            $sheet->getStyle($colTime . '1')->getFont()->setBold(true);
+            
+            $columnIndex += 4;
+        }
+        
+        // Add note about unlimited sections
+        $noteCol = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($columnIndex + 1);
+        $sheet->setCellValue($noteCol . '1', 'You can add more sections by continuing the pattern: Section N Name, Description, Price, Time Range...');
+        $sheet->getStyle($noteCol . '1')->getFont()->setItalic(true);
 
         // Add example row
         $sheet->setCellValue('A2', 'E-commerce Website Development');
@@ -301,10 +317,19 @@ class ProjectSectionController extends Controller
         $sheet->setCellValue('Q2', 'Cart functionality and payment integration');
         $sheet->setCellValue('R2', '800.00');
         $sheet->setCellValue('S2', '1.5 weeks');
+        $sheet->setCellValue('T2', 'Admin Dashboard');
+        $sheet->setCellValue('U2', 'Admin panel for managing products and orders');
+        $sheet->setCellValue('V2', '600.00');
+        $sheet->setCellValue('W2', '1 week');
+        $sheet->setCellValue('X2', 'Payment Gateway Integration');
+        $sheet->setCellValue('Y2', 'Stripe and PayPal integration');
+        $sheet->setCellValue('Z2', '400.00');
+        $sheet->setCellValue('AA2', '3 days');
 
         // Auto-size columns
-        foreach (range('A', 'S') as $col) {
-            $sheet->getColumnDimension($col)->setAutoSize(true);
+        for ($col = 1; $col <= $columnIndex + 5; $col++) {
+            $colLetter = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::stringFromColumnIndex($col);
+            $sheet->getColumnDimension($colLetter)->setAutoSize(true);
         }
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
@@ -355,19 +380,26 @@ class ProjectSectionController extends Controller
                         }
                     }
 
-                    // Build sections array (supporting up to 10 sections)
+                    // Build sections array dynamically (supporting unlimited sections)
                     $sections = [];
-                    for ($i = 0; $i < 10; $i++) {
-                        $baseIndex = 7 + ($i * 4); // Starting from column H (index 7)
+                    $sectionIndex = 0;
+                    
+                    while (true) {
+                        $baseIndex = 7 + ($sectionIndex * 4); // Starting from column H (index 7)
                         
-                        if (!empty($row[$baseIndex])) {
-                            $sections[] = [
-                                'name' => $row[$baseIndex],
-                                'description' => $row[$baseIndex + 1] ?? '',
-                                'price' => !empty($row[$baseIndex + 2]) ? floatval($row[$baseIndex + 2]) : 0,
-                                'time_range' => $row[$baseIndex + 3] ?? '',
-                            ];
+                        // Stop if we've reached the end of the row or no more section names
+                        if (!isset($row[$baseIndex]) || empty($row[$baseIndex])) {
+                            break;
                         }
+                        
+                        $sections[] = [
+                            'name' => $row[$baseIndex],
+                            'description' => $row[$baseIndex + 1] ?? '',
+                            'price' => !empty($row[$baseIndex + 2]) ? floatval($row[$baseIndex + 2]) : 0,
+                            'time_range' => $row[$baseIndex + 3] ?? '',
+                        ];
+                        
+                        $sectionIndex++;
                     }
 
                     if (empty($sections)) {

@@ -14,7 +14,7 @@
                 <li>Download the Excel template using the button below</li>
                 <li>Fill in the template with your conception data</li>
                 <li>Each row represents one conception</li>
-                <li>You can add up to 10 sections per conception</li>
+                <li>You can add unlimited sections per conception (just continue the pattern: Section Name, Description, Price, Time Range...)</li>
                 <li>Make sure dates are in YYYY-MM-DD format</li>
                 <li>Upload the completed file using the form below</li>
             </ol>
