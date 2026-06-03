@@ -66,15 +66,24 @@ class ProjectSectionController extends Controller
             'sections.*.description' => 'nullable|string',
             'sections.*.price' => 'nullable|numeric|min:0',
             'sections.*.time_range' => 'nullable|string|max:255',
+            'remise' => 'nullable|numeric|min:0',
+            'remise_type' => 'nullable|in:fixed,percent',
         ]);
 
-        // Calculate total price (treat null/empty as 0)
-        $totalPrice = collect($validated['sections'])->sum(function ($section) {
-            return floatval($section['price'] ?? 0);
-        });
+        if (($validated['remise_type'] ?? 'fixed') === 'percent' && floatval($validated['remise'] ?? 0) > 100) {
+            return back()->withErrors(['remise' => 'Remise percentage cannot exceed 100%.'])->withInput();
+        }
+
+        $totals = ProjectSection::calculateTotals(
+            $validated['sections'],
+            $validated['remise'] ?? 0,
+            $validated['remise_type'] ?? 'fixed'
+        );
 
         $validated['user_id'] = Auth::id();
-        $validated['total_price'] = $totalPrice;
+        $validated['total_price'] = $totals['total_price'];
+        $validated['remise'] = floatval($validated['remise'] ?? 0);
+        $validated['remise_type'] = $validated['remise_type'] ?? 'fixed';
         $validated['status'] = 'draft';
 
         ProjectSection::create($validated);
@@ -134,13 +143,23 @@ class ProjectSectionController extends Controller
             'sections.*.description' => 'nullable|string',
             'sections.*.price' => 'nullable|numeric|min:0',
             'sections.*.time_range' => 'nullable|string|max:255',
+            'remise' => 'nullable|numeric|min:0',
+            'remise_type' => 'nullable|in:fixed,percent',
         ]);
 
-        // Calculate total price (treat null/empty as 0)
-        $totalPrice = collect($validated['sections'])->sum(function ($section) {
-            return floatval($section['price'] ?? 0);
-        });
-        $validated['total_price'] = $totalPrice;
+        if (($validated['remise_type'] ?? 'fixed') === 'percent' && floatval($validated['remise'] ?? 0) > 100) {
+            return back()->withErrors(['remise' => 'Remise percentage cannot exceed 100%.'])->withInput();
+        }
+
+        $totals = ProjectSection::calculateTotals(
+            $validated['sections'],
+            $validated['remise'] ?? 0,
+            $validated['remise_type'] ?? 'fixed'
+        );
+
+        $validated['total_price'] = $totals['total_price'];
+        $validated['remise'] = floatval($validated['remise'] ?? 0);
+        $validated['remise_type'] = $validated['remise_type'] ?? 'fixed';
 
         $conception->update($validated);
 
@@ -186,6 +205,8 @@ class ProjectSectionController extends Controller
                 'project_overview' => 'Project Overview',
                 'project_sections' => 'Project Sections',
                 'time_range' => 'Time Range',
+                'subtotal' => 'Subtotal',
+                'remise' => 'Discount',
                 'total_project_price' => 'TOTAL PROJECT PRICE',
                 'additional_notes' => 'ADDITIONAL NOTES',
                 'important_scope' => 'IMPORTANT - SCOPE OF WORK',
@@ -210,6 +231,8 @@ class ProjectSectionController extends Controller
                 'project_overview' => 'Aperçu du projet',
                 'project_sections' => 'Sections du projet',
                 'time_range' => 'Durée',
+                'subtotal' => 'Sous-total',
+                'remise' => 'Remise',
                 'total_project_price' => 'PRIX TOTAL DU PROJET',
                 'additional_notes' => 'NOTES SUPPLÉMENTAIRES',
                 'important_scope' => 'IMPORTANT - PORTÉE DES TRAVAUX',

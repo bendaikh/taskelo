@@ -116,12 +116,32 @@
             </div>
         </div>
 
-        <!-- Total Price -->
-        <div class="border-t-2 border-gray-300 dark:border-gray-600 pt-6 mb-6">
-            <div class="flex items-center justify-between">
+        <!-- Pricing Summary -->
+        <div class="border-t-2 border-gray-300 dark:border-gray-600 pt-6 mb-6 space-y-3">
+            <div class="flex items-center justify-between text-gray-700 dark:text-gray-300">
+                <span class="text-lg">Subtotal:</span>
+                <span class="text-lg font-medium">
+                    {{ $conception->currency }} {{ number_format($conception->subtotal, 2) }}
+                </span>
+            </div>
+            @if($conception->remise_amount > 0)
+            <div class="flex items-center justify-between text-red-600 dark:text-red-400">
+                <span class="text-lg">
+                    Remise
+                    @if($conception->remise_type === 'percent')
+                        ({{ number_format($conception->remise, 0) }}%)
+                    @endif
+                    :
+                </span>
+                <span class="text-lg font-medium">
+                    -{{ $conception->currency }} {{ number_format($conception->remise_amount, 2) }}
+                </span>
+            </div>
+            @endif
+            <div class="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-600">
                 <span class="text-2xl font-bold text-gray-900 dark:text-gray-100">Total Price:</span>
                 <span class="text-3xl font-bold text-primary-600 dark:text-primary-400">
-                    {{ Auth::user()->currency }} {{ number_format($conception->total_price, 2) }}
+                    {{ $conception->currency }} {{ number_format($conception->total_price, 2) }}
                 </span>
             </div>
         </div>

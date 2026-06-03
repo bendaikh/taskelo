@@ -138,11 +138,53 @@
                     <!-- Existing sections will be loaded here -->
                 </div>
 
-                <div id="total-price-container" class="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
-                    <div class="flex items-center justify-between">
+                <!-- Remise -->
+                <div class="mt-4 p-4 border border-gray-200 dark:border-gray-600 rounded-lg">
+                    <h4 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-3">Remise (optional)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="remise_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Type</label>
+                            <select
+                                name="remise_type"
+                                id="remise_type"
+                                onchange="updateTotal()"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500">
+                                <option value="fixed" {{ old('remise_type', $conception->remise_type ?? 'fixed') === 'fixed' ? 'selected' : '' }}>Fixed amount</option>
+                                <option value="percent" {{ old('remise_type', $conception->remise_type ?? 'fixed') === 'percent' ? 'selected' : '' }}>Percentage (%)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label for="remise" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Value</label>
+                            <input
+                                type="number"
+                                name="remise"
+                                id="remise"
+                                value="{{ old('remise', $conception->remise ?? 0) }}"
+                                min="0"
+                                step="0.01"
+                                onchange="updateTotal()"
+                                oninput="updateTotal()"
+                                class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-primary-500 @error('remise') border-red-500 @enderror">
+                            @error('remise')
+                                <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
+
+                <div id="total-price-container" class="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg space-y-2">
+                    <div class="flex items-center justify-between text-gray-700 dark:text-gray-300">
+                        <span>Subtotal:</span>
+                        <span id="subtotal-price"><span class="currency-symbol">{{ $conception->currency ?? 'USD' }}</span> 0.00</span>
+                    </div>
+                    <div id="remise-row" class="flex items-center justify-between text-red-600 dark:text-red-400 hidden">
+                        <span>Remise:</span>
+                        <span id="remise-amount">-<span class="currency-symbol">{{ $conception->currency ?? 'USD' }}</span> 0.00</span>
+                    </div>
+                    <div class="flex items-center justify-between pt-2 border-t border-gray-300 dark:border-gray-600">
                         <span class="text-lg font-semibold text-gray-900 dark:text-gray-100">Total Price:</span>
                         <span id="total-price" class="text-2xl font-bold text-primary-600 dark:text-primary-400">
-                            <span id="currency-symbol">{{ $conception->currency ?? 'USD' }}</span> 0.00
+                            <span class="currency-symbol">{{ $conception->currency ?? 'USD' }}</span> 0.00
                         </span>
                     </div>
                 </div>
@@ -187,15 +229,31 @@ function getCurrentCurrency() {
 
 function updateCurrencyDisplay() {
     const currency = getCurrentCurrency();
-    document.getElementById('currency-symbol').textContent = currency;
-    
-    // Update all currency symbols in sections
+    document.querySelectorAll('.currency-symbol').forEach(el => {
+        el.textContent = currency;
+    });
+
     const currencyLabels = document.querySelectorAll('.currency-label');
     currencyLabels.forEach(label => {
         label.textContent = currency;
     });
-    
+
     updateTotal();
+}
+
+function getRemiseAmount(subtotal) {
+    const remise = parseFloat(document.getElementById('remise').value) || 0;
+    const remiseType = document.getElementById('remise_type').value;
+
+    if (remise <= 0 || subtotal <= 0) {
+        return 0;
+    }
+
+    if (remiseType === 'percent') {
+        return Math.min(subtotal, subtotal * Math.min(remise, 100) / 100);
+    }
+
+    return Math.min(remise, subtotal);
 }
 
 function addSection(name = '', description = '', price = '', timeRange = '') {
@@ -277,15 +335,26 @@ function removeSection(id) {
 
 function updateTotal() {
     const prices = document.querySelectorAll('.section-price');
-    let total = 0;
-    
+    let subtotal = 0;
+
     prices.forEach(priceInput => {
-        const value = parseFloat(priceInput.value) || 0;
-        total += value;
+        subtotal += parseFloat(priceInput.value) || 0;
     });
-    
+
     const currency = getCurrentCurrency();
-    document.getElementById('total-price').innerHTML = `<span id="currency-symbol">${currency}</span> ${total.toFixed(2)}`;
+    const remiseAmount = getRemiseAmount(subtotal);
+    const total = Math.max(0, subtotal - remiseAmount);
+
+    document.getElementById('subtotal-price').innerHTML = `<span class="currency-symbol">${currency}</span> ${subtotal.toFixed(2)}`;
+    document.getElementById('total-price').innerHTML = `<span class="currency-symbol">${currency}</span> ${total.toFixed(2)}`;
+
+    const remiseRow = document.getElementById('remise-row');
+    if (remiseAmount > 0) {
+        remiseRow.classList.remove('hidden');
+        document.getElementById('remise-amount').innerHTML = `-<span class="currency-symbol">${currency}</span> ${remiseAmount.toFixed(2)}`;
+    } else {
+        remiseRow.classList.add('hidden');
+    }
 }
 
 // Load existing sections on page load

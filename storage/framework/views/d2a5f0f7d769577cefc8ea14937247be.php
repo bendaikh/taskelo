@@ -326,9 +326,25 @@
         </div>
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         
-        <!-- Total Price -->
+        <!-- Pricing Summary -->
         <div class="total-box">
             <table class="total-table">
+                <tr>
+                    <td class="total-label"><?php echo e($trans['subtotal']); ?></td>
+                    <td class="total-amount"><?php echo e($conception->currency); ?> <?php echo e(number_format($conception->subtotal, 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',')); ?></td>
+                </tr>
+                <?php if($conception->remise_amount > 0): ?>
+                <tr>
+                    <td class="total-label">
+                        <?php echo e($trans['remise']); ?>
+
+                        <?php if($conception->remise_type === 'percent'): ?>
+                            (<?php echo e(number_format($conception->remise, 0)); ?>%)
+                        <?php endif; ?>
+                    </td>
+                    <td class="total-amount" style="color: #c53030;">-<?php echo e($conception->currency); ?> <?php echo e(number_format($conception->remise_amount, 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',')); ?></td>
+                </tr>
+                <?php endif; ?>
                 <tr>
                     <td class="total-label"><?php echo e($trans['total_project_price']); ?></td>
                     <td class="total-amount"><?php echo e($conception->currency); ?> <?php echo e(number_format($conception->total_price, 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',')); ?></td>

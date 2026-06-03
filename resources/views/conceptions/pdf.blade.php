@@ -321,9 +321,24 @@
         </div>
         @endforeach
         
-        <!-- Total Price -->
+        <!-- Pricing Summary -->
         <div class="total-box">
             <table class="total-table">
+                <tr>
+                    <td class="total-label">{{ $trans['subtotal'] }}</td>
+                    <td class="total-amount">{{ $conception->currency }} {{ number_format($conception->subtotal, 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',') }}</td>
+                </tr>
+                @if($conception->remise_amount > 0)
+                <tr>
+                    <td class="total-label">
+                        {{ $trans['remise'] }}
+                        @if($conception->remise_type === 'percent')
+                            ({{ number_format($conception->remise, 0) }}%)
+                        @endif
+                    </td>
+                    <td class="total-amount" style="color: #c53030;">-{{ $conception->currency }} {{ number_format($conception->remise_amount, 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',') }}</td>
+                </tr>
+                @endif
                 <tr>
                     <td class="total-label">{{ $trans['total_project_price'] }}</td>
                     <td class="total-amount">{{ $conception->currency }} {{ number_format($conception->total_price, 2, $lang == 'fr' ? ',' : '.', $lang == 'fr' ? ' ' : ',') }}</td>
