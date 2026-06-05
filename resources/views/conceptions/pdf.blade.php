@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>Conception - {{ $conception->title }}</title>
     <style>
+        @font-face {
+            font-family: 'Amiri';
+            font-style: normal;
+            font-weight: normal;
+            src: url('{{ str_replace('\\', '/', storage_path('fonts/Amiri-Regular.ttf')) }}') format('truetype');
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -147,6 +154,13 @@
             color: #666;
             line-height: 1.7;
         }
+
+        .arabic-text {
+            font-family: 'Amiri', 'DejaVu Sans', sans-serif;
+            text-align: right;
+            direction: ltr;
+            unicode-bidi: embed;
+        }
         
         .total-box {
             margin-top: 25px;
@@ -280,7 +294,9 @@
         
         @if($conception->description)
         <div class="section-title">{{ $trans['project_overview'] }}</div>
-        <p class="overview-text">{{ $conception->description }}</p>
+        <p class="overview-text">
+            <x-arabic-text :text="$conception->description" :for-pdf="true" />
+        </p>
         @endif
         
         <!-- Sections -->
@@ -315,7 +331,7 @@
             </table>
             @if(!empty($section['description']))
             <div class="section-description">
-                {{ $section['description'] }}
+                <x-arabic-text :text="$section['description']" :for-pdf="true" />
             </div>
             @endif
         </div>
@@ -350,7 +366,9 @@
         @if($conception->notes)
         <div class="notes-box">
             <div class="notes-title">{{ $trans['additional_notes'] }}</div>
-            <div class="notes-content">{{ $conception->notes }}</div>
+            <div class="notes-content">
+                <x-arabic-text :text="$conception->notes" :for-pdf="true" />
+            </div>
         </div>
         @endif
         

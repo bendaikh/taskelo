@@ -4,6 +4,13 @@
     <meta charset="UTF-8">
     <title>Conception - <?php echo e($conception->title); ?></title>
     <style>
+        @font-face {
+            font-family: 'Amiri';
+            font-style: normal;
+            font-weight: normal;
+            src: url('<?php echo e(str_replace('\\', '/', storage_path('fonts/Amiri-Regular.ttf'))); ?>') format('truetype');
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -147,6 +154,13 @@
             color: #666;
             line-height: 1.7;
         }
+
+        .arabic-text {
+            font-family: 'Amiri', 'DejaVu Sans', sans-serif;
+            text-align: right;
+            direction: ltr;
+            unicode-bidi: embed;
+        }
         
         .total-box {
             margin-top: 25px;
@@ -281,7 +295,28 @@
         
         <?php if($conception->description): ?>
         <div class="section-title"><?php echo e($trans['project_overview']); ?></div>
-        <p class="overview-text"><?php echo e($conception->description); ?></p>
+        <p class="overview-text">
+            <?php if (isset($component)) { $__componentOriginald5237fa2dcf0a51f82863f5526c2b46b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.arabic-text','data' => ['text' => $conception->description,'forPdf' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('arabic-text'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['text' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($conception->description),'for-pdf' => true]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b)): ?>
+<?php $attributes = $__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b; ?>
+<?php unset($__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginald5237fa2dcf0a51f82863f5526c2b46b)): ?>
+<?php $component = $__componentOriginald5237fa2dcf0a51f82863f5526c2b46b; ?>
+<?php unset($__componentOriginald5237fa2dcf0a51f82863f5526c2b46b); ?>
+<?php endif; ?>
+        </p>
         <?php endif; ?>
         
         <!-- Sections -->
@@ -319,8 +354,26 @@
             </table>
             <?php if(!empty($section['description'])): ?>
             <div class="section-description">
-                <?php echo e($section['description']); ?>
-
+                <?php if (isset($component)) { $__componentOriginald5237fa2dcf0a51f82863f5526c2b46b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.arabic-text','data' => ['text' => $section['description'],'forPdf' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('arabic-text'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['text' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($section['description']),'for-pdf' => true]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b)): ?>
+<?php $attributes = $__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b; ?>
+<?php unset($__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginald5237fa2dcf0a51f82863f5526c2b46b)): ?>
+<?php $component = $__componentOriginald5237fa2dcf0a51f82863f5526c2b46b; ?>
+<?php unset($__componentOriginald5237fa2dcf0a51f82863f5526c2b46b); ?>
+<?php endif; ?>
             </div>
             <?php endif; ?>
         </div>
@@ -356,7 +409,28 @@
         <?php if($conception->notes): ?>
         <div class="notes-box">
             <div class="notes-title"><?php echo e($trans['additional_notes']); ?></div>
-            <div class="notes-content"><?php echo e($conception->notes); ?></div>
+            <div class="notes-content">
+                <?php if (isset($component)) { $__componentOriginald5237fa2dcf0a51f82863f5526c2b46b = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.arabic-text','data' => ['text' => $conception->notes,'forPdf' => true]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? (array) $attributes->getIterator() : [])); ?>
+<?php $component->withName('arabic-text'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag && $constructor = (new ReflectionClass(Illuminate\View\AnonymousComponent::class))->getConstructor()): ?>
+<?php $attributes = $attributes->except(collect($constructor->getParameters())->map->getName()->all()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['text' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($conception->notes),'for-pdf' => true]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b)): ?>
+<?php $attributes = $__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b; ?>
+<?php unset($__attributesOriginald5237fa2dcf0a51f82863f5526c2b46b); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginald5237fa2dcf0a51f82863f5526c2b46b)): ?>
+<?php $component = $__componentOriginald5237fa2dcf0a51f82863f5526c2b46b; ?>
+<?php unset($__componentOriginald5237fa2dcf0a51f82863f5526c2b46b); ?>
+<?php endif; ?>
+            </div>
         </div>
         <?php endif; ?>
         

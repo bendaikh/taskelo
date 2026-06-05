@@ -4,6 +4,14 @@
 @section('page-title', 'Conception Details')
 
 @section('content')
+<style>
+    .arabic-text {
+        font-family: 'Segoe UI', 'Noto Sans Arabic', 'Amiri', Tahoma, sans-serif;
+        direction: rtl;
+        text-align: right;
+        unicode-bidi: isolate;
+    }
+</style>
 <div class="max-w-4xl mx-auto">
     <!-- Action Buttons -->
     <div class="mb-6 flex flex-wrap gap-3 justify-end">
@@ -33,7 +41,7 @@
                     </h1>
                     @if($conception->description)
                         <p class="text-gray-600 dark:text-gray-400">
-                            {{ $conception->description }}
+                            <x-arabic-text :text="$conception->description" />
                         </p>
                     @endif
                 </div>
@@ -95,7 +103,7 @@
                                 </div>
                                 @if(!empty($section['description']))
                                     <p class="text-gray-600 dark:text-gray-400 ml-10">
-                                        {{ $section['description'] }}
+                                        <x-arabic-text :text="$section['description']" />
                                     </p>
                                 @endif
                             </div>
@@ -151,7 +159,7 @@
         <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
             <h3 class="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">Notes</h3>
             <p class="text-gray-700 dark:text-gray-300 whitespace-pre-line">
-                {{ $conception->notes }}
+                <x-arabic-text :text="$conception->notes" />
             </p>
         </div>
         @endif
